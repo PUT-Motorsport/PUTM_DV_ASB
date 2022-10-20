@@ -100,6 +100,12 @@
   )
 
 
+  (text "konektory dodam jak będe wiedział jak chce żeby PCB wyglądał"
+    (at 93.98 130.81 0)
+    (effects (font (size 2.54 2.54) italic) (justify left bottom))
+    (uuid 0473fa28-1a71-4e0a-a0b3-247ebe9d6132)
+  )
+
   (global_label "SWDIO" (shape input) (at 111.76 97.79 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27) italic) (justify right))
     (uuid 0141fbba-b633-482d-8257-7b6b6b8c3ac9)

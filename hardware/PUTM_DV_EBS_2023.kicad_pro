@@ -429,7 +429,7 @@
     ],
     [
       "5ac2ed84-f067-458b-b606-2c46aae0c926",
-      "Valve Control"
+      "Solenoid Control and Supply"
     ],
     [
       "b805e2a7-5672-4834-9632-5be8d65bd9a8",
@@ -437,15 +437,11 @@
     ],
     [
       "81567b80-5afb-49a2-8e1a-6e4e57e56b9d",
-      "Safety Latch"
+      "Safety Relay"
     ],
     [
       "d8688165-16f9-4d4a-b76d-8edb3b6e7c8b",
       "Connector"
-    ],
-    [
-      "ef3ef422-de29-4905-a99e-758c89ef674c",
-      "Pressure sensor input"
     ]
   ],
   "text_variables": {}

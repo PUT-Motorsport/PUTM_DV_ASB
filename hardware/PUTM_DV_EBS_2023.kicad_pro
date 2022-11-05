@@ -442,6 +442,18 @@
     [
       "d8688165-16f9-4d4a-b76d-8edb3b6e7c8b",
       "Connector"
+    ],
+    [
+      "6c904b20-f0d8-4a34-af03-c65fb29a5704",
+      "TS_EXT_PROT"
+    ],
+    [
+      "dae80125-d1c3-42fb-af9d-4a51941dd8ab",
+      "TS_COCKPIT_PROT"
+    ],
+    [
+      "7e3c265d-84b6-4eba-9091-794b8ba634be",
+      "SAFETY_BUTTON_PROT"
     ]
   ],
   "text_variables": {}

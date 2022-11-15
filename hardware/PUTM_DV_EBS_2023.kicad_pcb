@@ -76,8 +76,4 @@
 
   (net 0 "")
 
-  (gr_text "tutaj kiedyś będzie zajebista płytka" (at 159 107.5) (layer "F.CrtYd") (tstamp 7614bf00-a50b-4d82-85c8-4740890469b6)
-    (effects (font (size 15 15) (thickness 2) italic))
-  )
-
 )

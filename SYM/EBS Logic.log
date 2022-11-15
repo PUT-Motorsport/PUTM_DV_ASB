@@ -1,0 +1,43 @@
+Circuit: * C:\Users\przemas\Desktop\PUTM\PUTM_DV_ASB_2023\SYM\EBS Logic.asc
+
+Warning: Multiple definitions of model "dio2" Type: Diode
+Warning: Multiple definitions of model "sw_hc2" Type: Switch
+Warning: Multiple definitions of model "sw_hc1" Type: Switch
+WARNING: Less than two connections to node SDC_RELAI.  This node is used by R:U3:OUT:OUT.
+WARNING: Less than two connections to node SDC_READY.  This node is used by R:U4:OUT:OUT.
+WARNING: Less than two connections to node AS_DRIVING_MODE.  This node is used by R3.
+WARNING: Less than two connections to node NC_09.  This node is used by R:U1:OUT2:OUT.
+WARNING: Less than two connections to node NC_10.  This node is used by R:U1:OUT3:OUT.
+WARNING: Less than two connections to node NC_11.  This node is used by R:U1:OUT4:OUT.
+Direct Newton iteration for .op point succeeded.
+Ignoring empty pin current: Ix(u2:vdd)
+Ignoring empty pin current: Ix(u3:vdd)
+Ignoring empty pin current: Ix(u4:vdd)
+Ignoring empty pin current: Ix(u6:vdd)
+Ignoring empty pin current: Ix(u7:vdd)
+Ignoring empty pin current: Ix(u1:vcc)
+Ignoring empty pin current: Ix(u2:vdd)
+Ignoring empty pin current: Ix(u3:vdd)
+Ignoring empty pin current: Ix(u4:vdd)
+Ignoring empty pin current: Ix(u6:vdd)
+Ignoring empty pin current: Ix(u7:vdd)
+Ignoring empty pin current: Ix(u1:vcc)
+
+Date: Fri Nov 11 01:02:01 2022
+Total elapsed time: 0.267 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 2106
+traniter = 2094
+tranpoints = 1048
+accept = 1048
+rejected = 0
+matrix size = 162
+fillins = 1
+solver = Normal
+Thread vector: 13.5/6.4[5] 5.3/2.3[5] 4.3/1.9[5] 0.4/1.4[1]  2592/500
+Matrix Compiler1: 4.28 KB object code size  2.1/1.1/[0.5]
+Matrix Compiler2: 8.02 KB object code size  1.4/2.6/[0.6]
+

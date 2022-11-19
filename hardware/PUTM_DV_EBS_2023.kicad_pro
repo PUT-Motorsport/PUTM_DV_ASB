@@ -454,6 +454,10 @@
     [
       "7e3c265d-84b6-4eba-9091-794b8ba634be",
       "SAFETY_BUTTON_PROT"
+    ],
+    [
+      "0e6e746e-cf7c-47e8-8ed6-c681697efa7a",
+      "Air pressure sensor control"
     ]
   ],
   "text_variables": {}

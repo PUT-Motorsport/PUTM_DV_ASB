@@ -326,7 +326,7 @@
     (property "Reference" "C30" (id 0) (at 160.02 88.8999 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "100nF" (id 1) (at 160.02 91.4399 0)
+    (property "Value" "10nF" (id 1) (at 160.02 91.4399 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Capacitor_SMD:C_0201_0603Metric_Pad0.64x0.40mm_HandSolder" (id 2) (at 157.1752 93.98 0)

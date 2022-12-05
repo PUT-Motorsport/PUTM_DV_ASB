@@ -389,7 +389,7 @@
     (property "Reference" "C5" (id 0) (at 121.92 44.4499 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "100nF" (id 1) (at 121.92 46.9899 0)
+    (property "Value" "10nF" (id 1) (at 121.92 46.9899 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Capacitor_SMD:C_0201_0603Metric_Pad0.64x0.40mm_HandSolder" (id 2) (at 119.0752 49.53 0)

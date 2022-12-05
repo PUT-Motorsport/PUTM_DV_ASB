@@ -5,9 +5,12 @@ Warning: Multiple definitions of model "sw_hc2" Type: Switch
 Warning: Multiple definitions of model "sw_hc1" Type: Switch
 WARNING: Less than two connections to node SDC_RELAI.  This node is used by R:U3:OUT:OUT.
 WARNING: Less than two connections to node SDC_READY.  This node is used by R:U4:OUT:OUT.
-WARNING: Less than two connections to node NC_09.  This node is used by R:U1:OUT2:OUT.
-WARNING: Less than two connections to node NC_10.  This node is used by R:U1:OUT3:OUT.
-WARNING: Less than two connections to node NC_11.  This node is used by R:U1:OUT4:OUT.
+WARNING: Less than two connections to node NC_07.  This node is used by R:U1:OUT2:OUT.
+WARNING: Less than two connections to node NC_08.  This node is used by R:U1:OUT3:OUT.
+WARNING: Less than two connections to node NC_09.  This node is used by R:U1:OUT4:OUT.
+WARNING: Less than two connections to node U5:DP.  This node is used by A:U5:DDEL.
+WARNING: Less than two connections to node U8:DP.  This node is used by A:U8:DDEL.
+WARNING: Less than two connections to node NC_10.  This node is used by R:U8:OUT2:OUT.
 Direct Newton iteration for .op point succeeded.
 Ignoring empty pin current: Ix(u2:vdd)
 Ignoring empty pin current: Ix(u3:vdd)
@@ -15,28 +18,32 @@ Ignoring empty pin current: Ix(u4:vdd)
 Ignoring empty pin current: Ix(u6:vdd)
 Ignoring empty pin current: Ix(u7:vdd)
 Ignoring empty pin current: Ix(u1:vcc)
+Ignoring empty pin current: Ix(u5:vcc)
+Ignoring empty pin current: Ix(u8:vcc)
 Ignoring empty pin current: Ix(u2:vdd)
 Ignoring empty pin current: Ix(u3:vdd)
 Ignoring empty pin current: Ix(u4:vdd)
 Ignoring empty pin current: Ix(u6:vdd)
 Ignoring empty pin current: Ix(u7:vdd)
 Ignoring empty pin current: Ix(u1:vcc)
+Ignoring empty pin current: Ix(u5:vcc)
+Ignoring empty pin current: Ix(u8:vcc)
 
-Date: Tue Nov 15 22:06:19 2022
-Total elapsed time: 0.234 seconds.
+Date: Mon Dec 05 04:48:00 2022
+Total elapsed time: 0.400 seconds.
 
 tnom = 27
 temp = 27
 method = modified trap
-totiter = 2105
-traniter = 2094
-tranpoints = 1048
-accept = 1048
-rejected = 0
-matrix size = 161
-fillins = 1
+totiter = 5802
+traniter = 5787
+tranpoints = 2475
+accept = 2188
+rejected = 287
+matrix size = 224
+fillins = 4
 solver = Normal
-Thread vector: 11.5/6.7[5] 4.0/2.6[5] 3.4/2.5[5] 0.3/1.4[1]  2592/500
-Matrix Compiler1: 4.25 KB object code size  1.8/0.9/[0.4]
-Matrix Compiler2: 7.98 KB object code size  1.0/2.0/[0.6]
+Thread vector: 38.7/8.5[7] 8.8/4.2[7] 6.6/3.9[7] 0.4/6.1[1]  2592/500
+Matrix Compiler1: 5.71 KB object code size  3.8/2.1/[0.7]
+Matrix Compiler2: 11.13 KB object code size  2.8/4.3/[0.6]
 

@@ -486,7 +486,7 @@
 
 
   (no_connect (at 100.33 80.01) (uuid 8ca2928a-7b1c-401b-8a27-b3f33596d98a))
-  (no_connect (at 109.22 77.47) (uuid 8ca2928a-7b1c-401b-8a27-b3f33596d98a))
+  (no_connect (at 109.22 77.47) (uuid 8ca2928a-7b1c-401b-8a27-b3f33596d98b))
 
   (wire (pts (xy 128.27 95.25) (xy 142.24 95.25))
     (stroke (width 0) (type default) (color 0 0 0 0))

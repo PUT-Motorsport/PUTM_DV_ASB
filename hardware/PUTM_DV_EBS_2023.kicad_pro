@@ -45,7 +45,7 @@
         "silk_text_upright": false,
         "zones": {
           "45_degree_only": false,
-          "min_clearance": 0.508
+          "min_clearance": 0.19999999999999998
         }
       },
       "diff_pair_dimensions": [
@@ -374,7 +374,7 @@
       },
       {
         "bus_width": 12.0,
-        "clearance": 0.8,
+        "clearance": 0.4,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -397,7 +397,7 @@
           "VALVE_2_COIL_I",
           "VALVE_2_COIL_II"
         ],
-        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "pcb_color": "rgb(255, 0, 92)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 1.6,
         "via_diameter": 0.8,
@@ -417,7 +417,7 @@
         "nets": [
           "+5V"
         ],
-        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "pcb_color": "rgb(0, 156, 38)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.7,
         "via_diameter": 0.8,
@@ -437,7 +437,7 @@
         "nets": [
           "GND"
         ],
-        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "pcb_color": "rgb(152, 133, 26)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.4,
         "via_diameter": 0.8,
@@ -461,17 +461,14 @@
           "/EBS Logic/WATCHDOG",
           "/EBS Supervisor/CAN_RX",
           "/EBS Supervisor/CAN_TX",
-          "/EBS Supervisor/XTAL1",
-          "/EBS Supervisor/XTAL2",
           "AIR_MAIN",
           "AIR_REDUNDANT",
           "CAN-H",
           "CAN-L",
-          "NRST",
           "SWDCLK",
           "SWDIO"
         ],
-        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "pcb_color": "rgb(87, 77, 255)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
         "via_diameter": 0.8,

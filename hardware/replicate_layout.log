@@ -1,0 +1,26 @@
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 326:Plugin executed on: 'win32'
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 327:Plugin executed with python version: '3.9.10 (main, Jul 19 2022, 05:36:50) [MSC v.1932 64 bit (AMD64)]'
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 328:KiCad build version: (6.0.7)
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 329:Plugin version: 1.2.5
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 330:Frame repr: <wx._core.Frame object at 0x000002B52053DF70>
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 354:Preparing replicator with R11 as a reference
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 110:getting a list of all footprints on board
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint G*** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint G*** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 369:Fatal error when making an instance of replicator
+Traceback (most recent call last):
+  File "C:\Users\przemas\Documents\KiCad\6.0\3rdparty\plugins\com_github_MitjaNemec_ReplicateLayout\action_replicate_layout.py", line 358, in Run
+    replicator = Replicator(board, src_anchor_fp_reference)
+  File "C:\Users\przemas\Documents\KiCad\6.0\3rdparty\plugins\com_github_MitjaNemec_ReplicateLayout\replicate_layout.py", line 153, in __init__
+    self.parse_schematic_files(self.sch_filename, schematic_found)
+  File "C:\Users\przemas\Documents\KiCad\6.0\3rdparty\plugins\com_github_MitjaNemec_ReplicateLayout\replicate_layout.py", line 198, in parse_schematic_files
+    self.parse_schematic_files(sheetfile, dict_of_sheets)
+  File "C:\Users\przemas\Documents\KiCad\6.0\3rdparty\plugins\com_github_MitjaNemec_ReplicateLayout\replicate_layout.py", line 179, in parse_schematic_files
+    with open(filename) as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'gic.kicad_sch'

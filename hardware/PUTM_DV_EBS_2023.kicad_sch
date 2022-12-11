@@ -11683,6 +11683,9 @@
     (path "/5ac2ed84-f067-458b-b606-2c46aae0c926/8fc8b381-3e99-424a-a2db-2e76152a2384"
       (reference "D5") (unit 1) (value "SK36A") (footprint "Diode_SMD:D_SMA_Handsoldering")
     )
+    (path "/bbd4f989-bc6f-4d23-b657-5429a2409e1d/b3b7a2f7-47a8-497e-9364-c3d35e267364"
+      (reference "D6") (unit 1) (value "LED") (footprint "LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder")
+    )
     (path "/b805e2a7-5672-4834-9632-5be8d65bd9a8/a32ac4f2-bafd-4063-bfa6-693b53934cdb"
       (reference "D7") (unit 1) (value "SD24-SOD323") (footprint "Diode_SMD:D_SMB")
     )
@@ -11913,6 +11916,9 @@
     )
     (path "/0e6e746e-cf7c-47e8-8ed6-c681697efa7a/d2cebea6-4b71-4d4d-8083-65636bff8f5a/3ca92ed6-f423-4f47-bb24-efe79160f66f"
       (reference "R46") (unit 1) (value "1k") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
+    )
+    (path "/bbd4f989-bc6f-4d23-b657-5429a2409e1d/a97abd1b-80b1-4083-9d5a-3bfab549c3e0"
+      (reference "R47") (unit 1) (value "2.2k") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
     )
     (path "/16412294-9d23-4b06-9a1c-2367431a1782/9320365f-69f8-4b5c-9ad1-bd449aaf6942"
       (reference "U1") (unit 1) (value "74157") (footprint "Package_SO:VSSOP-8_2.3x2mm_P0.5mm")

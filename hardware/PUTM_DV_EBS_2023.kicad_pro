@@ -384,8 +384,6 @@
         "name": "24V lines",
         "nets": [
           "+24V",
-          "/EBS Supervisor/VALVE_1",
-          "/EBS Supervisor/VALVE_2",
           "/Safety Relay/VALVE_SUPPLY",
           "AIR+",
           "DASH_TS_ON",
@@ -448,7 +446,9 @@
     "meta": {
       "version": 2
     },
-    "net_colors": null
+    "net_colors": {
+      "+3V3": "rgb(120, 15, 255)"
+    }
   },
   "pcbnew": {
     "last_paths": {

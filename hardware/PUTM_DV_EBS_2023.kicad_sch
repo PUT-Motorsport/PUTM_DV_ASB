@@ -11620,6 +11620,9 @@
     (path "/b805e2a7-5672-4834-9632-5be8d65bd9a8/91667bb3-ecc6-4ff2-a824-1ee62e235f12"
       (reference "C16") (unit 1) (value "100n") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
     )
+    (path "/b805e2a7-5672-4834-9632-5be8d65bd9a8/a388fcbd-f118-4d9f-ae97-70612ab4db65"
+      (reference "C17") (unit 1) (value "100n") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
+    )
     (path "/b805e2a7-5672-4834-9632-5be8d65bd9a8/955d351f-82fb-46a4-a1cf-a66659b33bbc"
       (reference "C19") (unit 1) (value "100n") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
     )
@@ -11716,11 +11719,11 @@
     (path "/b805e2a7-5672-4834-9632-5be8d65bd9a8/9400c549-8dee-409d-8a51-12524d0a48fa"
       (reference "D8") (unit 1) (value "LED 3.3") (footprint "LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder")
     )
-    (path "/b805e2a7-5672-4834-9632-5be8d65bd9a8/9f893ad0-4afc-423c-9cfc-5a112f3e6fcf"
-      (reference "D9") (unit 1) (value "LED 5V") (footprint "LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder")
-    )
     (path "/b805e2a7-5672-4834-9632-5be8d65bd9a8/4458395f-3f39-4fbb-ba21-07ba822cc291"
       (reference "D10") (unit 1) (value "BZX38450-C3V3-QX") (footprint "Diode_SMD:D_SOD-323_HandSoldering")
+    )
+    (path "/b805e2a7-5672-4834-9632-5be8d65bd9a8/9f893ad0-4afc-423c-9cfc-5a112f3e6fcf"
+      (reference "D11") (unit 1) (value "LED 5V") (footprint "LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder")
     )
     (path "/81567b80-5afb-49a2-8e1a-6e4e57e56b9d/0f54969c-fdd4-4064-8f18-8b620d3049b8"
       (reference "D12") (unit 1) (value "SK36A") (footprint "Diode_SMD:D_SMA_Handsoldering")
@@ -11786,7 +11789,7 @@
       (reference "LF_infltr1") (unit 1) (value "1.5uH 260mOhm") (footprint "Inductor_SMD:L_0805_2012Metric_Pad1.05x1.20mm_HandSolder")
     )
     (path "/b805e2a7-5672-4834-9632-5be8d65bd9a8/d3cff014-c551-49ac-82ea-b29e6c48f469"
-      (reference "L_SW1") (unit 1) (value "18uH 36mOhm") (footprint "PUTM_Kicad_FOOTPRINTS:L_Bourns_EBS")
+      (reference "L_SW1") (unit 1) (value "22uH 36mOhm") (footprint "PUTM_Kicad_FOOTPRINTS:L_Bourns_EBS")
     )
     (path "/bbd4f989-bc6f-4d23-b657-5429a2409e1d/ae2a1d04-84e6-4c79-bac1-518c5439030c"
       (reference "NT1") (unit 1) (value "NetTie_2") (footprint "NetTie:NetTie-2_SMD_Pad0.5mm")

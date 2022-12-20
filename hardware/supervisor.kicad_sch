@@ -2007,7 +2007,7 @@
     (uuid 0c9e5e93-cca0-4145-817f-6cbace1a7e8a)
     (property "Reference" "Y1" (id 0) (at 46.228 98.298 0))
     (property "Value" "Crystal_GND24" (id 1) (at 51.562 100.584 0))
-    (property "Footprint" "Crystal:Crystal_SMD_2520-4Pin_2.5x2.0mm" (id 2) (at 64.77 102.87 0)
+    (property "Footprint" "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm" (id 2) (at 64.77 102.87 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "https://abracon.com/Resonators/abm8.pdf" (id 3) (at 64.77 102.87 0)

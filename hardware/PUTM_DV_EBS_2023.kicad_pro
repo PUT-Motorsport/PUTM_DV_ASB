@@ -388,7 +388,6 @@
           "+24V",
           "/Safety Relay/VALVE_SUPPLY",
           "AIR+",
-          "DASH_TS_ON",
           "LINE",
           "SAFETY_IN",
           "SAFETY_OUT",

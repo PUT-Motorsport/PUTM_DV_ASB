@@ -1,0 +1,5 @@
+Default	True	2.0	3
+24V lines	True	2.0	3
+5V lines	True	2.0	3
+GND traces	True	2.0	3
+False	True	False

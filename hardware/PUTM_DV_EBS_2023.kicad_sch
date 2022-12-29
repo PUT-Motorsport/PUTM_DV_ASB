@@ -10990,14 +10990,6 @@
     )
   )
 
-  (text "routing, footprints left\n" (at 191.77 44.45 0)
-    (effects (font (size 1.27 1.27)) (justify left bottom))
-    (uuid 2c1b8e5f-d12c-4fc1-a674-e750ca5d1c73)
-  )
-  (text "TODO\n" (at 200.66 40.64 0)
-    (effects (font (size 1.27 1.27)) (justify left bottom))
-    (uuid 41fd65d6-8878-4288-8074-a632c4da8a0a)
-  )
   (text "On the wiring harness this Safety Out MUST\nbe placed before the AIR as a last SDC circuit"
     (at 21.59 163.83 0)
     (effects (font (size 1.27 1.27) italic) (justify left bottom))

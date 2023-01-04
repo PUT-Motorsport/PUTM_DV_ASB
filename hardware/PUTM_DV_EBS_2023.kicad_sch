@@ -11459,9 +11459,6 @@
     (path "/81567b80-5afb-49a2-8e1a-6e4e57e56b9d/44f1a4f0-11d0-42ef-aa7f-adef08f27f22"
       (reference "#PWR044") (unit 1) (value "GND") (footprint "")
     )
-    (path "/d8688165-16f9-4d4a-b76d-8edb3b6e7c8b/13a40777-e7bd-41ae-9b9b-4300e8dd37fc"
-      (reference "#PWR047") (unit 1) (value "LINE") (footprint "")
-    )
     (path "/d8688165-16f9-4d4a-b76d-8edb3b6e7c8b/a5bc15b9-c8a5-43bc-af6a-c78013ed8800"
       (reference "#PWR048") (unit 1) (value "GND") (footprint "")
     )
@@ -11534,6 +11531,9 @@
     (path "/16412294-9d23-4b06-9a1c-2367431a1782/d3b4efea-9abe-48dd-a77a-885a758985d9"
       (reference "#PWR0105") (unit 1) (value "GND") (footprint "")
     )
+    (path "/d8688165-16f9-4d4a-b76d-8edb3b6e7c8b/c4307e23-8b84-4c84-be65-8fe94b22b5cd"
+      (reference "#PWR0106") (unit 1) (value "LINE") (footprint "")
+    )
     (path "/81567b80-5afb-49a2-8e1a-6e4e57e56b9d/a3a3cf4d-b742-4e9a-8658-a9bfafd92b8c"
       (reference "#PWR0107") (unit 1) (value "LINE") (footprint "")
     )
@@ -11557,6 +11557,9 @@
     )
     (path "/0e6e746e-cf7c-47e8-8ed6-c681697efa7a/d2cebea6-4b71-4d4d-8083-65636bff8f5a/e896e08b-7a55-4246-bd5c-9d35f029e437"
       (reference "#PWR0114") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/bbd4f989-bc6f-4d23-b657-5429a2409e1d/5206f613-6bff-49a6-836f-c54d74b69b6f"
+      (reference "120_JP1") (unit 1) (value "Jumper_NC_Small") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
     )
     (path "/16412294-9d23-4b06-9a1c-2367431a1782/a7b1f5e9-a4dc-4df5-a425-36b04baf233d"
       (reference "C1") (unit 1) (value "10n 1%") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
@@ -11761,9 +11764,6 @@
     )
     (path "/d8688165-16f9-4d4a-b76d-8edb3b6e7c8b/54b41d50-2780-4416-9d8a-74df22d736d8"
       (reference "J5") (unit 1) (value "MAIN") (footprint "PUTM_Kicad_FOOTPRINTS:M80-5L112YYMC")
-    )
-    (path "/bbd4f989-bc6f-4d23-b657-5429a2409e1d/5206f613-6bff-49a6-836f-c54d74b69b6f"
-      (reference "JP1") (unit 1) (value "Jumper_NC_Small") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
     )
     (path "/5ac2ed84-f067-458b-b606-2c46aae0c926/b1f5c445-1bd0-424a-a292-c6d45aff5b23"
       (reference "K1") (unit 1) (value "FINDER-30.22") (footprint "Relay_THT:Relay_DPDT_Finder_30.22")

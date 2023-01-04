@@ -2294,7 +2294,7 @@
   (symbol (lib_id "Jumper:Jumper_2_Open") (at 265.43 97.79 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 5206f613-6bff-49a6-836f-c54d74b69b6f)
-    (property "Reference" "JP1" (id 0) (at 267.3096 96.6216 90)
+    (property "Reference" "120_JP1" (id 0) (at 267.3096 96.6216 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Jumper_NC_Small" (id 1) (at 267.3096 98.933 90)

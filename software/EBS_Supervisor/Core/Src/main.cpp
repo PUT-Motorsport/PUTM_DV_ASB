@@ -99,6 +99,8 @@ static struct TestPoints
 	volatile const uint16_t &air_ebs_adc = adc_dma_buffer[0];
 	volatile const uint16_t &air_redundant = adc_dma_buffer[1];
 	volatile const uint16_t &air_main = adc_dma_buffer[2];
+
+	volatile bool sdc_ready = false;
 } volatile test_points;
 #endif
 
@@ -175,6 +177,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 	while (1)
 	{
+#if USE_TEST
+		test_points.sdc_ready = sdc_ready.isActive();
+#endif
 		werker->run();
     /* USER CODE END WHILE */
 

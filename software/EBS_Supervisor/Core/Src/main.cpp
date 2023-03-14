@@ -72,7 +72,7 @@ volatile uint16_t adc_dma_buffer[3];
 
 uint16_t can_timeout_counter;
 
-volatile Fun air_fun = { 0.0026308866087872f, -2.00210470928703f };
+Fun air_fun = { 0.0026308866087872f, -2.00210470928703f };
 
 volatile float air_ebs;
 volatile float air_redundant;
@@ -97,32 +97,29 @@ GpioInElement sdc_ready(SDC_RDY_GPIO_Port, SDC_RDY_Pin);
 
 static struct Config
 {
-	constexpr float brake_lower_bound = 6.5f;
-	constexpr float brake_upper_bound = 8.f;
-	constexpr float brake_press_deviation = 0.01f;
-	constexpr float can_brake_offset = -0.01f;
-	constexpr float press_tf_coef = 1.f;
-	constexpr float can_brake_lower_bound = 1.f;
-	constexpr float can_engaged_brakes_upper_bound = 90.f;
-	constexpr float can_engaged_brakes_lower_bound = 60.f;
+	constexpr static float brake_lower_bound = 6.5f;
+	constexpr static float brake_upper_bound = 8.f;
+	constexpr static float brake_press_deviation = 0.01f;
+	constexpr static float can_brake_offset = -0.01f;
+	constexpr static float press_tf_coef = 1.f;
+	constexpr static float can_brake_lower_bound = 1.f;
+	constexpr static float can_engaged_brakes_upper_bound = 90.f;
+	constexpr static float can_engaged_brakes_lower_bound = 60.f;
 
-	constexpr uint32_t sdc_settle_timeout = 100;
-	constexpr uint32_t valve_settle_delay = 200;
-	constexpr uint32_t valve_settle_timeout = 200;
+	constexpr static uint32_t sdc_settle_timeout = 100;
+	constexpr static uint32_t valve_settle_delay = 200;
+	constexpr static uint32_t valve_settle_timeout = 200;
 
-	constexpr uint16_t can_timeout = 100;
+	constexpr static uint16_t can_timeout = 100;
 }volatile config;
 
 /* Tests */
 #if USE_TEST_POINTS
-static struct TestPoints
+struct TestPoints
 {
-	struct ADC
-	{
-		volatile const uint16_t &air_ebs_adc = adc_dma_buffer[0];
-		volatile const uint16_t &air_redundant_adc = adc_dma_buffer[1];
-		volatile const uint16_t &air_main_adc = adc_dma_buffer[2];
-	}volatile adc;
+	volatile const uint16_t &air_ebs_adc = adc_dma_buffer[0];
+	volatile const uint16_t &air_redundant_adc = adc_dma_buffer[1];
+	volatile const uint16_t &air_main_adc = adc_dma_buffer[2];
 	volatile float &air_ebs_ = air_ebs;
 	volatile float &air_redundant_adc_ = air_redundant;
 	volatile float &air_main_adc_ = air_main;
@@ -187,6 +184,8 @@ int main(void)
 	HAL_ADCEx_Calibration_Start(&hadc1);
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
 
+	while(true);
+
 	//--------------------------------------------------------------------------------------------------------------------
 	//Initial checkup
 
@@ -218,7 +217,7 @@ int main(void)
 
 	//aq_main.break_press returns in kP and we use Bars, so times 0.01
 	float brake_press_front = aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
-	float brake_press_rear = aq_main.brake_pressure_rear * 0.01f + config.can_brake_offset;
+	float brake_press_rear = aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
 
 	if(brake_press_front < config.press_tf_coef * air_ebs) Error_Handler();
 	if(brake_press_rear < config.press_tf_coef * air_ebs) Error_Handler();
@@ -245,7 +244,7 @@ int main(void)
 			aq_main = PUTM_CAN::can.get_aq_main();
 
 			brake_press_front = aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
-			brake_press_rear = aq_main.brake_pressure_rear * 0.01f + config.can_brake_offset;
+			brake_press_rear = aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
 		}
 		if(brake_press_front > config.press_tf_coef * air_ebs && brake_press_rear < config.can_brake_lower_bound) break;
 	}
@@ -261,7 +260,7 @@ int main(void)
 			aq_main = PUTM_CAN::can.get_aq_main();
 
 			brake_press_front = aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
-			brake_press_rear = aq_main.brake_pressure_rear * 0.01f + config.can_brake_offset;
+			brake_press_rear = aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
 		}
 		if(brake_press_rear > config.press_tf_coef * air_ebs && brake_press_front < config.can_brake_lower_bound) break;
 	}
@@ -291,7 +290,7 @@ int main(void)
 					aq_main = PUTM_CAN::can.get_aq_main();
 
 					brake_press_front = aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
-					brake_press_rear = aq_main.brake_pressure_rear * 0.01f + config.can_brake_offset;
+					brake_press_rear = aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
 				}
 				if(config.can_engaged_brakes_lower_bound < brake_press_rear  && config.can_engaged_brakes_upper_bound > brake_press_rear &&
 				   config.can_engaged_brakes_lower_bound < brake_press_front && config.can_engaged_brakes_upper_bound > brake_press_front) break;
@@ -301,10 +300,11 @@ int main(void)
 
 		//check if can alive
 		auto apps_main = PUTM_CAN::can.get_apps_main();
-		counter_value = apps_main.counter();
-		if(prev_apps_counter_value = counter_value) can_timeout_counter++;
+		auto counter_value = apps_main.counter;
+		if(prev_apps_counter_value == counter_value) can_timeout_counter++;
 		else can_timeout_counter = 0;
 		if(can_timeout_counter >= config.can_timeout) Error_Handler();
+		prev_apps_counter_value = counter_value;
 
 		//check Ass
 		//TODO: do ustalenia skąd mam to niby brać
@@ -605,7 +605,7 @@ static void MX_GPIO_Init(void)
 void HAL_ADC_ConsCpltCallback(ADC_HandleTypeDef *hadc)
 {
 	air_ebs = air_fun.solve(float(adc_dma_buffer[0]));
-	air_redundant_adc = air_fun.solve(float(adc_dma_buffer[1]));
+	air_redundant = air_fun.solve(float(adc_dma_buffer[1]));
 	air_main = air_fun.solve(float(adc_dma_buffer[2]));
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
 }
@@ -642,10 +642,10 @@ void Error_Handler(void)
 	  {
 		  PUTM_CAN::DV_Ass dv_ass
 		  {
-			  .ass = PUTM_CAN::AutonomousSystemStatus::Emergency,
+			  .status = PUTM_CAN::AutonomousSystemStatus::Emergency
 		  };
 		  PUTM_CAN::Can_tx_message<PUTM_CAN::DV_Ass> can_sender(dv_ass, PUTM_CAN::can_tx_header_DV_ASS);
-		  if(can_sender.send(hcan1) != HAL_StatusTypeDef::HAL_OK) led_chk.activate();
+		  if(can_sender.send(hcan) != HAL_StatusTypeDef::HAL_OK) led_chk.activate();
 	  }
 
 	//TODO: wysyłanie ramki do ASSI

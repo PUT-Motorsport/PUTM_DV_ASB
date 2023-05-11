@@ -15,3 +15,11 @@
 2023-03-02 14:31:42,507 [ERROR] ConfigurationRetriever:140 - IOException on connection: citools.st.com
 2023-03-02 14:31:42,513 [ERROR] ConfigurationRetriever:140 - IOException on connection: citools.st.com
 2023-03-02 14:31:44,342 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2023-05-12 01:28:41,547 [INFO] Activator:179 - 
+
+
+2023-05-12 01:28:41,547 [INFO] Activator:180 - !SESSION log4j initialized
+2023-05-12 01:29:30,837 [INFO] Activator:179 - 
+
+
+2023-05-12 01:29:30,838 [INFO] Activator:180 - !SESSION log4j initialized

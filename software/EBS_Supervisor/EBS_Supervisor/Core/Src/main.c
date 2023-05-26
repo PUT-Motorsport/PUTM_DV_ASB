@@ -181,8 +181,8 @@ int main(void)
   MX_CAN_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-//	HAL_ADCEx_Calibration_Start(&hadc1);
-//	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
+	HAL_ADCEx_Calibration_Start(&hadc1);
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
 //
 //	//--------------------------------------------------------------------------------------------------------------------
 //	//Initial checkup
@@ -272,8 +272,6 @@ int main(void)
 	//--------------------------------------------------------------------------------------------------------------------
 	//continuous monitoring
 
-  PUTM_CAN::AQ_main;
-
 //	auto apps_main = PUTM_CAN::can.get_apps_main();
 //	auto prev_apps_counter_value = apps_main.counter;
 //	while (true)
@@ -323,15 +321,28 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	}
+	//}
 
 	//--------------------------------------------------------------------------------------------------------------------
 	//Stop monitoring
-	stopTogglingWatchdog();
+//	stopTogglingWatchdog();
 
 	//TODO: idk if in stop monitoring mode sth should be done
+using namespace PUTM_CAN;
+	while(true) {
 
-	while(true) {}
+		AQ_main aq;
+		aq.brake_pressure_back = test_points.air_ebs_adc;
+		aq.brake_pressure_front = test_points.air_ebs_adc;
+
+		auto aq_main_frame = PUTM_CAN::Can_tx_message<AQ_main>(aq, can_tx_header_AQ_MAIN);
+
+		auto status = aq_main_frame.send(hcan);
+
+		HAL_Delay(1000);
+int chuj;
+
+	}
   /* USER CODE END 3 */
 }
 
@@ -348,11 +359,12 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV2;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -368,7 +380,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
     Error_Handler();
   }
@@ -461,11 +473,11 @@ static void MX_CAN_Init(void)
 
   /* USER CODE END CAN_Init 1 */
   hcan.Instance = CAN1;
-  hcan.Init.Prescaler = 16;
+  hcan.Init.Prescaler = 4;
   hcan.Init.Mode = CAN_MODE_NORMAL;
   hcan.Init.SyncJumpWidth = CAN_SJW_1TQ;
   hcan.Init.TimeSeg1 = CAN_BS1_1TQ;
-  hcan.Init.TimeSeg2 = CAN_BS2_1TQ;
+  hcan.Init.TimeSeg2 = CAN_BS2_7TQ;
   hcan.Init.TimeTriggeredMode = DISABLE;
   hcan.Init.AutoBusOff = DISABLE;
   hcan.Init.AutoWakeUp = DISABLE;

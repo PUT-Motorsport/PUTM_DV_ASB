@@ -181,87 +181,87 @@ int main(void)
   MX_CAN_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-	HAL_ADCEx_Calibration_Start(&hadc1);
-	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
-
-	//--------------------------------------------------------------------------------------------------------------------
-	//Initial checkup
-
-	//check if sdc is working
-	Timer sdc_timeout_timer(config.sdc_settle_timeout);
-	starTogglingWatchdog();
-	while(true)
-	{
-		if(sdc_timeout_timer.checkIfTimedOutThenReset()) Error_Handler();
-		if(sdc_ready.isActive()) break;
-	}
-
-	sdc_timeout_timer.restart();
-	stopTogglingWatchdog();
-	while(true)
-	{
-		if(sdc_timeout_timer.checkIfTimedOutThenReset()) Error_Handler();
-		if(!sdc_ready.isActive()) break;
-	}
-
-	starTogglingWatchdog();
-
-	//check pressure
-	if(std::abs(air_ebs - air_redundant) > config.brake_press_deviation) Error_Handler();
-	if(config.brake_lower_bound >= air_ebs || air_ebs >= config.brake_upper_bound) Error_Handler();
-	if(config.brake_lower_bound >= air_redundant || air_redundant >= config.brake_upper_bound) Error_Handler();
-
-	auto aq_main = PUTM_CAN::can.get_aq_main();
-
-	//aq_main.break_press returns in kP and we use Bars, so times 0.01
-	float brake_press_front = aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
-	float brake_press_rear = aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
-
-	if(brake_press_front < config.press_tf_coef * air_ebs) Error_Handler();
-	if(brake_press_rear < config.press_tf_coef * air_ebs) Error_Handler();
-
-	//wait for tc enabled
-	bool tc_activated = false;
-	do
-	{
-		HAL_Delay(100);
-		auto tc_main = PUTM_CAN::can.get_tc_main();
-		tc_activated = tc_main.traction_control_enable;
-	} while(!tc_activated);
-
-	//check valves
-	valve1.activate();
-	valve2.deactivate();
-	HAL_Delay(config.valve_settle_delay);
-	Timer valve_timeout_timer(config.valve_settle_timeout);
-	while(true)
-	{
-		if(valve_timeout_timer.checkIfTimedOutThenReset()) Error_Handler();
-		if(PUTM_CAN::can.get_aq_main_new_data())
-		{
-			aq_main = PUTM_CAN::can.get_aq_main();
-
-			brake_press_front = aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
-			brake_press_rear = aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
-		}
-		if(brake_press_front > config.press_tf_coef * air_ebs && brake_press_rear < config.can_brake_lower_bound) break;
-	}
-	valve1.activate();
-	valve2.deactivate();
-	HAL_Delay(config.valve_settle_delay);
-	valve_timeout_timer.restart();
-	while(true)
-	{
-		if(valve_timeout_timer.checkIfTimedOutThenReset()) Error_Handler();
-		if(PUTM_CAN::can.get_aq_main_new_data())
-		{
-			aq_main = PUTM_CAN::can.get_aq_main();
-
-			brake_press_front = aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
-			brake_press_rear = aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
-		}
-		if(brake_press_rear > config.press_tf_coef * air_ebs && brake_press_front < config.can_brake_lower_bound) break;
-	}
+//	HAL_ADCEx_Calibration_Start(&hadc1);
+//	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
+//
+//	//--------------------------------------------------------------------------------------------------------------------
+//	//Initial checkup
+//
+//	//check if sdc is working
+//	Timer sdc_timeout_timer(config.sdc_settle_timeout);
+//	starTogglingWatchdog();
+//	while(true)
+//	{
+//		if(sdc_timeout_timer.checkIfTimedOutThenReset()) Error_Handler();
+//		if(sdc_ready.isActive()) break;
+//	}
+//
+//	sdc_timeout_timer.restart();
+//	stopTogglingWatchdog();
+//	while(true)
+//	{
+//		if(sdc_timeout_timer.checkIfTimedOutThenReset()) Error_Handler();
+//		if(!sdc_ready.isActive()) break;
+//	}
+//
+//	starTogglingWatchdog();
+//
+//	//check pressure
+//	if(std::abs(air_ebs - air_redundant) > config.brake_press_deviation) Error_Handler();
+//	if(config.brake_lower_bound >= air_ebs || air_ebs >= config.brake_upper_bound) Error_Handler();
+//	if(config.brake_lower_bound >= air_redundant || air_redundant >= config.brake_upper_bound) Error_Handler();
+//
+//	auto aq_main = PUTM_CAN::can.get_aq_main();
+//
+//	//aq_main.break_press returns in kP and we use Bars, so times 0.01
+//	float brake_press_front = aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
+//	float brake_press_rear = aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
+//
+//	if(brake_press_front < config.press_tf_coef * air_ebs) Error_Handler();
+//	if(brake_press_rear < config.press_tf_coef * air_ebs) Error_Handler();
+//
+//	//wait for tc enabled
+//	bool tc_activated = false;
+//	do
+//	{
+//		HAL_Delay(100);
+//		auto tc_main = PUTM_CAN::can.get_tc_main();
+//		tc_activated = tc_main.traction_control_enable;
+//	} while(!tc_activated);
+//
+//	//check valves
+//	valve1.activate();
+//	valve2.deactivate();
+//	HAL_Delay(config.valve_settle_delay);
+//	Timer valve_timeout_timer(config.valve_settle_timeout);
+//	while(true)
+//	{
+//		if(valve_timeout_timer.checkIfTimedOutThenReset()) Error_Handler();
+//		if(PUTM_CAN::can.get_aq_main_new_data())
+//		{
+//			aq_main = PUTM_CAN::can.get_aq_main();
+//
+//			brake_press_front = aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
+//			brake_press_rear = aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
+//		}
+//		if(brake_press_front > config.press_tf_coef * air_ebs && brake_press_rear < config.can_brake_lower_bound) break;
+//	}
+//	valve1.activate();
+//	valve2.deactivate();
+//	HAL_Delay(config.valve_settle_delay);
+//	valve_timeout_timer.restart();
+//	while(true)
+//	{
+//		if(valve_timeout_timer.checkIfTimedOutThenReset()) Error_Handler();
+//		if(PUTM_CAN::can.get_aq_main_new_data())
+//		{
+//			aq_main = PUTM_CAN::can.get_aq_main();
+//
+//			brake_press_front = aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
+//			brake_press_rear = aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
+//		}
+//		if(brake_press_rear > config.press_tf_coef * air_ebs && brake_press_front < config.can_brake_lower_bound) break;
+//	}
 
 
 
@@ -271,40 +271,43 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 	//--------------------------------------------------------------------------------------------------------------------
 	//continuous monitoring
-	auto apps_main = PUTM_CAN::can.get_apps_main();
-	auto prev_apps_counter_value = apps_main.counter;
-	while (true)
-	{
-		//check sdc
-		if(!sdc_ready.isActive())
-		{
-			HAL_Delay(config.valve_settle_delay);
-			valve_timeout_timer.restart();
-			while(true)
-			{
-				if(valve_timeout_timer.checkIfTimedOutThenReset()) Error_Handler();
-				if(PUTM_CAN::can.get_aq_main_new_data())
-				{
-					aq_main = PUTM_CAN::can.get_aq_main();
 
-					brake_press_front = aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
-					brake_press_rear = aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
-				}
-				if(config.can_engaged_brakes_lower_bound < brake_press_rear 	&&
-				   config.can_engaged_brakes_upper_bound > brake_press_rear 	&&
-				   config.can_engaged_brakes_lower_bound < brake_press_front 	&&
-				   config.can_engaged_brakes_upper_bound > brake_press_front) break;
-			}
-			break;
-		}
+  PUTM_CAN::AQ_main;
 
-		//check if can alive
-		auto apps_main = PUTM_CAN::can.get_apps_main();
-		auto counter_value = apps_main.counter;
-		if(prev_apps_counter_value == counter_value) can_timeout_counter++;
-		else can_timeout_counter = 0;
-		if(can_timeout_counter >= config.can_timeout) Error_Handler();
-		prev_apps_counter_value = counter_value;
+//	auto apps_main = PUTM_CAN::can.get_apps_main();
+//	auto prev_apps_counter_value = apps_main.counter;
+//	while (true)
+//	{
+//		//check sdc
+//		if(!sdc_ready.isActive())
+//		{
+//			HAL_Delay(config.valve_settle_delay);
+//			valve_timeout_timer.restart();
+//			while(true)
+//			{
+//				if(valve_timeout_timer.checkIfTimedOutThenReset()) Error_Handler();
+//				if(PUTM_CAN::can.get_aq_main_new_data())
+//				{
+//					aq_main = PUTM_CAN::can.get_aq_main();
+//
+//					brake_press_front = aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
+//					brake_press_rear = aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
+//				}
+//				if(config.can_engaged_brakes_lower_bound < brake_press_rear 	&&
+//				   config.can_engaged_brakes_upper_bound > brake_press_rear 	&&
+//				   config.can_engaged_brakes_lower_bound < brake_press_front 	&&
+//				   config.can_engaged_brakes_upper_bound > brake_press_front) break;
+//			}
+//			break;
+//		}
+//
+//		//check if can alive
+//		auto apps_main = PUTM_CAN::can.get_apps_main();
+//		auto counter_value = apps_main.counter;
+//		if(prev_apps_counter_value == counter_value) can_timeout_counter++;
+//		else can_timeout_counter = 0;
+//		if(can_timeout_counter >= config.can_timeout) Error_Handler();
+//		prev_apps_counter_value = counter_value;
 
 		//check Ass
 		//TODO: do ustalenia skąd mam to niby brać
@@ -313,9 +316,9 @@ int main(void)
 		//TODO: też do ustalenia
 
 		//check pressure
-		if(std::abs(air_ebs - air_redundant) > config.brake_press_deviation) Error_Handler();
-		if(config.brake_lower_bound >= air_ebs || air_ebs >= config.brake_upper_bound) Error_Handler();
-		if(config.brake_lower_bound >= air_redundant || air_redundant >= config.brake_upper_bound) Error_Handler();
+//		if(std::abs(air_ebs - air_redundant) > config.brake_press_deviation) Error_Handler();
+//		if(config.brake_lower_bound >= air_ebs || air_ebs >= config.brake_upper_bound) Error_Handler();
+//		if(config.brake_lower_bound >= air_redundant || air_redundant >= config.brake_upper_bound) Error_Handler();
 
     /* USER CODE END WHILE */
 

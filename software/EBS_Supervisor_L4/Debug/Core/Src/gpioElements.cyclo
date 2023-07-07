@@ -1,0 +1,16 @@
+gpioElements.hpp:18:16:virtual void GpioElement::handle()	1
+gpioElements.hpp:20:11:GpioElement::~GpioElement()	1
+gpioElements.hpp:20:11:virtual GpioElement::~GpioElement()	1
+gpioElements.hpp:43:3:GpioOutElement::~GpioOutElement()	1
+gpioElements.hpp:43:3:virtual GpioOutElement::~GpioOutElement()	1
+gpioElements.hpp:56:3:GpioInElement::~GpioInElement()	1
+gpioElements.hpp:56:3:virtual GpioInElement::~GpioInElement()	1
+gpioElements.cpp:10:1:GpioElement::GpioElement(const GPIO_TypeDef*, uint32_t, bool)	1
+gpioElements.cpp:13:1:GpioOutElement::GpioOutElement(const GPIO_TypeDef*, uint32_t)	1
+gpioElements.cpp:16:1:GpioOutElement::GpioOutElement(const GPIO_TypeDef*, uint32_t, bool)	1
+gpioElements.cpp:19:6:void GpioOutElement::activate()	2
+gpioElements.cpp:24:6:void GpioOutElement::deactivate()	2
+gpioElements.cpp:29:6:void GpioOutElement::toggle()	1
+gpioElements.cpp:34:1:GpioInElement::GpioInElement(const GPIO_TypeDef*, uint32_t)	1
+gpioElements.cpp:37:1:GpioInElement::GpioInElement(const GPIO_TypeDef*, uint32_t, bool)	1
+gpioElements.cpp:40:6:bool GpioInElement::isActive()	1

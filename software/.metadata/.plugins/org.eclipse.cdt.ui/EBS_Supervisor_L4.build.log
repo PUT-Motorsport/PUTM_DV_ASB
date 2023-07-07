@@ -1,0 +1,17 @@
+21:48:01 **** Incremental Build of configuration Debug for project EBS_Supervisor_L4 ****
+make -j8 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4P5xx -c -I../Core/Inc -IC:/Users/przem/STM32Cube/Repository/STM32Cube_FW_L4_V1.17.2/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/przem/STM32Cube/Repository/STM32Cube_FW_L4_V1.17.2/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/przem/STM32Cube/Repository/STM32Cube_FW_L4_V1.17.2/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/przem/STM32Cube/Repository/STM32Cube_FW_L4_V1.17.2/Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "EBS_Supervisor_L4.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\przem\OneDrive\Pulpit\PUTM\PUTM_DV_ASB_2023\software\EBS_Supervisor_L4\STM32L4P5RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="EBS_Supervisor_L4.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: EBS_Supervisor_L4.elf
+ 
+arm-none-eabi-size   EBS_Supervisor_L4.elf 
+arm-none-eabi-objdump -h -S  EBS_Supervisor_L4.elf  > "EBS_Supervisor_L4.list"
+   text	   data	    bss	    dec	    hex	filename
+  23168	    128	   2048	  25344	   6300	EBS_Supervisor_L4.elf
+Finished building: default.size.stdout
+ 
+Finished building: EBS_Supervisor_L4.list
+ 
+
+21:48:03 Build Finished. 0 errors, 0 warnings. (took 1s.806ms)
+

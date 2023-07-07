@@ -1,0 +1,76 @@
+[D0]
+name=WATCHDOG IN
+enabled=true
+color=4287584514
+conversion_type=0
+conv_options=0
+
+[D1]
+name=WATCHDOG OUT
+enabled=true
+color=4279638298
+conversion_type=0
+conv_options=0
+
+[D2]
+name=RESET BUTTON
+enabled=true
+color=4291559424
+conversion_type=0
+conv_options=0
+
+[D3]
+name=RESET LATCH
+enabled=true
+color=4294967295
+conversion_type=0
+conv_options=0
+
+[D4]
+name=SAFETY INPUT
+enabled=true
+color=4291714048
+conversion_type=0
+conv_options=0
+
+[D5]
+name=WATCHDOG + SAFETY AND GATE OUT
+enabled=true
+color=4293848812
+conversion_type=0
+conv_options=0
+
+[D6]
+name=SAFETY READY
+enabled=true
+color=4293776384
+conversion_type=0
+conv_options=0
+
+[D7]
+name=UC + MUX OUTPUT
+enabled=true
+color=4285878395
+conversion_type=0
+conv_options=0
+
+[General]
+decode_signals=0
+views=1
+meta_objs=0
+
+[view0]
+scale=0.0009781799899446927
+v_offset=-140
+splitter_state=@ByteArray(\0\0\0\xff\0\0\0\x1\0\0\0\x2\0\0\0\xed\0\0\x4\x62\x1\0\0\0\x1\x1\0\0\0\x1\0)
+segment_display_mode=1
+offset=22 serialization::archive 14 0 0 0 0 10247609 47902086 74143185 10853904 47600529 38106190 -8 0 0 6
+zero_offset=22 serialization::archive 14 0 0 0 0 0 0 0 0 0 0 0 0 0 6
+D0\trace_height=26
+D1\trace_height=26
+D2\trace_height=26
+D3\trace_height=26
+D4\trace_height=26
+D5\trace_height=26
+D6\trace_height=26
+D7\trace_height=26

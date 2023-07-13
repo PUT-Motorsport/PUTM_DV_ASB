@@ -2598,7 +2598,7 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 79c0ecae-a272-4328-9d45-fea2997b4b4e)
   )
-  (label "WD + SAFETY OK" (at 161.29 138.43 0) (fields_autoplaced)
+  (label "WD & SAFETY OK" (at 161.29 138.43 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid a4f63837-e4b7-4cb9-94bc-93996d598b3b)
   )

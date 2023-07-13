@@ -76,6 +76,8 @@ volatile float air_ebs;
 volatile float air_redundant;
 volatile float air_main;
 
+GPIO_PinState SDC_STATE;
+
 /* GPIO Section */
 GpioOutElement led_ok(LD_OK_GPIO_Port, LD_OK_Pin);
 GpioOutElement led_warn(LD_WARN_GPIO_Port, LD_WARN_Pin);
@@ -152,6 +154,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -179,6 +182,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_ADCEx_Calibration_Start(&hadc1, 10);
   	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
+  	valve1.activate();
+  	valve2.activate();
 
   	//	//--------------------------------------------------------------------------------------------------------------------
   	//	//Initial checkup
@@ -265,6 +270,20 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  	while (1){
+  		SDC_STATE=HAL_GPIO_ReadPin(SDC_RDY_GPIO_Port, SDC_RDY_Pin);
+starTogglingWatchdog();
+as_close_sdc.activate();
+
+  		if (SDC_STATE=GPIO_PIN_RESET){
+
+  			HAL_GPIO_TogglePin(LD_WARN_GPIO_Port, LD_WARN_Pin);
+  			HAL_Delay(500);
+
+  		}
+
+
+  	}
   	//--------------------------------------------------------------------------------------------------------------------
   		//continuous monitoring
 
@@ -499,7 +518,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 1022;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 13869;
+  htim3.Init.Period = 4000;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)

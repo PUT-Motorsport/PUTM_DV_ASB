@@ -384,9 +384,9 @@
       "different_unit_net": "error",
       "duplicate_reference": "error",
       "duplicate_sheet_names": "error",
-      "endpoint_off_grid": "warning",
+      "endpoint_off_grid": "ignore",
       "extra_units": "error",
-      "global_label_dangling": "warning",
+      "global_label_dangling": "error",
       "hier_label_mismatch": "error",
       "label_dangling": "error",
       "lib_symbol_issues": "ignore",
@@ -396,14 +396,14 @@
       "missing_unit": "warning",
       "multiple_net_names": "warning",
       "net_not_bus_member": "warning",
-      "no_connect_connected": "warning",
-      "no_connect_dangling": "warning",
+      "no_connect_connected": "error",
+      "no_connect_dangling": "error",
       "pin_not_connected": "error",
       "pin_not_driven": "error",
-      "pin_to_pin": "warning",
+      "pin_to_pin": "error",
       "power_pin_not_driven": "error",
       "similar_labels": "warning",
-      "simulation_model_issue": "error",
+      "simulation_model_issue": "ignore",
       "unannotated": "error",
       "unit_value_mismatch": "error",
       "unresolved_variable": "error",
@@ -447,7 +447,7 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "24V lines",
-        "pcb_color": "rgb(255, 0, 92)",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 1.6,
         "via_diameter": 0.8,
@@ -464,7 +464,7 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "5V lines",
-        "pcb_color": "rgb(0, 156, 38)",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.7,
         "via_diameter": 0.8,
@@ -481,7 +481,7 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "GND traces",
-        "pcb_color": "rgb(152, 133, 26)",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.4,
         "via_diameter": 0.8,
@@ -560,7 +560,7 @@
     ],
     [
       "16412294-9d23-4b06-9a1c-2367431a1782",
-      "EBS Logic"
+      "Watchdog supervisor & SDC detection"
     ],
     [
       "7da1b602-85c7-4e23-9ab2-6325d57b1abc",
@@ -613,6 +613,10 @@
     [
       "d2cebea6-4b71-4d4d-8083-65636bff8f5a",
       "Pressure Buffer2"
+    ],
+    [
+      "f266ff56-9481-481d-8224-0f0c95f197a3",
+      "Pressure Buffer3"
     ]
   ],
   "text_variables": {}

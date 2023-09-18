@@ -1,0 +1,63 @@
+Circuit: * C:\Users\przem\OneDrive\Pulpit\PUTM\PUTM_DV_ASB_2023\SYM\Pressure_sensor_r2.asc
+
+WARNING: Less than two connections to node nc_01.  This node is used by v3.
+WARNING: Less than two connections to node nc_02.  This node is used by b1.
+Instance "m:u1:61": Length shorter than recommended for a level 1 MOSFET.
+Instance "m:u1:66": Length shorter than recommended for a level 1 MOSFET.
+Instance "m:u1:62": Length shorter than recommended for a level 1 MOSFET.
+Instance "m:u1:63": Length shorter than recommended for a level 1 MOSFET.
+Instance "m:u1:64": Length shorter than recommended for a level 1 MOSFET.
+Instance "m:u1:65": Length shorter than recommended for a level 1 MOSFET.
+Instance "m:u1:67": Length shorter than recommended for a level 1 MOSFET.
+Instance "m:u1:68": Length shorter than recommended for a level 1 MOSFET.
+Direct Newton iteration failed to find .op point.  (Use ".option noopiter" to skip.)
+Starting Gmin stepping
+Gmin = 10
+vernier = 0.5
+Gmin = 1.86414
+vernier = 0.25
+vernier = 0.125
+vernier = 0.0625
+vernier = 0.03125
+Gmin = 1.89914
+vernier = 0.015625
+vernier = 0.0078125
+vernier = 0.00390625
+vernier = 0.00195312
+Gmin = 1.89451
+vernier = 0.000976562
+vernier = 0.000488281
+Gmin = 0
+Gmin stepping succeeded in finding the operating point.
+
+Ignoring empty pin current: Ix(u1:vc+)
+Ignoring empty pin current: Ix(u1:vc-)
+Ignoring empty pin current: Ix(u1:vout+)
+Ignoring empty pin current: Ix(u1:vout-)
+Ignoring empty pin current: Ix(u2:a)
+Ignoring empty pin current: Ix(u2:c)
+Ignoring empty pin current: Ix(u1:vc+)
+Ignoring empty pin current: Ix(u1:vc-)
+Ignoring empty pin current: Ix(u1:vout+)
+Ignoring empty pin current: Ix(u1:vout-)
+Ignoring empty pin current: Ix(u2:a)
+Ignoring empty pin current: Ix(u2:c)
+
+Date: Fri Sep 15 16:27:24 2023
+Total elapsed time: 0.234 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 4296
+traniter = 2807
+tranpoints = 1132
+accept = 1105
+rejected = 27
+matrix size = 108
+fillins = 134
+solver = Normal
+Avg thread counts: 1.2/3.2/1.6/1.2
+Matrix Compiler1: 8.78 KB object code size  2.8/1.8/[0.7]
+Matrix Compiler2: off  [0.9]/2.4/1.2
+

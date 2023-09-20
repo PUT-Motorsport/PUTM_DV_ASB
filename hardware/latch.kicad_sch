@@ -51,37 +51,29 @@
         )
       )
     )
-    (symbol "Diode:1N5408" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "Diode:1N5817" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
       (property "Reference" "D" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)))
       )
-      (property "Value" "1N5408" (at 0 -2.54 0)
+      (property "Value" "1N5817" (at 0 -2.54 0)
         (effects (font (size 1.27 1.27)))
       )
-      (property "Footprint" "Diode_THT:D_DO-201AD_P15.24mm_Horizontal" (at 0 -4.445 0)
+      (property "Footprint" "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal" (at 0 -4.445 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "Datasheet" "http://www.vishay.com/docs/88516/1n5400.pdf" (at 0 0 0)
+      (property "Datasheet" "http://www.vishay.com/docs/88525/1n5817.pdf" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "diode" (at 0 0 0)
+      (property "ki_keywords" "diode Schottky" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "1000V 3A General Purpose Rectifier Diode, DO-201AD" (at 0 0 0)
+      (property "ki_description" "20V 1A Schottky Barrier Rectifier Diode, DO-41" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_fp_filters" "D*DO?201AD*" (at 0 0 0)
+      (property "ki_fp_filters" "D*DO?41*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (symbol "1N5408_0_1"
-        (polyline
-          (pts
-            (xy -1.27 1.27)
-            (xy -1.27 -1.27)
-          )
-          (stroke (width 0.254) (type default))
-          (fill (type none))
-        )
+      (symbol "1N5817_0_1"
         (polyline
           (pts
             (xy 1.27 0)
@@ -100,8 +92,20 @@
           (stroke (width 0.254) (type default))
           (fill (type none))
         )
+        (polyline
+          (pts
+            (xy -1.905 0.635)
+            (xy -1.905 1.27)
+            (xy -1.27 1.27)
+            (xy -1.27 -1.27)
+            (xy -0.635 -1.27)
+            (xy -0.635 -0.635)
+          )
+          (stroke (width 0.254) (type default))
+          (fill (type none))
+        )
       )
-      (symbol "1N5408_1_1"
+      (symbol "1N5817_1_1"
         (pin passive line (at -3.81 0 0) (length 2.54)
           (name "K" (effects (font (size 1.27 1.27))))
           (number "1" (effects (font (size 1.27 1.27))))
@@ -858,7 +862,7 @@
     (uuid e274d458-459e-4de8-9c0b-50d481e3ec99)
   )
 
-  (symbol (lib_id "Diode:1N5408") (at 127 85.09 90) (mirror x) (unit 1)
+  (symbol (lib_id "Diode:1N5817") (at 127 85.09 90) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 0f54969c-fdd4-4064-8f18-8b620d3049b8)
     (property "Reference" "D12" (at 129.54 83.8199 90)
@@ -873,8 +877,8 @@
     (property "Datasheet" "https://www.mouser.pl/datasheet/2/395/SK32A_SERIES_V2102-2822194.pdf" (at 127 85.09 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 53fdc9e8-bb07-4db6-973f-e0c20c880341))
-    (pin "2" (uuid a7c913b8-b290-4f23-8af1-fe3c4fb1ce9e))
+    (pin "1" (uuid cb422e8d-a34b-49eb-a80f-7e4ed2ba40cf))
+    (pin "2" (uuid 66f35145-2509-4687-903f-732c4548c242))
     (instances
       (project "PUTM_DV_EBS_2023"
         (path "/d921fbb5-521e-405d-bdec-f40195adfa1c/81567b80-5afb-49a2-8e1a-6e4e57e56b9d"

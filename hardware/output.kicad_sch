@@ -51,37 +51,29 @@
         )
       )
     )
-    (symbol "Diode:1N5408" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "Diode:1N5817" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
       (property "Reference" "D" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)))
       )
-      (property "Value" "1N5408" (at 0 -2.54 0)
+      (property "Value" "1N5817" (at 0 -2.54 0)
         (effects (font (size 1.27 1.27)))
       )
-      (property "Footprint" "Diode_THT:D_DO-201AD_P15.24mm_Horizontal" (at 0 -4.445 0)
+      (property "Footprint" "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal" (at 0 -4.445 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "Datasheet" "http://www.vishay.com/docs/88516/1n5400.pdf" (at 0 0 0)
+      (property "Datasheet" "http://www.vishay.com/docs/88525/1n5817.pdf" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "diode" (at 0 0 0)
+      (property "ki_keywords" "diode Schottky" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "1000V 3A General Purpose Rectifier Diode, DO-201AD" (at 0 0 0)
+      (property "ki_description" "20V 1A Schottky Barrier Rectifier Diode, DO-41" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_fp_filters" "D*DO?201AD*" (at 0 0 0)
+      (property "ki_fp_filters" "D*DO?41*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (symbol "1N5408_0_1"
-        (polyline
-          (pts
-            (xy -1.27 1.27)
-            (xy -1.27 -1.27)
-          )
-          (stroke (width 0.254) (type default))
-          (fill (type none))
-        )
+      (symbol "1N5817_0_1"
         (polyline
           (pts
             (xy 1.27 0)
@@ -100,8 +92,20 @@
           (stroke (width 0.254) (type default))
           (fill (type none))
         )
+        (polyline
+          (pts
+            (xy -1.905 0.635)
+            (xy -1.905 1.27)
+            (xy -1.27 1.27)
+            (xy -1.27 -1.27)
+            (xy -0.635 -1.27)
+            (xy -0.635 -0.635)
+          )
+          (stroke (width 0.254) (type default))
+          (fill (type none))
+        )
       )
-      (symbol "1N5408_1_1"
+      (symbol "1N5817_1_1"
         (pin passive line (at -3.81 0 0) (length 2.54)
           (name "K" (effects (font (size 1.27 1.27))))
           (number "1" (effects (font (size 1.27 1.27))))
@@ -915,6 +919,10 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 87ef801e-85fb-411c-bfd5-e81d6e1f3d04)
   )
+  (text "//parallel to the AIR's" (at 123.19 50.8 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid af8faf3d-888b-4e14-8dae-440f765155a2)
+  )
   (text "pedała" (at 167.64 165.1 0)
     (effects (font (size 2.54 2.54) italic) (justify left bottom))
     (uuid c65ea8af-0f6e-4c80-8d7d-9439370db350)
@@ -942,10 +950,10 @@
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
-  (global_label "AIR+" (shape input) (at 135.89 45.72 180) (fields_autoplaced)
+  (global_label "TSMS" (shape input) (at 135.89 45.72 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid b6fbf2cb-574b-470c-b1fc-9696030b4562)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 128.9412 45.6406 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 128.1462 45.72 0)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
@@ -1080,7 +1088,7 @@
     )
   )
 
-  (symbol (lib_id "Diode:1N5408") (at 219.71 110.49 270) (unit 1)
+  (symbol (lib_id "Diode:1N5817") (at 219.71 110.49 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8fc8b381-3e99-424a-a2db-2e76152a2384)
     (property "Reference" "D5" (at 222.25 109.2199 90)
@@ -1095,8 +1103,8 @@
     (property "Datasheet" "https://www.mouser.pl/datasheet/2/395/SK32A_SERIES_V2102-2822194.pdf" (at 219.71 110.49 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 9ce4e70c-23e4-4840-b07a-7df5e9927547))
-    (pin "2" (uuid f26cf339-9fbb-4aea-af3b-74f58f188893))
+    (pin "1" (uuid 621a4368-a293-4095-ae39-de3252f20b58))
+    (pin "2" (uuid 5d26690e-cc2f-42b2-bf93-c4024fc8d1bd))
     (instances
       (project "PUTM_DV_EBS_2023"
         (path "/d921fbb5-521e-405d-bdec-f40195adfa1c/5ac2ed84-f067-458b-b606-2c46aae0c926"
@@ -1106,7 +1114,7 @@
     )
   )
 
-  (symbol (lib_id "Diode:1N5408") (at 151.13 60.96 270) (unit 1)
+  (symbol (lib_id "Diode:1N5817") (at 151.13 60.96 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 982be599-12e4-4d75-a41f-6cffd1e7abae)
     (property "Reference" "D4" (at 153.67 59.6899 90)
@@ -1121,8 +1129,8 @@
     (property "Datasheet" "https://www.mouser.pl/datasheet/2/395/SK32A_SERIES_V2102-2822194.pdf" (at 151.13 60.96 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid f2c79937-3467-4435-9fb1-5781e9f20d4a))
-    (pin "2" (uuid 77ce3e60-d763-44b4-acc4-be7e87d2d0d5))
+    (pin "1" (uuid cfc63920-6cd6-4bd5-9964-16e012eb4ac8))
+    (pin "2" (uuid 06c1789f-4f87-4db0-86b8-d23343f74055))
     (instances
       (project "PUTM_DV_EBS_2023"
         (path "/d921fbb5-521e-405d-bdec-f40195adfa1c/5ac2ed84-f067-458b-b606-2c46aae0c926"
@@ -1138,7 +1146,7 @@
     (property "Reference" "R16" (at 208.28 134.62 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1k" (at 208.28 132.08 90)
+    (property "Value" "100R" (at 208.28 132.08 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 208.28 130.048 90)
@@ -1196,7 +1204,7 @@
     (property "Reference" "R14" (at 90.17 133.35 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1k" (at 90.17 130.81 90)
+    (property "Value" "100R" (at 90.17 130.81 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 90.17 128.778 90)
@@ -1267,7 +1275,7 @@
     )
   )
 
-  (symbol (lib_id "Diode:1N5408") (at 100.33 109.22 270) (unit 1)
+  (symbol (lib_id "Diode:1N5817") (at 100.33 109.22 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid ea6cbba5-167a-4d43-88ac-e9233b0a6d54)
     (property "Reference" "D3" (at 102.87 107.9499 90)
@@ -1282,8 +1290,8 @@
     (property "Datasheet" "https://www.mouser.pl/datasheet/2/395/SK32A_SERIES_V2102-2822194.pdf" (at 100.33 109.22 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 573ff2f4-c419-4bfd-91a3-4fbb65ac26ab))
-    (pin "2" (uuid f88d115e-a1c6-4621-a0da-ab250ec4ac49))
+    (pin "1" (uuid 399190a7-9b65-46e8-b7b0-215c49a02ad2))
+    (pin "2" (uuid 642c2a6c-ab31-4178-9274-e5c1527243e4))
     (instances
       (project "PUTM_DV_EBS_2023"
         (path "/d921fbb5-521e-405d-bdec-f40195adfa1c/5ac2ed84-f067-458b-b606-2c46aae0c926"

@@ -1,78 +1,70 @@
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 400:Plugin executed on: 'win32'
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 401:Plugin executed with python version: '3.9.16 (main, Apr  9 2023, 05:22:13) [MSC v.1934 64 bit (AMD64)]'
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 402:KiCad build version: 7.0.2
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 403:Plugin version: 2.1.0
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 404:Frame repr: <wx._core.Frame object at 0x0000016F00FE8EE0>
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 428:Preparing replicator with U8 as a reference
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.replicate_layout 116:getting a list of all footprints on board
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H3 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H2 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H1 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H5 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H6 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint PUTM_LOGO does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H4 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint G*** does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 476:source anchor footprint is 'U8'
-Located on: ['Air pressure sensor control', 'Pressure Buffer']
-With filenames: ['C:\\Users\\przem\\OneDrive\\Pulpit\\PUTM\\PUTM_DV_ASB_2023\\hardware\\sensors.kicad_sch', 'C:\\Users\\przem\\OneDrive\\Pulpit\\PUTM\\PUTM_DV_ASB_2023\\hardware\\buffer.kicad_sch']
-With sheet_id:['Air pressure sensor control', 'Pressure Buffer']
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 483:Corresponding footprints are 
-[('U12', ['Air pressure sensor control', 'Pressure Buffer3']), ('U10', ['Air pressure sensor control', 'Pressure Buffer2']), ('U9', ['Air pressure sensor control', 'Pressure Buffer1']), ('U8', ['Air pressure sensor control', 'Pressure Buffer'])]
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 495:Showing dialog
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.replicate_layout 403:constructing a list of sheets suitable for replication on level:'Pressure Buffer', file:'C:\\Users\\przem\\OneDrive\\Pulpit\\PUTM\\PUTM_DV_ASB_2023\\hardware\\buffer.kicad_sch'
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.replicate_layout 440:suitable sheets are:[['Air pressure sensor control', 'Pressure Buffer1'], ['Air pressure sensor control', 'Pressure Buffer2'], ['Air pressure sensor control', 'Pressure Buffer3']]
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1411:Level selected: ['Air pressure sensor control', 'Pressure Buffer']
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1246:Filtering list of tracks
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 501:Toolbar position: wx.Point(1329, 80)
-09-18 21:00:55 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 506:Dialog position: wx.Point(967, 80)
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 403:constructing a list of sheets suitable for replication on level:'Pressure Buffer', file:'C:\\Users\\przem\\OneDrive\\Pulpit\\PUTM\\PUTM_DV_ASB_2023\\hardware\\buffer.kicad_sch'
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 440:suitable sheets are:[['Air pressure sensor control', 'Pressure Buffer1'], ['Air pressure sensor control', 'Pressure Buffer2'], ['Air pressure sensor control', 'Pressure Buffer3']]
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 248:Replicating layout
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 239:Starting replication of sheets: [['Air pressure sensor control', 'Pressure Buffer1'], ['Air pressure sensor control', 'Pressure Buffer2'], ['Air pressure sensor control', 'Pressure Buffer3']]
-on level: ['Air pressure sensor control', 'Pressure Buffer']
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 400:Plugin executed on: 'win32'
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 401:Plugin executed with python version: '3.9.16 (main, Apr  9 2023, 05:22:13) [MSC v.1934 64 bit (AMD64)]'
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 402:KiCad build version: 7.0.2
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 403:Plugin version: 2.1.0
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 404:Frame repr: <wx._core.Frame object at 0x000001FA64F69EE0>
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 428:Preparing replicator with D13 as a reference
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.replicate_layout 116:getting a list of all footprints on board
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H3 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H2 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H1 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H5 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H6 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint PUTM_LOGO does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H4 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint G*** does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 476:source anchor footprint is 'D13'
+Located on: ['Input Protection', 'TS_COCKPIT_PROT']
+With filenames: ['C:\\Users\\przem\\OneDrive\\Pulpit\\PUTM\\PUTM_DV_ASB_2023\\hardware\\protection.kicad_sch', 'C:\\Users\\przem\\OneDrive\\Pulpit\\PUTM\\PUTM_DV_ASB_2023\\hardware\\ts_ext_prot.kicad_sch']
+With sheet_id:['Input Protection', 'TS_COCKPIT_PROT']
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 483:Corresponding footprints are 
+[('D13', ['Input Protection', 'TS_COCKPIT_PROT']), ('D14', ['Input Protection', 'SAFETY_BUTTON_PROT']), ('D9', ['Input Protection', 'TS_EXT_PROT'])]
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 495:Showing dialog
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.replicate_layout 403:constructing a list of sheets suitable for replication on level:'TS_COCKPIT_PROT', file:'C:\\Users\\przem\\OneDrive\\Pulpit\\PUTM\\PUTM_DV_ASB_2023\\hardware\\ts_ext_prot.kicad_sch'
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.replicate_layout 440:suitable sheets are:[['Input Protection', 'SAFETY_BUTTON_PROT'], ['Input Protection', 'TS_EXT_PROT']]
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1411:Level selected: ['Input Protection', 'TS_COCKPIT_PROT']
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1246:Filtering list of tracks
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 501:Toolbar position: wx.Point(1329, 80)
+09-29 16:52:07 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 506:Dialog position: wx.Point(945, 80)
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 403:constructing a list of sheets suitable for replication on level:'TS_COCKPIT_PROT', file:'C:\\Users\\przem\\OneDrive\\Pulpit\\PUTM\\PUTM_DV_ASB_2023\\hardware\\ts_ext_prot.kicad_sch'
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 440:suitable sheets are:[['Input Protection', 'SAFETY_BUTTON_PROT'], ['Input Protection', 'TS_EXT_PROT']]
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 248:Replicating layout
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 239:Starting replication of sheets: [['Input Protection', 'SAFETY_BUTTON_PROT'], ['Input Protection', 'TS_EXT_PROT']]
+on level: ['Input Protection', 'TS_COCKPIT_PROT']
 with tracks=True, zone=True, text=True, text=True, intersecting=False, remove=False, locked footprints=False, group_only=False
-09-18 21:01:18 root 340:updating GUI message: 'Preparing for replication'
-09-18 21:01:18 root 345:updating GUI with: 0
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 309:Getting the list of source footprints
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 319:Getting the list of all the remaining footprints
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 326:Getting source tracks
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1246:Filtering list of tracks
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 330:Getting source zones
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 334:Getting source text items
-09-18 21:01:18 root 345:updating GUI with: 66
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 338:Getting source drawing items
-09-18 21:01:18 root 340:updating GUI message: 'Replicating footprints'
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 754:Replicating footprints
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 761:Replicating footprints on sheet ['Air pressure sensor control', 'Pressure Buffer1']
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 761:Replicating footprints on sheet ['Air pressure sensor control', 'Pressure Buffer2']
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 761:Replicating footprints on sheet ['Air pressure sensor control', 'Pressure Buffer3']
-09-18 21:01:18 root 340:updating GUI message: 'Replicating tracks'
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 924:Replicating tracks
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 930:Replicating tracks on sheet ['Air pressure sensor control', 'Pressure Buffer1']
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Air pressure sensor control', 'Pressure Buffer1'] :[('unconnected-(U8-NC-Pad8)', 'unconnected-(U9-NC-Pad8)'), ('unconnected-(U8-NC-Pad5)', 'unconnected-(U9-NC-Pad5)'), ('Net-(U8-+)', 'Net-(U9-+)'), ('/Air pressure sensor control/MAIN', '/Air pressure sensor control/EBS'), ('+3V3', '+3V3'), ('GND', 'GND'), ('unconnected-(U8-NC-Pad1)', 'unconnected-(U9-NC-Pad1)'), ('SENSORIN_MAIN', 'SENSORIN_EBS'), ('Net-(U8--)', 'Net-(U9--)')]
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 930:Replicating tracks on sheet ['Air pressure sensor control', 'Pressure Buffer2']
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Air pressure sensor control', 'Pressure Buffer2'] :[('SENSORIN_MAIN', 'SENSORIN_REDUNDANT'), ('/Air pressure sensor control/MAIN', '/Air pressure sensor control/REDUNDANT'), ('Net-(U8--)', 'Net-(U10--)'), ('+3V3', '+3V3'), ('GND', 'GND'), ('unconnected-(U8-NC-Pad5)', 'unconnected-(U10-NC-Pad5)'), ('unconnected-(U8-NC-Pad1)', 'unconnected-(U10-NC-Pad1)'), ('Net-(U8-+)', 'Net-(U10-+)'), ('unconnected-(U8-NC-Pad8)', 'unconnected-(U10-NC-Pad8)')]
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 930:Replicating tracks on sheet ['Air pressure sensor control', 'Pressure Buffer3']
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Air pressure sensor control', 'Pressure Buffer3'] :[('unconnected-(U8-NC-Pad8)', 'unconnected-(U12-NC-Pad8)'), ('+3V3', '+3V3'), ('unconnected-(U8-NC-Pad1)', 'unconnected-(U12-NC-Pad1)'), ('GND', 'GND'), ('Net-(U8--)', 'Net-(U12--)'), ('unconnected-(U8-NC-Pad5)', 'unconnected-(U12-NC-Pad5)'), ('SENSORIN_MAIN', 'SENSORIN_SPARE'), ('/Air pressure sensor control/MAIN', '/Air pressure sensor control/PRESS4'), ('Net-(U8-+)', 'Net-(U12-+)')]
-09-18 21:01:18 root 340:updating GUI message: 'Replicating zones'
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 994:Replicating zones
-09-18 21:01:18 root 345:updating GUI with: 0
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1001:Replicating zones on sheet ['Air pressure sensor control', 'Pressure Buffer1']
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Air pressure sensor control', 'Pressure Buffer1'] :[('unconnected-(U8-NC-Pad8)', 'unconnected-(U9-NC-Pad8)'), ('unconnected-(U8-NC-Pad5)', 'unconnected-(U9-NC-Pad5)'), ('Net-(U8-+)', 'Net-(U9-+)'), ('/Air pressure sensor control/MAIN', '/Air pressure sensor control/EBS'), ('+3V3', '+3V3'), ('GND', 'GND'), ('unconnected-(U8-NC-Pad1)', 'unconnected-(U9-NC-Pad1)'), ('SENSORIN_MAIN', 'SENSORIN_EBS'), ('Net-(U8--)', 'Net-(U9--)')]
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1001:Replicating zones on sheet ['Air pressure sensor control', 'Pressure Buffer2']
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Air pressure sensor control', 'Pressure Buffer2'] :[('SENSORIN_MAIN', 'SENSORIN_REDUNDANT'), ('/Air pressure sensor control/MAIN', '/Air pressure sensor control/REDUNDANT'), ('Net-(U8--)', 'Net-(U10--)'), ('+3V3', '+3V3'), ('GND', 'GND'), ('unconnected-(U8-NC-Pad5)', 'unconnected-(U10-NC-Pad5)'), ('unconnected-(U8-NC-Pad1)', 'unconnected-(U10-NC-Pad1)'), ('Net-(U8-+)', 'Net-(U10-+)'), ('unconnected-(U8-NC-Pad8)', 'unconnected-(U10-NC-Pad8)')]
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1001:Replicating zones on sheet ['Air pressure sensor control', 'Pressure Buffer3']
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Air pressure sensor control', 'Pressure Buffer3'] :[('unconnected-(U8-NC-Pad8)', 'unconnected-(U12-NC-Pad8)'), ('+3V3', '+3V3'), ('unconnected-(U8-NC-Pad1)', 'unconnected-(U12-NC-Pad1)'), ('GND', 'GND'), ('Net-(U8--)', 'Net-(U12--)'), ('unconnected-(U8-NC-Pad5)', 'unconnected-(U12-NC-Pad5)'), ('SENSORIN_MAIN', 'SENSORIN_SPARE'), ('/Air pressure sensor control/MAIN', '/Air pressure sensor control/PRESS4'), ('Net-(U8-+)', 'Net-(U12-+)')]
-09-18 21:01:18 root 340:updating GUI message: 'Replicating text'
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1083:Replicating text
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1090:Replicating text on sheet ['Air pressure sensor control', 'Pressure Buffer1']
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1090:Replicating text on sheet ['Air pressure sensor control', 'Pressure Buffer2']
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1090:Replicating text on sheet ['Air pressure sensor control', 'Pressure Buffer3']
-09-18 21:01:18 root 340:updating GUI message: 'Replicating drawings'
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1134:Replicating drawings
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1140:Replicating drawings on sheet ['Air pressure sensor control', 'Pressure Buffer1']
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1140:Replicating drawings on sheet ['Air pressure sensor control', 'Pressure Buffer2']
-09-18 21:01:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1140:Replicating drawings on sheet ['Air pressure sensor control', 'Pressure Buffer3']
-09-18 21:01:19 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 264:Replication complete
+09-29 16:52:14 root 340:updating GUI message: 'Preparing for replication'
+09-29 16:52:14 root 345:updating GUI with: 0
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 309:Getting the list of source footprints
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 319:Getting the list of all the remaining footprints
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 326:Getting source tracks
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1246:Filtering list of tracks
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 330:Getting source zones
+09-29 16:52:14 root 345:updating GUI with: 50
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 334:Getting source text items
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 338:Getting source drawing items
+09-29 16:52:14 root 340:updating GUI message: 'Replicating footprints'
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 754:Replicating footprints
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 761:Replicating footprints on sheet ['Input Protection', 'SAFETY_BUTTON_PROT']
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 761:Replicating footprints on sheet ['Input Protection', 'TS_EXT_PROT']
+09-29 16:52:14 root 340:updating GUI message: 'Replicating tracks'
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 924:Replicating tracks
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 930:Replicating tracks on sheet ['Input Protection', 'SAFETY_BUTTON_PROT']
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Input Protection', 'SAFETY_BUTTON_PROT'] :[('TS_COCKPIT_P', 'SAFETY_RESET_BUTT_P'), ('GND', 'GND'), ('DASH_TS_ON', 'EBS_RESET _BUTTON')]
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 930:Replicating tracks on sheet ['Input Protection', 'TS_EXT_PROT']
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Input Protection', 'TS_EXT_PROT'] :[('DASH_TS_ON', 'TS_ON_EXTERNAL'), ('TS_COCKPIT_P', 'TS_ON_EXT_P'), ('GND', 'GND')]
+09-29 16:52:14 root 340:updating GUI message: 'Replicating zones'
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 994:Replicating zones
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1001:Replicating zones on sheet ['Input Protection', 'SAFETY_BUTTON_PROT']
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Input Protection', 'SAFETY_BUTTON_PROT'] :[('TS_COCKPIT_P', 'SAFETY_RESET_BUTT_P'), ('GND', 'GND'), ('DASH_TS_ON', 'EBS_RESET _BUTTON')]
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1001:Replicating zones on sheet ['Input Protection', 'TS_EXT_PROT']
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Input Protection', 'TS_EXT_PROT'] :[('DASH_TS_ON', 'TS_ON_EXTERNAL'), ('TS_COCKPIT_P', 'TS_ON_EXT_P'), ('GND', 'GND')]
+09-29 16:52:14 root 340:updating GUI message: 'Replicating text'
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1083:Replicating text
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1090:Replicating text on sheet ['Input Protection', 'SAFETY_BUTTON_PROT']
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1090:Replicating text on sheet ['Input Protection', 'TS_EXT_PROT']
+09-29 16:52:14 root 340:updating GUI message: 'Replicating drawings'
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1134:Replicating drawings
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1140:Replicating drawings on sheet ['Input Protection', 'SAFETY_BUTTON_PROT']
+09-29 16:52:14 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1140:Replicating drawings on sheet ['Input Protection', 'TS_EXT_PROT']
+09-29 16:52:15 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 264:Replication complete

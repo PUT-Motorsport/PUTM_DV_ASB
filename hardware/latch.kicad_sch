@@ -871,7 +871,7 @@
     (property "Value" "SK36A" (at 129.54 86.3599 90)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "Diode_SMD:D_SMA_Handsoldering" (at 131.445 85.09 0)
+    (property "Footprint" "Diode_SMD:D_SMA" (at 131.445 85.09 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "https://www.mouser.pl/datasheet/2/395/SK32A_SERIES_V2102-2822194.pdf" (at 127 85.09 0)

@@ -617,6 +617,14 @@
     [
       "f266ff56-9481-481d-8224-0f0c95f197a3",
       "Pressure Buffer3"
+    ],
+    [
+      "1279e61d-b49a-4682-96da-0b4f49d68759",
+      "CAN_comm"
+    ],
+    [
+      "cb98bda1-8cc2-4b83-bddd-d5756e33cfe1",
+      "uC power decoupling"
     ]
   ],
   "text_variables": {}

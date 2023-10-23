@@ -43,8 +43,8 @@ Ignoring empty pin current: Ix(u1:vout-)
 Ignoring empty pin current: Ix(u2:a)
 Ignoring empty pin current: Ix(u2:c)
 
-Date: Fri Sep 15 16:27:24 2023
-Total elapsed time: 0.234 seconds.
+Date: Wed Oct 18 11:37:43 2023
+Total elapsed time: 0.451 seconds.
 
 tnom = 27
 temp = 27
@@ -57,7 +57,7 @@ rejected = 27
 matrix size = 108
 fillins = 134
 solver = Normal
-Avg thread counts: 1.2/3.2/1.6/1.2
-Matrix Compiler1: 8.78 KB object code size  2.8/1.8/[0.7]
-Matrix Compiler2: off  [0.9]/2.4/1.2
+Avg thread counts: 1.2/1.6/1.6/1.2
+Matrix Compiler1: 8.78 KB object code size  6.3/3.9/[1.2]
+Matrix Compiler2: 10.97 KB object code size  2.2/5.6/[1.6]
 

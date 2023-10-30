@@ -34,9 +34,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 1.0,
-          "height": 1.7,
-          "width": 1.7
+          "drill": 3.2,
+          "height": 3.6,
+          "width": 3.6
         },
         "silk_line_width": 0.153,
         "silk_text_italic": false,
@@ -46,7 +46,7 @@
         "silk_text_upright": false,
         "zones": {
           "45_degree_only": false,
-          "min_clearance": 0.19999999999999998
+          "min_clearance": 0.0
         }
       },
       "diff_pair_dimensions": [
@@ -56,7 +56,20 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        "annular_width|133026000|56112000|e70d6c5f-7b90-4b05-9cd8-e72f616797ab|00000000-0000-0000-0000-000000000000",
+        "annular_width|133026000|57212000|2e833717-309f-4b96-abac-f588436b998d|00000000-0000-0000-0000-000000000000",
+        "annular_width|133026000|58512000|fd7ad04f-2680-40d2-970e-53357e7bb1f3|00000000-0000-0000-0000-000000000000",
+        "annular_width|133026000|59712000|4d0dadf9-eeb4-42ba-9def-eb8aa9fe5c8b|00000000-0000-0000-0000-000000000000",
+        "annular_width|134226000|56112000|44bccf72-095b-4cf4-9a30-1bf9251fa011|00000000-0000-0000-0000-000000000000",
+        "annular_width|134226000|57212000|3391e040-4439-435a-9ea3-fc10a6c1bc14|00000000-0000-0000-0000-000000000000",
+        "annular_width|134226000|58512000|79ec8878-e1df-4712-a52e-0ef6ecaa62fc|00000000-0000-0000-0000-000000000000",
+        "annular_width|134226000|59712000|b2809246-8fe8-4059-b848-a79170aad303|00000000-0000-0000-0000-000000000000",
+        "starved_thermal|105918000|83280000|c460c7cc-0ab1-447e-a2a3-94f4ad45fa6e|a7067ad6-1edd-4765-a76c-94c41010cab1|F.Cu",
+        "starved_thermal|107843000|73855000|c460c7cc-0ab1-447e-a2a3-94f4ad45fa6e|0df6cdcb-dfe6-46fb-8f56-f8d720e08252|F.Cu",
+        "starved_thermal|117268000|82280000|c460c7cc-0ab1-447e-a2a3-94f4ad45fa6e|b79979a6-520f-4e48-acb9-ea49a40e2a3a|F.Cu",
+        "starved_thermal|97953501|56526501|c460c7cc-0ab1-447e-a2a3-94f4ad45fa6e|1b887dab-27d5-4a55-ba9b-631bfdb5016f|F.Cu"
+      ],
       "meta": {
         "version": 2
       },
@@ -494,7 +507,8 @@
       "version": 3
     },
     "net_colors": {
-      "+3V3": "rgb(120, 15, 255)"
+      "+3V3": "rgb(194, 1, 138)",
+      "GND": "rgb(86, 250, 250)"
     },
     "netclass_assignments": null,
     "netclass_patterns": []

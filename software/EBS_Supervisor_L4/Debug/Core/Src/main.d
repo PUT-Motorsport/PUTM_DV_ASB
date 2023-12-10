@@ -46,7 +46,8 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
  ../Core/Inc/PUTM_EV_CAN_LIBRARY/lib/CanHeaders/PM08-CANBUS-TC.hpp \
  ../Core/Inc/PUTM_EV_CAN_LIBRARY/lib/CanHeaders/PM08-CANBUS-TELEMETRY.hpp \
  ../Core/Inc/PUTM_EV_CAN_LIBRARY/lib/CanHeaders/PM08-CANBUS-WHEELTEMP.hpp \
- ../Core/Inc/PUTM_EV_CAN_LIBRARY/lib/CanHeaders/PM08-CANBUS-YAWPROBE.hpp
+ ../Core/Inc/PUTM_EV_CAN_LIBRARY/lib/CanHeaders/PM08-CANBUS-YAWPROBE.hpp \
+ ../Core/Inc/PUTM_EV_CAN_LIBRARY/lib/CanHeaders/PM08-CANBUS-ASB.hpp
 ../Core/Inc/main.h:
 C:/Users/przem/STM32Cube/Repository/STM32Cube_FW_L4_V1.17.2/Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:
 ../Core/Inc/stm32l4xx_hal_conf.h:
@@ -98,3 +99,4 @@ C:/Users/przem/STM32Cube/Repository/STM32Cube_FW_L4_V1.17.2/Drivers/STM32L4xx_HA
 ../Core/Inc/PUTM_EV_CAN_LIBRARY/lib/CanHeaders/PM08-CANBUS-TELEMETRY.hpp:
 ../Core/Inc/PUTM_EV_CAN_LIBRARY/lib/CanHeaders/PM08-CANBUS-WHEELTEMP.hpp:
 ../Core/Inc/PUTM_EV_CAN_LIBRARY/lib/CanHeaders/PM08-CANBUS-YAWPROBE.hpp:
+../Core/Inc/PUTM_EV_CAN_LIBRARY/lib/CanHeaders/PM08-CANBUS-ASB.hpp:

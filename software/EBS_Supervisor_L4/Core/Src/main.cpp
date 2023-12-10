@@ -45,7 +45,7 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-struct Fun
+struct TransferFcn
 {
 	float a;
 	float b;
@@ -66,15 +66,16 @@ TIM_HandleTypeDef htim3;
 
 const int adc_count = 3;
 
-volatile uint16_t adc_dma_buffer[3];
+uint16_t adc_dma_buffer[3];
 
 uint16_t can_timeout_counter;
 
-Fun air_fun = { 0.0026308866087872f, -2.00210470928703f };
+TransferFcn air_transferFcn = { 0.0026308866087872f, -2.00210470928703f };
+// Transfer Function for Air pressure ADC readings:
 
-volatile float air_ebs;
-volatile float air_redundant;
-volatile float air_main;
+float air_ebs;
+float air_redundant;
+float air_main;
 
 GPIO_PinState SDC_STATE;
 
@@ -113,16 +114,16 @@ static struct Config
 
 /* Tests */
 #if USE_TEST_POINTS
-struct TestPoints
+static struct TestPoints
 {
-	volatile const uint16_t &air_ebs_adc = adc_dma_buffer[0];
-	volatile const uint16_t &air_redundant_adc = adc_dma_buffer[1];
-	volatile const uint16_t &air_main_adc = adc_dma_buffer[2];
-	volatile float &air_ebs_ = air_ebs;
-	volatile float &air_redundant_adc_ = air_redundant;
-	volatile float &air_main_adc_ = air_main;
+	constexpr static uint16_t &air_ebs_adc = adc_dma_buffer[0];
+	constexpr static uint16_t &air_redundant_adc = adc_dma_buffer[1];
+	constexpr static uint16_t &air_main_adc = adc_dma_buffer[2];
+	 constexpr static float &air_ebs_ = air_ebs;
+	 constexpr static float &air_redundant_adc_ = air_redundant;
+	 constexpr static float &air_main_adc_ = air_main;
 
-	volatile bool sdc_ready = false;
+	 constexpr static bool sdc_ready = false;
 } volatile test_points;
 #endif
 /* USER CODE END PV */
@@ -135,7 +136,7 @@ static void MX_TIM3_Init(void);
 static void MX_CAN1_Init(void);
 static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
-
+void My_CAN_init();
 void starTogglingWatchdog();
 void stopTogglingWatchdog();
 
@@ -180,6 +181,7 @@ int main(void)
   MX_CAN1_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
+  My_CAN_init();
   HAL_ADCEx_Calibration_Start(&hadc1, 10);
   	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
   	valve1.activate();
@@ -272,17 +274,37 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   	while (1){
   		SDC_STATE=HAL_GPIO_ReadPin(SDC_RDY_GPIO_Port, SDC_RDY_Pin);
-starTogglingWatchdog();
-as_close_sdc.activate();
+  		starTogglingWatchdog();
+  		as_close_sdc.activate();
 
-  		if (SDC_STATE=GPIO_PIN_RESET){
+  		if (SDC_STATE == GPIO_PIN_RESET){
 
   			HAL_GPIO_TogglePin(LD_WARN_GPIO_Port, LD_WARN_Pin);
-  			HAL_Delay(500);
 
   		}
+  		//Pressure conversion to mbar
 
 
+  		//cast wyjść z DMA
+  		//////////////////////////////////
+using namespace PUTM_CAN;
+  		PUTM_CAN::ASB_main asb_data
+		{
+  			.airpressure_bank1 =0,
+  			.airpressure_bank2 =0,
+			.SDC_Ready =0,
+			.valve1_active =0,
+			.valve2_active =0,
+			.device_state =PUTM_CAN::ASB_states::ASB_OK
+  		};
+
+  		auto test1 = PUTM_CAN::Can_tx_message<ASB_main>(asb_data, can_tx_header_ASB_MAIN);
+  		auto status = test1.send(hcan1);
+  		HAL_Delay(20);
+
+  		if (status == HAL_ERROR){
+  			HAL_GPIO_TogglePin(LD_ERR_GPIO_Port, LD_ERR_Pin);
+  		}
   	}
   	//--------------------------------------------------------------------------------------------------------------------
   		//continuous monitoring
@@ -626,10 +648,42 @@ static void MX_GPIO_Init(void)
 
 void HAL_ADC_ConsCpltCallback(ADC_HandleTypeDef *hadc)
 {
-	air_ebs = air_fun.solve(float(adc_dma_buffer[0]));
-	air_redundant = air_fun.solve(float(adc_dma_buffer[1]));
-	air_main = air_fun.solve(float(adc_dma_buffer[2]));
+	air_ebs = air_transferFcn.solve(float(adc_dma_buffer[0]));
+	air_redundant = air_transferFcn.solve(float(adc_dma_buffer[1]));
+	air_main = air_transferFcn.solve(float(adc_dma_buffer[2]));
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
+}
+
+void My_CAN_init(void)
+{
+	constexpr static CAN_FilterTypeDef sFilterConfig{
+		.FilterIdHigh = 0x0000,
+		.FilterIdLow = 0x0000,
+		.FilterMaskIdHigh = 0x0000,
+		.FilterMaskIdLow = 0x0000,
+		.FilterFIFOAssignment = CAN_RX_FIFO0,
+		.FilterBank = 0,
+		.FilterMode = CAN_FILTERMODE_IDMASK,
+		.FilterScale = CAN_FILTERSCALE_32BIT,
+		.FilterActivation = ENABLE,
+		.SlaveStartFilterBank = 14
+	};
+
+
+	if (HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
+	{
+		Error_Handler();
+	}
+
+	if (HAL_CAN_Start(&hcan1) != HAL_OK)
+	{
+		Error_Handler();
+	}
+
+	if (HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_TX_MAILBOX_EMPTY) != HAL_OK)
+	{
+		Error_Handler();
+	}
 }
 
 void starTogglingWatchdog()

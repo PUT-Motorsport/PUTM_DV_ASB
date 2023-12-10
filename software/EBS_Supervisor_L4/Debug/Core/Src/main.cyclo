@@ -7,25 +7,29 @@ gpioElements.hpp:56:3:GpioInElement::~GpioInElement()	1
 gpioElements.hpp:56:3:virtual GpioInElement::~GpioInElement()	1
 message_abstraction.hpp:20:3:PUTM_CAN::Can_rx_message::Can_rx_message(CAN_HandleTypeDef&, uint32_t)	1
 message_abstraction.hpp:105:36:constexpr uint32_t PUTM_CAN::Device_base::get_ID()	1
-can_interface.hpp:120:8:bool PUTM_CAN::Can_interface::parse_message(const PUTM_CAN::Can_rx_message&)	3
-can_interface.hpp:248:6:void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef*)	2
-main.cpp:52:8:float Fun::solve(float)	1
-main.cpp:153:5:int main()	2
-main.cpp:350:6:void SystemClock_Config()	4
-main.cpp:399:13:void MX_ADC1_Init()	4
-main.cpp:467:13:void MX_CAN1_Init()	2
-main.cpp:504:13:void MX_TIM3_Init()	6
-main.cpp:561:13:void MX_DMA_Init()	1
-main.cpp:580:13:void MX_GPIO_Init()	1
-main.cpp:627:6:void HAL_ADC_ConsCpltCallback(ADC_HandleTypeDef*)	1
-main.cpp:635:6:void starTogglingWatchdog()	1
-main.cpp:640:6:void stopTogglingWatchdog()	1
-main.cpp:651:6:void Error_Handler()	1
-array:126:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::begin() [with _Tp = PUTM_CAN::Device_base*; unsigned int _Nm = 37]	1
-array:134:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::end() [with _Tp = PUTM_CAN::Device_base*; unsigned int _Nm = 37]	1
-array:234:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::data() [with _Tp = PUTM_CAN::Device_base*; unsigned int _Nm = 37]	1
-array:59:7:static constexpr _Tp* std::__array_traits<_Tp, _Nm>::_S_ptr(const _Tp (&)[_Nm]) [with _Tp = PUTM_CAN::Device_base*; unsigned int _Nm = 37]	1
-main.cpp:660:1:void __static_initialization_and_destruction_0(int, int)	5
+can_interface.hpp:123:8:bool PUTM_CAN::Can_interface::parse_message(const PUTM_CAN::Can_rx_message&)	3
+can_interface.hpp:251:6:void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef*)	2
+main.cpp:52:8:float TransferFcn::solve(float)	1
+message_abstraction.hpp:35:13:constexpr PUTM_CAN::Can_tx_message<T>::Can_tx_message(const T&, const CAN_TxHeaderTypeDef&) [with T = PUTM_CAN::ASB_main]	1
+main.cpp:154:5:int main()	3
+main.cpp:372:6:void SystemClock_Config()	4
+main.cpp:421:13:void MX_ADC1_Init()	4
+main.cpp:489:13:void MX_CAN1_Init()	2
+main.cpp:526:13:void MX_TIM3_Init()	6
+main.cpp:583:13:void MX_DMA_Init()	1
+main.cpp:602:13:void MX_GPIO_Init()	1
+main.cpp:649:6:void HAL_ADC_ConsCpltCallback(ADC_HandleTypeDef*)	1
+main.cpp:657:6:void My_CAN_init()	4
+main.cpp:689:6:void starTogglingWatchdog()	1
+main.cpp:694:6:void stopTogglingWatchdog()	1
+main.cpp:705:6:void Error_Handler()	1
+array:126:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::begin() [with _Tp = PUTM_CAN::Device_base*; unsigned int _Nm = 38]	1
+array:134:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::end() [with _Tp = PUTM_CAN::Device_base*; unsigned int _Nm = 38]	1
+message_abstraction.hpp:49:21:HAL_StatusTypeDef PUTM_CAN::Can_tx_message<T>::send(CAN_HandleTypeDef&) [with T = PUTM_CAN::ASB_main]	1
+array:234:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::data() [with _Tp = PUTM_CAN::Device_base*; unsigned int _Nm = 38]	1
+array:59:7:static constexpr _Tp* std::__array_traits<_Tp, _Nm>::_S_ptr(const _Tp (&)[_Nm]) [with _Tp = PUTM_CAN::Device_base*; unsigned int _Nm = 38]	1
+main.cpp:714:1:void __static_initialization_and_destruction_0(int, int)	5
+message_abstraction.hpp:126:8:void PUTM_CAN::Device<Device_data_type>::set_data(const PUTM_CAN::Can_rx_message&) [with Device_data_type = PUTM_CAN::ASB_main]	1
 message_abstraction.hpp:126:8:void PUTM_CAN::Device<Device_data_type>::set_data(const PUTM_CAN::Can_rx_message&) [with Device_data_type = PUTM_CAN::YawProbe_air_flow]	1
 message_abstraction.hpp:126:8:void PUTM_CAN::Device<Device_data_type>::set_data(const PUTM_CAN::Can_rx_message&) [with Device_data_type = PUTM_CAN::WheelTemp_main]	1
 message_abstraction.hpp:126:8:void PUTM_CAN::Device<Device_data_type>::set_data(const PUTM_CAN::Can_rx_message&) [with Device_data_type = PUTM_CAN::Telemetry_Main]	1
@@ -63,5 +67,5 @@ message_abstraction.hpp:126:8:void PUTM_CAN::Device<Device_data_type>::set_data(
 message_abstraction.hpp:126:8:void PUTM_CAN::Device<Device_data_type>::set_data(const PUTM_CAN::Can_rx_message&) [with Device_data_type = PUTM_CAN::AQ_acceleration]	1
 message_abstraction.hpp:126:8:void PUTM_CAN::Device<Device_data_type>::set_data(const PUTM_CAN::Can_rx_message&) [with Device_data_type = PUTM_CAN::AQ_main]	1
 message_abstraction.hpp:126:8:void PUTM_CAN::Device<Device_data_type>::set_data(const PUTM_CAN::Can_rx_message&) [with Device_data_type = PUTM_CAN::Apps_main]	1
-main.cpp:660:1:cpp)	1
-main.cpp:660:1:cpp)	1
+main.cpp:714:1:cpp)	1
+main.cpp:714:1:cpp)	1

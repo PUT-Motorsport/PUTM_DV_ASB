@@ -29,6 +29,7 @@
 #include "CanHeaders/PM08-CANBUS-TELEMETRY.hpp"
 #include "CanHeaders/PM08-CANBUS-WHEELTEMP.hpp"
 #include "CanHeaders/PM08-CANBUS-YAWPROBE.hpp"
+#include "CanHeaders/PM08-CANBUS-ASB.hpp"
 
 namespace PUTM_CAN {
 
@@ -73,9 +74,10 @@ class Can_interface {
   Device<Telemetry_Main> telemetry_main{TELEMETRY_MAIN_CAN_ID};
   Device<WheelTemp_main> wheel_temp_main{WHEELTEMP_MAIN_CAN_ID};
   Device<YawProbe_air_flow> yawprobe_air_flow{YAWPROBE_AIR_FLOW_CAN_ID};
+  Device<ASB_main> asb_main{ASB_MAIN_CAN_ID};
 
 
-  std::array<Device_base *, 37> device_array = {&apps,
+  std::array<Device_base *, 38> device_array = {&apps,
                                                 &aq_main,
                                                 &aq_gyroscope,
                                                 &aq_acceleration,
@@ -111,7 +113,8 @@ class Can_interface {
                                                 &yawprobe_air_flow,
                                                 &wheel_temp_main,
                                                 &swps_main,
-                                                &dv_ass};
+                                                &dv_ass,
+  	  	  	  	  	  	  	  	  	  	  	  	&asb_main};
 
 public:
   Can_interface() = default;

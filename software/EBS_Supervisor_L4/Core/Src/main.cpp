@@ -23,7 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include <functional>
 #include <math.h>
-
+#include <cstdint>
 #include "timer.hpp"
 #include "gpioElements.hpp"
 #include "PUTM_EV_CAN_LIBRARY/lib/can_interface.hpp"
@@ -70,12 +70,13 @@ uint16_t adc_dma_buffer[3];
 
 uint16_t can_timeout_counter;
 
-TransferFcn air_transferFcn = { 0.0026308866087872f, -2.00210470928703f };
+TransferFcn air_transferFcn = { 3.227f, 620.0f };
 // Transfer Function for Air pressure ADC readings:
 
 float air_ebs;
 float air_redundant;
 float air_main;
+
 
 GPIO_PinState SDC_STATE;
 
@@ -113,19 +114,6 @@ static struct Config
 } volatile config;
 
 /* Tests */
-#if USE_TEST_POINTS
-static struct TestPoints
-{
-	constexpr static uint16_t &air_ebs_adc = adc_dma_buffer[0];
-	constexpr static uint16_t &air_redundant_adc = adc_dma_buffer[1];
-	constexpr static uint16_t &air_main_adc = adc_dma_buffer[2];
-	 constexpr static float &air_ebs_ = air_ebs;
-	 constexpr static float &air_redundant_adc_ = air_redundant;
-	 constexpr static float &air_main_adc_ = air_main;
-
-	 constexpr static bool sdc_ready = false;
-} volatile test_points;
-#endif
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -276,6 +264,10 @@ int main(void)
   		SDC_STATE=HAL_GPIO_ReadPin(SDC_RDY_GPIO_Port, SDC_RDY_Pin);
   		starTogglingWatchdog();
   		as_close_sdc.activate();
+  		HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
+  		air_ebs = air_transferFcn.solve(float(adc_dma_buffer[0]));
+  		air_redundant = air_transferFcn.solve(float(adc_dma_buffer[1]));
+  		air_main = air_transferFcn.solve(float(adc_dma_buffer[2]));
 
   		if (SDC_STATE == GPIO_PIN_RESET){
 
@@ -288,10 +280,11 @@ int main(void)
   		//cast wyjść z DMA
   		//////////////////////////////////
 using namespace PUTM_CAN;
+
   		PUTM_CAN::ASB_main asb_data
 		{
-  			.airpressure_bank1 =0,
-  			.airpressure_bank2 =0,
+  			.airpressure_bank1 = static_cast<uint16_t>(air_ebs),
+  			.airpressure_bank2 = static_cast<uint16_t>(air_main),
 			.SDC_Ready =0,
 			.valve1_active =0,
 			.valve2_active =0,
@@ -438,15 +431,15 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
   hadc1.Init.ContinuousConvMode = DISABLE;
-  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.NbrOfConversion = 3;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.DMAContinuousRequests = ENABLE;
   hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
   hadc1.Init.OversamplingMode = DISABLE;
   hadc1.Init.DFSDMConfig = ADC_DFSDM_MODE_ENABLE;
@@ -471,6 +464,24 @@ static void MX_ADC1_Init(void)
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_2;
+  sConfig.Rank = ADC_REGULAR_RANK_2;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_3;
+  sConfig.Rank = ADC_REGULAR_RANK_3;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -651,7 +662,7 @@ void HAL_ADC_ConsCpltCallback(ADC_HandleTypeDef *hadc)
 	air_ebs = air_transferFcn.solve(float(adc_dma_buffer[0]));
 	air_redundant = air_transferFcn.solve(float(adc_dma_buffer[1]));
 	air_main = air_transferFcn.solve(float(adc_dma_buffer[2]));
-	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
+	//HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
 }
 
 void My_CAN_init(void)

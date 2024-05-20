@@ -1,7 +1,15 @@
 # PUTM_DV_ASB_2023
 Autonomus Brake System PCB and Software for PM07
 
-Know How:
+Functionality:
+Solenoid valves control,
+Pressure sensors data acquisition,
+Functional safety, and hard-wired logic implementation,
+Autonomous System SDC driver,
+RES communication bridge.
+
+
+Important links:
 
 FSG Rules:
 fsg.one/rules
@@ -11,7 +19,7 @@ Previous board (unusable)
 ASF Examples:
 https://www.formulastudent.de/academy/hands-on/asf/
 
-FSG Academy, DV dla bystzraków:
+FSG Academy:
 https://www.formulastudent.de/fileadmin/user_upload/all/2022/important_docs/FSG21_AS_Beginners_Guide_v1.0.pdf
 
 Jakub's Mechanical construction:

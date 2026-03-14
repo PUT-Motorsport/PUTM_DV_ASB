@@ -1,7 +1,0 @@
-timer.cpp:10:1:Timer::Timer()	1
-timer.cpp:15:1:Timer::Timer(uint32_t)	1
-timer.cpp:20:6:void Timer::setTimeOut(uint32_t)	1
-timer.cpp:25:6:void Timer::restart()	1
-timer.cpp:30:6:bool Timer::checkIfTimedOutThenReset()	3
-timer.cpp:43:10:uint32_t Timer::getPassedTime()	1
-timer.cpp:48:10:uint32_t Timer::getPassedTimeThenReset()	1

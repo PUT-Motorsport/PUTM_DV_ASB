@@ -1,5 +1,0 @@
-C:/Users/przem/STM32Cube/Repository/STM32Cube_FW_L4_V1.17.2/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c:104:19:HAL_DMAEx_ConfigMuxSync	16	static
-C:/Users/przem/STM32Cube/Repository/STM32Cube_FW_L4_V1.17.2/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c:150:19:HAL_DMAEx_ConfigMuxRequestGenerator	16	static
-C:/Users/przem/STM32Cube/Repository/STM32Cube_FW_L4_V1.17.2/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c:189:19:HAL_DMAEx_EnableMuxRequestGenerator	16	static
-C:/Users/przem/STM32Cube/Repository/STM32Cube_FW_L4_V1.17.2/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c:217:19:HAL_DMAEx_DisableMuxRequestGenerator	16	static
-C:/Users/przem/STM32Cube/Repository/STM32Cube_FW_L4_V1.17.2/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c:245:6:HAL_DMAEx_MUX_IRQHandler	16	static

@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "PUTM_EV_CAN_LIBRARY/lib/can_interface.hpp"
+#include "PUTM_EV_CAN_LIBRARY/include/can_driver.hpp"
 #include "gpioElements.hpp"
 #include "timer.hpp"
 #include <cstdint>
@@ -166,7 +166,16 @@ int main(void) {
     MX_CAN1_Init();
     MX_ADC1_Init();
     /* USER CODE BEGIN 2 */
-    My_CAN_init();
+
+    //     My_CAN_init();
+    using namespace putm_ev_can;
+
+    CanDriver can_m;
+
+    if (!can_m.Init(&fcan1)) {
+        Error_Handler();
+    }
+
     HAL_ADCEx_Calibration_Start(&hadc1, 10);
     HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_dma_buffer, adc_count);
     valve1.activate();
@@ -206,172 +215,179 @@ int main(void) {
         air_redundant >= config.brake_upper_bound)
         Error_Handler();
 
-    auto aq_main = PUTM_CAN::can.get_aq_main();
+    // auto aq_main = PUTM_CAN::can.get_aq_main();
 
-    // aq_main.break_press returns in kP and we use Bars, so times 0.01
-    float brake_press_front =
-        aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
-    float brake_press_rear =
-        aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
+    // // aq_main.break_press returns in kP and we use Bars, so times 0.01
+    // float brake_press_front =
+    //     aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
+    // float brake_press_rear =
+    //     aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
 
-    if (brake_press_front < config.press_tf_coef * air_ebs)
-        Error_Handler();
-    if (brake_press_rear < config.press_tf_coef * air_ebs)
-        Error_Handler();
+    // if (brake_press_front < config.press_tf_coef * air_ebs)
+    //     Error_Handler();
+    // if (brake_press_rear < config.press_tf_coef * air_ebs)
+    //     Error_Handler();
 
-    // wait for tc enabled
-    bool tc_activated = false;
-    do {
-        HAL_Delay(100);
-        auto tc_main = PUTM_CAN::can.get_tc_main();
-        tc_activated = tc_main.traction_control_enable;
-    } while (!tc_activated);
+    // // wait for tc enabled
+    // bool tc_activated = false;
+    // do {
+    //     HAL_Delay(100);
+    //     auto tc_main = PUTM_CAN::can.get_tc_main();
+    //     tc_activated = tc_main.traction_control_enable;
+    // } while (!tc_activated);
 
-    // check valves
-    valve1.activate();
-    valve2.deactivate();
-    HAL_Delay(config.valve_settle_delay);
-    Timer valve_timeout_timer(config.valve_settle_timeout);
-    while (true) {
-        if (valve_timeout_timer.checkIfTimedOutThenReset())
-            Error_Handler();
-        if (PUTM_CAN::can.get_aq_main_new_data()) {
-            aq_main = PUTM_CAN::can.get_aq_main();
+    // // check valves
+    // valve1.activate();
+    // valve2.deactivate();
+    // HAL_Delay(config.valve_settle_delay);
+    // Timer valve_timeout_timer(config.valve_settle_timeout);
+    // while (true) {
+    //     if (valve_timeout_timer.checkIfTimedOutThenReset())
+    //         Error_Handler();
+    //     if (PUTM_CAN::can.get_aq_main_new_data()) {
+    //         aq_main = PUTM_CAN::can.get_aq_main();
 
-            brake_press_front =
-                aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
-            brake_press_rear =
-                aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
-        }
-        if (brake_press_front > config.press_tf_coef * air_ebs &&
-            brake_press_rear < config.can_brake_lower_bound)
-            break;
-    }
-    valve1.activate();
-    valve2.deactivate();
-    HAL_Delay(config.valve_settle_delay);
-    valve_timeout_timer.restart();
-    while (true) {
-        if (valve_timeout_timer.checkIfTimedOutThenReset())
-            Error_Handler();
-        if (PUTM_CAN::can.get_aq_main_new_data()) {
-            aq_main = PUTM_CAN::can.get_aq_main();
+    //         brake_press_front =
+    //             aq_main.brake_pressure_front * 0.01f +
+    //             config.can_brake_offset;
+    //         brake_press_rear =
+    //             aq_main.brake_pressure_back * 0.01f +
+    //             config.can_brake_offset;
+    //     }
+    //     if (brake_press_front > config.press_tf_coef * air_ebs &&
+    //         brake_press_rear < config.can_brake_lower_bound)
+    //         break;
+    // }
+    // valve1.activate();
+    // valve2.deactivate();
+    // HAL_Delay(config.valve_settle_delay);
+    // valve_timeout_timer.restart();
+    // while (true) {
+    //     if (valve_timeout_timer.checkIfTimedOutThenReset())
+    //         Error_Handler();
+    //     if (PUTM_CAN::can.get_aq_main_new_data()) {
+    //         aq_main = PUTM_CAN::can.get_aq_main();
 
-            brake_press_front =
-                aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
-            brake_press_rear =
-                aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
-        }
-        if (brake_press_rear > config.press_tf_coef * air_ebs &&
-            brake_press_front < config.can_brake_lower_bound)
-            break;
-    }
+    //         brake_press_front =
+    //             aq_main.brake_pressure_front * 0.01f +
+    //             config.can_brake_offset;
+    //         brake_press_rear =
+    //             aq_main.brake_pressure_back * 0.01f +
+    //             config.can_brake_offset;
+    //     }
+    //     if (brake_press_rear > config.press_tf_coef * air_ebs &&
+    //         brake_press_front < config.can_brake_lower_bound)
+    //         break;
+    // }
 
-    /* USER CODE END 2 */
+    // /* USER CODE END 2 */
 
-    /* Infinite loop */
-    /* USER CODE BEGIN WHILE */
-    while (1) {
-        SDC_STATE = HAL_GPIO_ReadPin(SDC_RDY_GPIO_Port, SDC_RDY_Pin);
-        starTogglingWatchdog();
-        as_close_sdc.activate();
-        HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_dma_buffer, adc_count);
-        air_ebs = air_transferFcn.solve(float(adc_dma_buffer[0]));
-        air_redundant = air_transferFcn.solve(float(adc_dma_buffer[1]));
-        air_main = air_transferFcn.solve(float(adc_dma_buffer[2]));
+    // /* Infinite loop */
+    // /* USER CODE BEGIN WHILE */
+    // while (1) {
+    //     SDC_STATE = HAL_GPIO_ReadPin(SDC_RDY_GPIO_Port, SDC_RDY_Pin);
+    //     starTogglingWatchdog();
+    //     as_close_sdc.activate();
+    //     HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_dma_buffer, adc_count);
+    //     air_ebs = air_transferFcn.solve(float(adc_dma_buffer[0]));
+    //     air_redundant = air_transferFcn.solve(float(adc_dma_buffer[1]));
+    //     air_main = air_transferFcn.solve(float(adc_dma_buffer[2]));
 
-        if (SDC_STATE == GPIO_PIN_RESET) {
-            HAL_GPIO_TogglePin(LD_WARN_GPIO_Port, LD_WARN_Pin);
-        }
-        // Pressure conversion to mbar
+    //     if (SDC_STATE == GPIO_PIN_RESET) {
+    //         HAL_GPIO_TogglePin(LD_WARN_GPIO_Port, LD_WARN_Pin);
+    //     }
+    //     // Pressure conversion to mbar
 
-        // cast wyjść z DMA
-        //////////////////////////////////
-        using namespace PUTM_CAN;
+    //     // cast wyjść z DMA
+    //     //////////////////////////////////
+    //     using namespace PUTM_CAN;
 
-        PUTM_CAN::ASB_main asb_data{
-            .airpressure_bank1 = static_cast<uint16_t>(air_ebs),
-            .airpressure_bank2 = static_cast<uint16_t>(air_main),
-            .SDC_Ready = 0,
-            .valve1_active = 0,
-            .valve2_active = 0,
-            .device_state = PUTM_CAN::ASB_states::ASB_OK};
+    //     PUTM_CAN::ASB_main asb_data{
+    //         .airpressure_bank1 = static_cast<uint16_t>(air_ebs),
+    //         .airpressure_bank2 = static_cast<uint16_t>(air_main),
+    //         .SDC_Ready = 0,
+    //         .valve1_active = 0,
+    //         .valve2_active = 0,
+    //         .device_state = PUTM_CAN::ASB_states::ASB_OK};
 
-        auto test1 = PUTM_CAN::Can_tx_message<ASB_main>(asb_data,
-                                                        can_tx_header_ASB_MAIN);
-        auto status = test1.send(hcan1);
-        HAL_Delay(20);
+    //     auto test1 = PUTM_CAN::Can_tx_message<ASB_main>(asb_data,
+    //                                                     can_tx_header_ASB_MAIN);
+    //     auto status = test1.send(hcan1);
+    //     HAL_Delay(20);
 
-        if (status == HAL_ERROR) {
-            HAL_GPIO_TogglePin(LD_ERR_GPIO_Port, LD_ERR_Pin);
-        }
-    }
-    //--------------------------------------------------------------------------------------------------------------------
-    // continuous monitoring
+    //     if (status == HAL_ERROR) {
+    //         HAL_GPIO_TogglePin(LD_ERR_GPIO_Port, LD_ERR_Pin);
+    //     }
+    // }
+    // //--------------------------------------------------------------------------------------------------------------------
+    // // continuous monitoring
 
-    auto apps_main = PUTM_CAN::can.get_apps_main();
-    auto prev_apps_counter_value = apps_main.counter;
-    while (true) {
-        // check sdc
-        if (!sdc_ready.isActive()) {
-            HAL_Delay(config.valve_settle_delay);
-            valve_timeout_timer.restart();
-            while (true) {
-                if (valve_timeout_timer.checkIfTimedOutThenReset())
-                    Error_Handler();
-                if (PUTM_CAN::can.get_aq_main_new_data()) {
-                    aq_main = PUTM_CAN::can.get_aq_main();
+    // auto apps_main = PUTM_CAN::can.get_apps_main();
+    // auto prev_apps_counter_value = apps_main.counter;
+    // while (true) {
+    //     // check sdc
+    //     if (!sdc_ready.isActive()) {
+    //         HAL_Delay(config.valve_settle_delay);
+    //         valve_timeout_timer.restart();
+    //         while (true) {
+    //             if (valve_timeout_timer.checkIfTimedOutThenReset())
+    //                 Error_Handler();
+    //             if (PUTM_CAN::can.get_aq_main_new_data()) {
+    //                 aq_main = PUTM_CAN::can.get_aq_main();
 
-                    brake_press_front = aq_main.brake_pressure_front * 0.01f +
-                                        config.can_brake_offset;
-                    brake_press_rear = aq_main.brake_pressure_back * 0.01f +
-                                       config.can_brake_offset;
-                }
-                if (config.can_engaged_brakes_lower_bound < brake_press_rear &&
-                    config.can_engaged_brakes_upper_bound > brake_press_rear &&
-                    config.can_engaged_brakes_lower_bound < brake_press_front &&
-                    config.can_engaged_brakes_upper_bound > brake_press_front)
-                    break;
-            }
-            break;
-        }
+    //                 brake_press_front = aq_main.brake_pressure_front * 0.01f
+    //                 +
+    //                                     config.can_brake_offset;
+    //                 brake_press_rear = aq_main.brake_pressure_back * 0.01f +
+    //                                    config.can_brake_offset;
+    //             }
+    //             if (config.can_engaged_brakes_lower_bound < brake_press_rear
+    //             &&
+    //                 config.can_engaged_brakes_upper_bound > brake_press_rear
+    //                 && config.can_engaged_brakes_lower_bound <
+    //                 brake_press_front &&
+    //                 config.can_engaged_brakes_upper_bound >
+    //                 brake_press_front) break;
+    //         }
+    //         break;
+    //     }
 
-        // check if can alive
-        auto apps_main = PUTM_CAN::can.get_apps_main();
-        auto counter_value = apps_main.counter;
-        if (prev_apps_counter_value == counter_value)
-            can_timeout_counter++;
-        else
-            can_timeout_counter = 0;
-        if (can_timeout_counter >= config.can_timeout)
-            Error_Handler();
-        prev_apps_counter_value = counter_value;
+    //     // check if can alive
+    //     auto apps_main = PUTM_CAN::can.get_apps_main();
+    //     auto counter_value = apps_main.counter;
+    //     if (prev_apps_counter_value == counter_value)
+    //         can_timeout_counter++;
+    //     else
+    //         can_timeout_counter = 0;
+    //     if (can_timeout_counter >= config.can_timeout)
+    //         Error_Handler();
+    //     prev_apps_counter_value = counter_value;
 
-        // check Ass
-        // TODO: do ustalenia skąd mam to niby brać
+    //     // check Ass
+    //     // TODO: do ustalenia skąd mam to niby brać
 
-        // check RES
-        // TODO: też do ustalenia
+    //     // check RES
+    //     // TODO: też do ustalenia
 
-        //     check pressure
-        if (std::abs(air_ebs - air_redundant) > config.brake_press_deviation)
-            Error_Handler();
-        if (config.brake_lower_bound >= air_ebs ||
-            air_ebs >= config.brake_upper_bound)
-            Error_Handler();
-        if (config.brake_lower_bound >= air_redundant ||
-            air_redundant >= config.brake_upper_bound)
-            Error_Handler();
+    //     //     check pressure
+    //     if (std::abs(air_ebs - air_redundant) > config.brake_press_deviation)
+    //         Error_Handler();
+    //     if (config.brake_lower_bound >= air_ebs ||
+    //         air_ebs >= config.brake_upper_bound)
+    //         Error_Handler();
+    //     if (config.brake_lower_bound >= air_redundant ||
+    //         air_redundant >= config.brake_upper_bound)
+    //         Error_Handler();
 
-        /* USER CODE END WHILE */
+    //     /* USER CODE END WHILE */
 
-        /* USER CODE BEGIN 3 */
-        //--------------------------------------------------------------------------------------------------------------------
-        // Stop monitoring
-        stopTogglingWatchdog();
-        // TODO: idk if in stop monitoring mode sth should be done
-        /* USER CODE END 3 */
-    }
+    //     /* USER CODE BEGIN 3 */
+    //     //--------------------------------------------------------------------------------------------------------------------
+    //     // Stop monitoring
+    //     stopTogglingWatchdog();
+    //     // TODO: idk if in stop monitoring mode sth should be done
+    //     /* USER CODE END 3 */
+    // }
 }
 
 /**

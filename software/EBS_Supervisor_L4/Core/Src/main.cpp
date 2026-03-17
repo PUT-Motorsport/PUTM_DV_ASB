@@ -282,100 +282,100 @@ int main(void) {
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
-    while (1) {
-        SDC_STATE = HAL_GPIO_ReadPin(SDC_RDY_GPIO_Port, SDC_RDY_Pin);
-        starTogglingWatchdog();
-        as_close_sdc.activate();
-        HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_dma_buffer, adc_count);
-        air_ebs = air_transferFcn.solve(float(adc_dma_buffer[0]));
-        air_redundant = air_transferFcn.solve(float(adc_dma_buffer[1]));
-        air_main = air_transferFcn.solve(float(adc_dma_buffer[2]));
+    // while (1) {
+    //     SDC_STATE = HAL_GPIO_ReadPin(SDC_RDY_GPIO_Port, SDC_RDY_Pin);
+    //     starTogglingWatchdog();
+    //     as_close_sdc.activate();
+    //     HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_dma_buffer, adc_count);
+    //     air_ebs = air_transferFcn.solve(float(adc_dma_buffer[0]));
+    //     air_redundant = air_transferFcn.solve(float(adc_dma_buffer[1]));
+    //     air_main = air_transferFcn.solve(float(adc_dma_buffer[2]));
 
-        if (SDC_STATE == GPIO_PIN_RESET) {
-            HAL_GPIO_TogglePin(LD_WARN_GPIO_Port, LD_WARN_Pin);
-        }
-        // Pressure conversion to mbar
+    //     if (SDC_STATE == GPIO_PIN_RESET) {
+    //         HAL_GPIO_TogglePin(LD_WARN_GPIO_Port, LD_WARN_Pin);
+    //     }
+    // Pressure conversion to mbar
 
-        // cast wyjść z DMA
-        //////////////////////////////////
+    // cast wyjść z DMA
+    //////////////////////////////////
 
-        // PUTM_CAN::ASB_main asb_data{
-        //     .airpressure_bank1 = static_cast<uint16_t>(air_ebs),
-        //     .airpressure_bank2 = static_cast<uint16_t>(air_main),
-        //     .SDC_Ready = 0,
-        //     .valve1_active = 0,
-        //     .valve2_active = 0,
-        //     .device_state = PUTM_CAN::ASB_states::ASB_OK};
+    // PUTM_CAN::ASB_main asb_data{
+    //     .airpressure_bank1 = static_cast<uint16_t>(air_ebs),
+    //     .airpressure_bank2 = static_cast<uint16_t>(air_main),
+    //     .SDC_Ready = 0,
+    //     .valve1_active = 0,
+    //     .valve2_active = 0,
+    //     .device_state = PUTM_CAN::ASB_states::ASB_OK};
 
-        // auto test1 =
-        //     PUTM_CAN::Can_tx_message<ASB_main>(asb_data,
-        //     can_tx_header_ASB_MAIN);
-        // auto status = test1.send(hcan1);
-        // // HAL_Delay(20);
+    // auto test1 =
+    //     PUTM_CAN::Can_tx_message<ASB_main>(asb_data,
+    //     can_tx_header_ASB_MAIN);
+    // auto status = test1.send(hcan1);
+    // // HAL_Delay(20);
 
-        // if (status == HAL_ERROR) {
-        //   HAL_GPIO_TogglePin(LD_ERR_GPIO_Port, LD_ERR_Pin);
-        // }
-    }
-    //--------------------------------------------------------------------------------------------------------------------
-    // continuous monitoring
-
-    //   auto apps_main = PUTM_CAN::can.get_apps_main();
-    //   auto prev_apps_counter_value = apps_main.counter;
-    while (true) {
-        // check sdc
-        if (!sdc_ready.isActive()) {
-            HAL_Delay(config.valve_settle_delay);
-            valve_timeout_timer.restart();
-            while (true) {
-                if (valve_timeout_timer.checkIfTimedOutThenReset())
-                    Error_Handler();
-                if (config.can_engaged_brakes_lower_bound < brake_data.front &&
-                    config.can_engaged_brakes_upper_bound > brake_data.rear &&
-                    config.can_engaged_brakes_lower_bound < brake_data.front &&
-                    config.can_engaged_brakes_upper_bound > brake_data.rear)
-                    break;
-            }
-            break;
-        }
-
-        // check if can alive
-        //     auto apps_main = PUTM_CAN::can.get_apps_main();
-        //     auto counter_value = apps_main.counter;
-        //     if (prev_apps_counter_value == counter_value)
-        //       can_timeout_counter++;
-        //     else
-        //       can_timeout_counter = 0;
-        //     if (can_timeout_counter >= config.can_timeout)
-        //       Error_Handler();
-        //     prev_apps_counter_value = counter_value;
-
-        // check Ass
-        // TODO: do ustalenia skąd mam to niby brać
-
-        // check RES
-        // TODO: też do ustalenia
-
-        //     check pressure
-        if (std::abs(air_ebs - air_redundant) > config.brake_press_deviation)
-            Error_Handler();
-        if (config.brake_lower_bound >= air_ebs ||
-            air_ebs >= config.brake_upper_bound)
-            Error_Handler();
-        if (config.brake_lower_bound >= air_redundant ||
-            air_redundant >= config.brake_upper_bound)
-            Error_Handler();
-
-        /* USER CODE END WHILE */
-
-        /* USER CODE BEGIN 3 */
-        //--------------------------------------------------------------------------------------------------------------------
-        // Stop monitoring
-        stopTogglingWatchdog();
-        // TODO: idk if in stop monitoring mode sth should be done
-        /* USER CODE END 3 */
-    }
+    // if (status == HAL_ERROR) {
+    //   HAL_GPIO_TogglePin(LD_ERR_GPIO_Port, LD_ERR_Pin);
+    // }
 }
+//--------------------------------------------------------------------------------------------------------------------
+// continuous monitoring
+
+//   auto apps_main = PUTM_CAN::can.get_apps_main();
+//   auto prev_apps_counter_value = apps_main.counter;
+while (true) {
+    // check sdc
+    if (!sdc_ready.isActive()) {
+        HAL_Delay(config.valve_settle_delay);
+        valve_timeout_timer.restart();
+        while (true) {
+            if (valve_timeout_timer.checkIfTimedOutThenReset())
+                Error_Handler();
+            if (config.can_engaged_brakes_lower_bound < brake_data.front &&
+                config.can_engaged_brakes_upper_bound > brake_data.rear &&
+                config.can_engaged_brakes_lower_bound < brake_data.front &&
+                config.can_engaged_brakes_upper_bound > brake_data.rear)
+                break;
+        }
+        break;
+    }
+
+    // check if can alive
+    //     auto apps_main = PUTM_CAN::can.get_apps_main();
+    //     auto counter_value = apps_main.counter;
+    //     if (prev_apps_counter_value == counter_value)
+    //       can_timeout_counter++;
+    //     else
+    //       can_timeout_counter = 0;
+    //     if (can_timeout_counter >= config.can_timeout)
+    //       Error_Handler();
+    //     prev_apps_counter_value = counter_value;
+
+    // check Ass
+    // TODO: do ustalenia skąd mam to niby brać
+
+    // check RES
+    // TODO: też do ustalenia
+
+    //     check pressure
+    if (std::abs(air_ebs - air_redundant) > config.brake_press_deviation)
+        Error_Handler();
+    if (config.brake_lower_bound >= air_ebs ||
+        air_ebs >= config.brake_upper_bound)
+        Error_Handler();
+    if (config.brake_lower_bound >= air_redundant ||
+        air_redundant >= config.brake_upper_bound)
+        Error_Handler();
+
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+    //--------------------------------------------------------------------------------------------------------------------
+    // Stop monitoring
+    // stopTogglingWatchdog();
+    // TODO: idk if in stop monitoring mode sth should be done
+    /* USER CODE END 3 */
+}
+
 /**
  * @brief System Clock Configuration
  * @retval None

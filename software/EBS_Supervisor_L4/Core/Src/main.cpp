@@ -168,11 +168,10 @@ int main(void) {
     /* USER CODE BEGIN 2 */
 
     //     My_CAN_init();
-    using namespace putm_ev_can;
 
-    CanDriver can_m;
+    putm_ev_can::CanDriver can_m;
 
-    if (!can_m.Init(&fcan1)) {
+    if (!can_m.Init(&hcan1)) {
         Error_Handler();
     }
 
@@ -389,7 +388,6 @@ int main(void) {
     //     /* USER CODE END 3 */
     // }
 }
-
 /**
  * @brief System Clock Configuration
  * @retval None
@@ -405,8 +403,8 @@ void SystemClock_Config(void) {
         Error_Handler();
     }
 
-    /** Initializes the RCC Oscillators according to the specified parameters
-     * in the RCC_OscInitTypeDef structure.
+    /** Initializes the RCC Oscillators according to the specified
+     * parameters in the RCC_OscInitTypeDef structure.
      */
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
     RCC_OscInitStruct.HSEState = RCC_HSE_ON;
@@ -713,7 +711,8 @@ void stopTogglingWatchdog() { HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2); }
  */
 void Error_Handler(void) {
     /* USER CODE BEGIN Error_Handler_Debug */
-    /* User can add his own implementation to report the HAL error return state
+    /* User can add his own implementation to report the HAL error return
+     * state
      */
     __disable_irq();
     while (1) {

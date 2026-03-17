@@ -26,8 +26,9 @@ set(CMAKE_PROJECT_NAME EBS_Supervisor_L4)
 # Enable compile command to ease indexing with e.g. clangd
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
+set(PUTM_CAN_BACKEND "STM32" CACHE STRING "Select backend" FORCE)
+
 add_compile_definitions(STM32L4)
-add_compile_definitions(PUTM_CAN_BACKEND_STM32)
 
 # Core project settings
 project(${CMAKE_PROJECT_NAME})
@@ -44,9 +45,7 @@ add_subdirectory(cmake/stm32cubemx)
 add_subdirectory(Core/Inc/PUTM_EV_CAN_LIBRARY)
 
 # Link directories setup
-target_link_directories(${CMAKE_PROJECT_NAME} PUBLIC
-        stm32cubemx
-        put_ev_can
+target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined library search paths
 )
 
@@ -69,8 +68,8 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
 list(REMOVE_ITEM CMAKE_C_IMPLICIT_LINK_LIBRARIES ob)
 
 # Add linked libraries
-target_link_libraries(${CMAKE_PROJECT_NAME}
-    stm32cubemx
-
+target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC
+        stm32cubemx
+        putm_ev_can
     # Add user defined libraries
 )

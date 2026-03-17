@@ -1,8 +1,7 @@
 {
     "cmake.cmakePath": "cube-cmake",
     "cmake.configureArgs": [
-        "-DCMAKE_COMMAND=cube-cmake",
-        "-DPython_EXECUTABLE=/home/hubert-gerl/miniconda3/envs/stm_can/bin/python3"
+        "-DCMAKE_COMMAND=cube-cmake"
     ],
     "cmake.preferredGenerators": [
         "Ninja"

@@ -1,4 +1,4 @@
 [submodule "software/EBS_Supervisor_L4/Core/Inc/PUTM_EV_CAN_LIBRARY"]
-	path = software/EBS_Supervisor_L4/Core/Inc/PUTM_EV_CAN_LIBRARY
+	path = software/Core/Inc/PUTM_EV_CAN_LIBRARY
 	url = https://github.com/PUT-Motorsport/PUTM_EV_CAN_LIBRARY.git
 	branch = origin/dev-soft-v1.2

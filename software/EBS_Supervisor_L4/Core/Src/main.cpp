@@ -57,6 +57,11 @@ struct TransferFcn {
   float solve(float x) { return a * x + b; }
 };
 
+struct Brake_data {
+  float front;
+  float rear;
+};
+
 /* USER CODE END PM */
 
 /* Private variables
@@ -71,12 +76,9 @@ TIM_HandleTypeDef htim3;
 /* USER CODE BEGIN PV */
 using namespace putm_ev_can;
 
-struct brake_data {
-  float front;
-  float rear;
-}
-
 const int adc_count = 3;
+
+Brake_data brake_data;
 
 uint16_t adc_dma_buffer[3];
 
@@ -134,9 +136,10 @@ static void MX_TIM3_Init(void);
 static void MX_CAN1_Init(void);
 static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
-
 void starTogglingWatchdog();
 void stopTogglingWatchdog();
+
+void can_driver_input_cb(const PUTM_CAN_M_driver_input_t &driver_input);
 
 /* USER CODE END PFP */
 
@@ -189,20 +192,7 @@ int main(void) {
   }
 
   can_m.RegisterCallback<PUTM_CAN_M_driver_input_t>(
-      PUTM_CAN_M_DRIVER_INPUT_FRAME_ID,
-      [](const PUTM_CAN_M_driver_input_t &driver_input) {
-        // driver_input.break_pressure* returns in kP and we use Bars, so
-        // times 0.01
-        brake_data.front = PUTM_CAN_M_driver_input_brake_pressure_front_decode(
-                               driver_input.brake_pressure_front) *
-                               0.01f +
-                           config.can_brake_offset;
-
-        brake_data.rear = PUTM_CAN_M_driver_input_brake_pressure_rear_decode(
-                              driver_input.brake_pressure_rear) *
-                              0.01f +
-                          config.can_brake_offset;
-      });
+      PUTM_CAN_M_DRIVER_INPUT_FRAME_ID, can_driver_input_cb);
 
   HAL_ADCEx_Calibration_Start(&hadc1, 10);
   HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_dma_buffer, adc_count);
@@ -265,15 +255,10 @@ int main(void) {
     if (valve_timeout_timer.checkIfTimedOutThenReset())
       Error_Handler();
     if (PUTM_CAN::can.get_aq_main_new_data()) {
-      aq_main = PUTM_CAN::can.get_aq_main();
-
-      brake_press_front =
-          aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
-      brake_press_rear =
-          aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
+      // dane z cana driver_input
     }
-    if (brake_press_front > config.press_tf_coef * air_ebs &&
-        brake_press_rear < config.can_brake_lower_bound)
+    if (brake_data.front > config.press_tf_coef * air_ebs &&
+        brake_data.rear < config.can_brake_lower_bound)
       break;
   }
   valve1.activate();
@@ -284,15 +269,10 @@ int main(void) {
     if (valve_timeout_timer.checkIfTimedOutThenReset())
       Error_Handler();
     if (PUTM_CAN::can.get_aq_main_new_data()) {
-      aq_main = PUTM_CAN::can.get_aq_main();
-
-      brake_press_front =
-          aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
-      brake_press_rear =
-          aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
+      // dane z cana driver_input
     }
-    if (brake_press_rear > config.press_tf_coef * air_ebs &&
-        brake_press_front < config.can_brake_lower_bound)
+    if (brake_data.rear > config.press_tf_coef * air_ebs &&
+        brake_data.front < config.can_brake_lower_bound)
       break;
   }
 
@@ -316,7 +296,6 @@ int main(void) {
 
     // cast wyjść z DMA
     //////////////////////////////////
-    using namespace PUTM_CAN;
 
     PUTM_CAN::ASB_main asb_data{
         .airpressure_bank1 = static_cast<uint16_t>(air_ebs),
@@ -349,17 +328,12 @@ int main(void) {
         if (valve_timeout_timer.checkIfTimedOutThenReset())
           Error_Handler();
         if (PUTM_CAN::can.get_aq_main_new_data()) {
-          aq_main = PUTM_CAN::can.get_aq_main();
-
-          brake_press_front =
-              aq_main.brake_pressure_front * 0.01f + config.can_brake_offset;
-          brake_press_rear =
-              aq_main.brake_pressure_back * 0.01f + config.can_brake_offset;
+          // dane z cana driver_input
         }
-        if (config.can_engaged_brakes_lower_bound < brake_press_rear &&
-            config.can_engaged_brakes_upper_bound > brake_press_rear &&
-            config.can_engaged_brakes_lower_bound < brake_press_front &&
-            config.can_engaged_brakes_upper_bound > brake_press_front)
+        if (config.can_engaged_brakes_lower_bound < brake_data.front &&
+            config.can_engaged_brakes_upper_bound > brake_data.rear &&
+            config.can_engaged_brakes_lower_bound < brake_data.front &&
+            config.can_engaged_brakes_upper_bound > brake_data.rear)
           break;
       }
       break;
@@ -674,6 +648,19 @@ static void MX_GPIO_Init(void) {
 }
 
 /* USER CODE BEGIN 4 */
+
+void can_driver_input_cb(const PUTM_CAN_M_driver_input_t &driver_input) {
+  // driver_input.break_pressure* returns in kP and we use Bars, so
+  // times 0.01
+  brake_data.front = PUTM_CAN_M_driver_input_brake_pressure_front_decode(
+                         driver_input.brake_pressure_front) *
+                         0.01f +
+                     config.can_brake_offset;
+  brake_data.rear = PUTM_CAN_M_driver_input_brake_pressure_rear_decode(
+                        driver_input.brake_pressure_rear) *
+                        0.01f +
+                    config.can_brake_offset;
+}
 
 void HAL_ADC_ConsCpltCallback(ADC_HandleTypeDef *hadc) {
   air_ebs = air_transferFcn.solve(float(adc_dma_buffer[0]));

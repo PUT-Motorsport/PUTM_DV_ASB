@@ -68,7 +68,7 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
 list(REMOVE_ITEM CMAKE_C_IMPLICIT_LINK_LIBRARIES ob)
 
 # Add linked libraries
-target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
         stm32cubemx
         putm_ev_can
     # Add user defined libraries

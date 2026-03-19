@@ -27,6 +27,7 @@
 #include "PUTM_EV_CAN_LIBRARY/include/can_driver.hpp"
 #include "gpioElements.hpp"
 #include "stm32l4xx_hal_can.h"
+#include "stm32l4xx_hal_def.h"
 #include "timer.hpp"
 #include <cstdint>
 #include <functional>
@@ -52,16 +53,106 @@
 /* Private macro
  * -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+static struct Config {
+  constexpr static float brake_lower_bound = 6.5f;
+  constexpr static float brake_upper_bound = 8.f;
+  constexpr static float brake_press_deviation = 0.01f;
+  constexpr static float can_brake_offset = -0.01f;
+  constexpr static float press_tf_coef = 1.f;
+  constexpr static float can_brake_lower_bound = 1.f;
+  constexpr static float can_engaged_brakes_upper_bound = 90.f;
+  constexpr static float can_engaged_brakes_lower_bound = 60.f;
+
+  constexpr static uint32_t sdc_settle_timeout = 100;
+  constexpr static uint32_t valve_settle_delay = 200;
+  constexpr static uint32_t valve_settle_timeout = 200;
+
+  constexpr static uint16_t can_timeout = 100;
+
+  constexpr static uint32_t adc_count = 3;
+} volatile config;
+
 struct TransferFcn {
   float a;
   float b;
   float solve(float x) { return a * x + b; }
 };
 
-struct Brake_data {
-  float front = 0.0f;
-  float rear = 0.0f;
-  bool status = false;
+struct Brake_data_can {
+  uint16_t front;
+  uint16_t rear;
+  bool status;
+};
+
+class Brakes {
+private:
+  // driver_input.break_pressure* returns in kP and we use Bars, so times 0.01
+  float convert_raw_data(uint16_t raw_data) {
+    return static_cast<float>(raw_data) * 0.01f + config.can_brake_offset;
+  }
+
+public:
+  float front;
+  float rear;
+
+  void update(Brake_data_can &brake_data) {
+    this->front = convert_raw_data(brake_data.front);
+    this->rear = convert_raw_data(brake_data.rear);
+  }
+
+  HAL_StatusTypeDef check_buildup(float air_ebs) {
+    if (this->front < config.press_tf_coef * air_ebs)
+      return HAL_ERROR;
+    if (this->rear < config.press_tf_coef * air_ebs)
+      return HAL_ERROR;
+    return HAL_OK;
+  }
+
+  HAL_StatusTypeDef check_holdup(float air_ebs) {
+    if (this->front > config.press_tf_coef * air_ebs &&
+        this->rear < config.can_brake_lower_bound)
+      return HAL_OK;
+    else
+      return HAL_ERROR;
+  }
+  HAL_StatusTypeDef check_engaged() {
+    if (config.can_engaged_brakes_lower_bound < this->front &&
+        config.can_engaged_brakes_upper_bound > this->rear &&
+        config.can_engaged_brakes_lower_bound < this->front &&
+        config.can_engaged_brakes_upper_bound > this->rear)
+      return HAL_OK;
+    else
+      return HAL_ERROR;
+  }
+};
+
+class Air_pressure {
+private:
+  // Transfer Function for Air pressure ADC readings:
+  TransferFcn air_transferFcn = {3.227f, 620.0f};
+
+public:
+  float ebs;
+  float redundant;
+  float main;
+
+  void update(uint16_t adc_dma_data[config.adc_count]) {
+    this->ebs = air_transferFcn.solve(static_cast<float>(adc_dma_data[0]));
+    this->redundant =
+        air_transferFcn.solve(static_cast<float>(adc_dma_data[1]));
+    this->main = air_transferFcn.solve(static_cast<float>(adc_dma_data[2]));
+  }
+  HAL_StatusTypeDef check() {
+    if (std::abs(this->ebs - this->redundant) > config.brake_press_deviation)
+      return HAL_ERROR;
+    if (config.brake_lower_bound >= this->ebs ||
+        this->ebs >= config.brake_upper_bound)
+      return HAL_ERROR;
+    if (config.brake_lower_bound >= this->redundant ||
+        this->redundant >= config.brake_upper_bound)
+      return HAL_ERROR;
+    return HAL_OK;
+  }
 };
 
 /* USER CODE END PM */
@@ -76,22 +167,12 @@ CAN_HandleTypeDef hcan1;
 TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN PV */
-using namespace putm_ev_can;
 
-const int adc_count = 3;
-
-Brake_data brake_data;
+Brake_data_can brake_data_can;
 
 uint16_t adc_dma_buffer[3];
 
 uint16_t can_timeout_counter;
-
-TransferFcn air_transferFcn = {3.227f, 620.0f};
-// Transfer Function for Air pressure ADC readings:
-
-float air_ebs;
-float air_redundant;
-float air_main;
 
 GPIO_PinState SDC_STATE;
 
@@ -108,23 +189,6 @@ GpioOutElement valve1(VALVE1_GPIO_Port, VALVE1_Pin);
 GpioOutElement valve2(VALVE2_GPIO_Port, VALVE2_Pin);
 
 GpioInElement sdc_ready(SDC_RDY_GPIO_Port, SDC_RDY_Pin);
-
-static struct Config {
-  constexpr static float brake_lower_bound = 6.5f;
-  constexpr static float brake_upper_bound = 8.f;
-  constexpr static float brake_press_deviation = 0.01f;
-  constexpr static float can_brake_offset = -0.01f;
-  constexpr static float press_tf_coef = 1.f;
-  constexpr static float can_brake_lower_bound = 1.f;
-  constexpr static float can_engaged_brakes_upper_bound = 90.f;
-  constexpr static float can_engaged_brakes_lower_bound = 60.f;
-
-  constexpr static uint32_t sdc_settle_timeout = 100;
-  constexpr static uint32_t valve_settle_delay = 200;
-  constexpr static uint32_t valve_settle_timeout = 200;
-
-  constexpr static uint16_t can_timeout = 100;
-} volatile config;
 
 /* Tests */
 /* USER CODE END PV */
@@ -187,17 +251,22 @@ int main(void) {
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 
+  // Initialize CAN
+  using namespace putm_ev_can;
+
   CanDriver can_m;
   can_filter_config(&hcan1);
   if (!can_m.Init(&hcan1)) {
     Error_Handler();
   }
-
   can_m.RegisterCallback<PUTM_CAN_M_driver_input_t>(
       PUTM_CAN_M_DRIVER_INPUT_FRAME_ID, can_driver_input_cb);
 
+  Brakes brake_data;
+  Air_pressure air_pressure_data;
+
   HAL_ADCEx_Calibration_Start(&hadc1, 10);
-  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_dma_buffer, adc_count);
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_dma_buffer, config.adc_count);
   valve1.activate();
   valve2.activate();
 
@@ -225,19 +294,16 @@ int main(void) {
 
   starTogglingWatchdog();
 
-  // check pressure
-  if (std::abs(air_ebs - air_redundant) > config.brake_press_deviation)
-    Error_Handler();
-  if (config.brake_lower_bound >= air_ebs ||
-      air_ebs >= config.brake_upper_bound)
-    Error_Handler();
-  if (config.brake_lower_bound >= air_redundant ||
-      air_redundant >= config.brake_upper_bound)
+  // Check that the EBS energy storage is filled
+  air_pressure_data.update(adc_dma_buffer);
+  if (air_pressure_data.check() == HAL_ERROR)
     Error_Handler();
 
-  if (brake_data.front < config.press_tf_coef * air_ebs)
-    Error_Handler();
-  if (brake_data.rear < config.press_tf_coef * air_ebs)
+  // Check that the brake pressure is built up correctly
+  while (brake_data_can.status == false) {
+  }
+  brake_data_can.status = false;
+  if (brake_data.check_buildup(air_pressure_data.ebs) == HAL_ERROR)
     Error_Handler();
 
   // wait for tc enabled
@@ -256,11 +322,10 @@ int main(void) {
   while (true) {
     if (valve_timeout_timer.checkIfTimedOutThenReset())
       Error_Handler();
-    while (brake_data.status == false) {
+    while (brake_data_can.status == false) {
     }
-    brake_data.status = false;
-    if (brake_data.front > config.press_tf_coef * air_ebs &&
-        brake_data.rear < config.can_brake_lower_bound)
+    brake_data_can.status = false;
+    if (brake_data.check_holdup(air_pressure_data.ebs) == HAL_OK)
       break;
   }
   valve1.activate();
@@ -270,11 +335,10 @@ int main(void) {
   while (true) {
     if (valve_timeout_timer.checkIfTimedOutThenReset())
       Error_Handler();
-    while (brake_data.status == false) {
+    while (brake_data_can.status == false) {
     }
-    brake_data.status = false;
-    if (brake_data.rear > config.press_tf_coef * air_ebs &&
-        brake_data.front < config.can_brake_lower_bound)
+    brake_data_can.status = false;
+    if (brake_data.check_holdup(air_pressure_data.ebs) == HAL_OK)
       break;
   }
 
@@ -320,35 +384,31 @@ int main(void) {
   //--------------------------------------------------------------------------------------------------------------------
   // continuous monitoring
 
-  //   auto apps_main = PUTM_CAN::can.get_apps_main();
-  //   auto prev_apps_counter_value = apps_main.counter;
   while (true) {
-    // check sdc
+
+    // Convert brake pressure data from if received from CAN
+    if (brake_data_can.status == true) {
+      brake_data.update(brake_data_can);
+      brake_data_can.status = false;
+    }
+
+    // Monitor the storage of brake energy (air pressure)
+    air_pressure_data.update(adc_dma_buffer);
+    if (air_pressure_data.check() == HAL_ERROR)
+      Error_Handler();
+
+    // Check SDC
     if (!sdc_ready.isActive()) {
       HAL_Delay(config.valve_settle_delay);
       valve_timeout_timer.restart();
       while (true) {
         if (valve_timeout_timer.checkIfTimedOutThenReset())
           Error_Handler();
-        if (config.can_engaged_brakes_lower_bound < brake_data.front &&
-            config.can_engaged_brakes_upper_bound > brake_data.rear &&
-            config.can_engaged_brakes_lower_bound < brake_data.front &&
-            config.can_engaged_brakes_upper_bound > brake_data.rear)
+        if (brake_data.check_engaged() == HAL_OK)
           break;
       }
       break;
     }
-
-    // check if can alive
-    //     auto apps_main = PUTM_CAN::can.get_apps_main();
-    //     auto counter_value = apps_main.counter;
-    //     if (prev_apps_counter_value == counter_value)
-    //       can_timeout_counter++;
-    //     else
-    //       can_timeout_counter = 0;
-    //     if (can_timeout_counter >= config.can_timeout)
-    //       Error_Handler();
-    //     prev_apps_counter_value = counter_value;
 
     // check Ass
     // TODO: do ustalenia skąd mam to niby brać
@@ -357,14 +417,6 @@ int main(void) {
     // TODO: też do ustalenia
 
     //     check pressure
-    if (std::abs(air_ebs - air_redundant) > config.brake_press_deviation)
-      Error_Handler();
-    if (config.brake_lower_bound >= air_ebs ||
-        air_ebs >= config.brake_upper_bound)
-      Error_Handler();
-    if (config.brake_lower_bound >= air_redundant ||
-        air_redundant >= config.brake_upper_bound)
-      Error_Handler();
 
     /* USER CODE END WHILE */
 
@@ -651,25 +703,17 @@ static void MX_GPIO_Init(void) {
 /* USER CODE BEGIN 4 */
 
 void can_driver_input_cb(const PUTM_CAN_M_driver_input_t &driver_input) {
-  // driver_input.break_pressure* returns in kP and we use Bars, so
-  // times 0.01
-  brake_data.front = PUTM_CAN_M_driver_input_brake_pressure_front_decode(
-                         driver_input.brake_pressure_front) *
-                         0.01f +
-                     config.can_brake_offset;
-  brake_data.rear = PUTM_CAN_M_driver_input_brake_pressure_rear_decode(
-                        driver_input.brake_pressure_rear) *
-                        0.01f +
-                    config.can_brake_offset;
-  brake_data.status = true;
+  brake_data_can.front = driver_input.brake_pressure_front;
+  brake_data_can.rear = driver_input.brake_pressure_rear;
+  brake_data_can.status = true;
 }
 
-void HAL_ADC_ConsCpltCallback(ADC_HandleTypeDef *hadc) {
-  air_ebs = air_transferFcn.solve(float(adc_dma_buffer[0]));
-  air_redundant = air_transferFcn.solve(float(adc_dma_buffer[1]));
-  air_main = air_transferFcn.solve(float(adc_dma_buffer[2]));
-  // HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
-}
+// void HAL_ADC_ConsCpltCallback(ADC_HandleTypeDef *hadc) {
+//   air_ebs = air_transferFcn.solve(float(adc_dma_buffer[0]));
+//   air_redundant = air_transferFcn.solve(float(adc_dma_buffer[1]));
+//   air_main = air_transferFcn.solve(float(adc_dma_buffer[2]));
+//   // HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
+// }
 
 void can_filter_config(CAN_HandleTypeDef *hcan) {
   constexpr static CAN_FilterTypeDef sFilterConfig{

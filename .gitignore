@@ -28,3 +28,7 @@ fp-info-cache
 *.xml
 *.csv
 /.metadata/
+
+firmware/.vscode/*
+firmware/.settings/*
+firmware/.metadata/*

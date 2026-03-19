@@ -707,13 +707,6 @@ void can_driver_input_cb(const PUTM_CAN_M_driver_input_t &driver_input) {
   brake_data_can.status = true;
 }
 
-// void HAL_ADC_ConsCpltCallback(ADC_HandleTypeDef *hadc) {
-//   air_ebs = air_transferFcn.solve(float(adc_dma_buffer[0]));
-//   air_redundant = air_transferFcn.solve(float(adc_dma_buffer[1]));
-//   air_main = air_transferFcn.solve(float(adc_dma_buffer[2]));
-//   // HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_buffer, adc_count);
-// }
-
 void can_filter_config(CAN_HandleTypeDef *hcan) {
   constexpr static CAN_FilterTypeDef sFilterConfig{
       .FilterIdHigh = 0x0000,

@@ -53,6 +53,12 @@
 /* Private macro
  * -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+enum Ebs_supervisor_state {
+  EBS_INITIAL_CHECKUP,
+  EBS_CONTINOUS_MONITORING,
+  EBS_STOP_MONITORING,
+};
+
 static struct Config {
   constexpr static float brake_lower_bound = 6.5f;
   constexpr static float brake_upper_bound = 8.f;
@@ -84,7 +90,7 @@ struct Brake_data_can {
   bool status;
 };
 
-class Brakes {
+class Brakes_data {
 private:
   // driver_input.break_pressure* returns in kP and we use Bars, so times 0.01
   float convert_raw_data(uint16_t raw_data) {
@@ -126,7 +132,7 @@ public:
   }
 };
 
-class Air_pressure {
+class Air_pressure_data {
 private:
   // Transfer Function for Air pressure ADC readings:
   TransferFcn air_transferFcn = {3.227f, 620.0f};
@@ -202,10 +208,11 @@ static void MX_TIM3_Init(void);
 static void MX_CAN1_Init(void);
 static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
-void starTogglingWatchdog();
+void startTogglingWatchdog();
 void stopTogglingWatchdog();
 void can_filter_config(CAN_HandleTypeDef *hcan);
 void can_driver_input_cb(const PUTM_CAN_M_driver_input_t &driver_input);
+Ebs_supervisor_state ebs_error();
 
 /* USER CODE END PFP */
 
@@ -250,6 +257,7 @@ int main(void) {
   MX_CAN1_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
+  Ebs_supervisor_state ebs_state = EBS_INITIAL_CHECKUP;
 
   // Initialize CAN
   using namespace putm_ev_can;
@@ -257,91 +265,19 @@ int main(void) {
   CanDriver can_m;
   can_filter_config(&hcan1);
   if (!can_m.Init(&hcan1)) {
-    Error_Handler();
+    ebs_state = ebs_error();
   }
   can_m.RegisterCallback<PUTM_CAN_M_driver_input_t>(
       PUTM_CAN_M_DRIVER_INPUT_FRAME_ID, can_driver_input_cb);
 
-  Brakes brake_data;
-  Air_pressure air_pressure_data;
+  Brakes_data brakes;
+  Air_pressure_data air_pressure;
 
   HAL_ADCEx_Calibration_Start(&hadc1, 10);
   HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_dma_buffer, config.adc_count);
-  valve1.activate();
-  valve2.activate();
 
-  //--------------------------------------------------------------------------------------------------------------------
-  // Initial checkup
-
-  // check if sdc is working
   Timer sdc_timeout_timer(config.sdc_settle_timeout);
-  starTogglingWatchdog();
-  while (true) {
-    if (sdc_timeout_timer.checkIfTimedOutThenReset())
-      Error_Handler();
-    if (sdc_ready.isActive())
-      break;
-  }
-
-  sdc_timeout_timer.restart();
-  stopTogglingWatchdog();
-  while (true) {
-    if (sdc_timeout_timer.checkIfTimedOutThenReset())
-      Error_Handler();
-    if (!sdc_ready.isActive())
-      break;
-  }
-
-  starTogglingWatchdog();
-
-  // Check that the EBS energy storage is filled
-  air_pressure_data.update(adc_dma_buffer);
-  if (air_pressure_data.check() == HAL_ERROR)
-    Error_Handler();
-
-  // Check that the brake pressure is built up correctly
-  while (brake_data_can.status == false) {
-  }
-  brake_data_can.status = false;
-  if (brake_data.check_buildup(air_pressure_data.ebs) == HAL_ERROR)
-    Error_Handler();
-
-  // wait for tc enabled
-  //   bool tc_activated = false;
-  //   do {
-  //     HAL_Delay(100);
-  //     auto tc_main = PUTM_CAN::can.get_tc_main();
-  //     tc_activated = tc_main.traction_control_enable;
-  //   } while (!tc_activated);
-
-  // check valves
-  valve1.activate();
-  valve2.deactivate();
-  HAL_Delay(config.valve_settle_delay);
   Timer valve_timeout_timer(config.valve_settle_timeout);
-  while (true) {
-    if (valve_timeout_timer.checkIfTimedOutThenReset())
-      Error_Handler();
-    while (brake_data_can.status == false) {
-    }
-    brake_data_can.status = false;
-    if (brake_data.check_holdup(air_pressure_data.ebs) == HAL_OK)
-      break;
-  }
-  valve1.activate();
-  valve2.deactivate();
-  HAL_Delay(config.valve_settle_delay);
-  valve_timeout_timer.restart();
-  while (true) {
-    if (valve_timeout_timer.checkIfTimedOutThenReset())
-      Error_Handler();
-    while (brake_data_can.status == false) {
-    }
-    brake_data_can.status = false;
-    if (brake_data.check_holdup(air_pressure_data.ebs) == HAL_OK)
-      break;
-  }
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -350,18 +286,9 @@ int main(void) {
   //     SDC_STATE = HAL_GPIO_ReadPin(SDC_RDY_GPIO_Port, SDC_RDY_Pin);
   //     starTogglingWatchdog();
   //     as_close_sdc.activate();
-  //     HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_dma_buffer, adc_count);
-  //     air_ebs = air_transferFcn.solve(float(adc_dma_buffer[0]));
-  //     air_redundant = air_transferFcn.solve(float(adc_dma_buffer[1]));
-  //     air_main = air_transferFcn.solve(float(adc_dma_buffer[2]));
-
   //     if (SDC_STATE == GPIO_PIN_RESET) {
   //         HAL_GPIO_TogglePin(LD_WARN_GPIO_Port, LD_WARN_Pin);
   //     }
-  // Pressure conversion to mbar
-
-  // cast wyjść z DMA
-  //////////////////////////////////
 
   // PUTM_CAN::ASB_main asb_data{
   //     .airpressure_bank1 = static_cast<uint16_t>(air_ebs),
@@ -384,49 +311,125 @@ int main(void) {
   //--------------------------------------------------------------------------------------------------------------------
   // continuous monitoring
 
-  while (true) {
+  while (1) {
+    switch (ebs_state) {
+    case (EBS_INITIAL_CHECKUP): {
+      valve1.activate();
+      valve2.activate();
 
-    // Convert brake pressure data from if received from CAN
-    if (brake_data_can.status == true) {
-      brake_data.update(brake_data_can);
+      //--------------------------------------------------------------------------------------------------------------------
+      // Initial checkup
+
+      // check if sdc is working
+      sdc_timeout_timer.restart();
+      startTogglingWatchdog();
+      while (true) {
+        if (sdc_timeout_timer.checkIfTimedOutThenReset())
+          ebs_state = ebs_error();
+        if (sdc_ready.isActive())
+          break;
+      }
+
+      sdc_timeout_timer.restart();
+      stopTogglingWatchdog();
+      while (true) {
+        if (sdc_timeout_timer.checkIfTimedOutThenReset())
+          ebs_state = ebs_error();
+        if (!sdc_ready.isActive())
+          break;
+      }
+
+      startTogglingWatchdog();
+
+      // Check that the EBS energy storage is filled
+      air_pressure.update(adc_dma_buffer);
+      if (air_pressure.check() == HAL_ERROR)
+        ebs_state = ebs_error();
+
+      // Check that the brake pressure is built up correctly
+      while (brake_data_can.status == false) {
+      }
       brake_data_can.status = false;
-    }
+      if (brakes.check_buildup(air_pressure.ebs) == HAL_ERROR)
+        ebs_state = ebs_error();
 
-    // Monitor the storage of brake energy (air pressure)
-    air_pressure_data.update(adc_dma_buffer);
-    if (air_pressure_data.check() == HAL_ERROR)
-      Error_Handler();
+      // wait for tc enabled
+      //   bool tc_activated = false;
+      //   do {
+      //     HAL_Delay(100);
+      //     auto tc_main = PUTM_CAN::can.get_tc_main();
+      //     tc_activated = tc_main.traction_control_enable;
+      //   } while (!tc_activated);
 
-    // Check SDC
-    if (!sdc_ready.isActive()) {
+      // Check that the brake pressure is still built
+      // up correctly
+      valve1.deactivate();
       HAL_Delay(config.valve_settle_delay);
       valve_timeout_timer.restart();
       while (true) {
         if (valve_timeout_timer.checkIfTimedOutThenReset())
-          Error_Handler();
-        if (brake_data.check_engaged() == HAL_OK)
+          ebs_state = ebs_error();
+        while (brake_data_can.status == false) {
+        }
+        brake_data_can.status = false;
+        if (brakes.check_holdup(air_pressure.ebs) == HAL_OK)
           break;
       }
-      break;
+      valve1.activate();
+
+      valve2.deactivate();
+      HAL_Delay(config.valve_settle_delay);
+      valve_timeout_timer.restart();
+      while (true) {
+        if (valve_timeout_timer.checkIfTimedOutThenReset())
+          ebs_state = ebs_error();
+        while (brake_data_can.status == false) {
+        }
+        brake_data_can.status = false;
+        if (brakes.check_holdup(air_pressure.ebs) == HAL_OK)
+          break;
+      }
+      valve2.activate();
+
+      ebs_state = EBS_CONTINOUS_MONITORING;
     }
+    case EBS_CONTINOUS_MONITORING: {
+      // Monitor the storage of brake energy (air pressure)
+      air_pressure.update(adc_dma_buffer);
+      if (air_pressure.check() == HAL_ERROR)
+        ebs_state = ebs_error();
 
-    // check Ass
-    // TODO: do ustalenia skąd mam to niby brać
+      // Convert brake pressure data from if received from CAN
+      if (brake_data_can.status == true) {
+        brakes.update(brake_data_can);
+        brake_data_can.status = false;
+      }
 
-    // check RES
-    // TODO: też do ustalenia
+      // Check RES state CAN OK?
+      // AS OK?
 
-    //     check pressure
-
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
-    //--------------------------------------------------------------------------------------------------------------------
-    // Stop monitoring
-    // stopTogglingWatchdog();
-    // TODO: idk if in stop monitoring mode sth should be done
-    /* USER CODE END 3 */
+      // Check SDC
+      if (!sdc_ready.isActive()) {
+        HAL_Delay(config.valve_settle_delay);
+        valve_timeout_timer.restart();
+        while (true) {
+          if (valve_timeout_timer.checkIfTimedOutThenReset())
+            ebs_state = ebs_error();
+          if (brakes.check_engaged() == HAL_OK)
+            break;
+        }
+        break;
+      }
+    }
+    case EBS_STOP_MONITORING: {
+    }
+    }
   }
+  /* USER CODE END WHILE */
+
+  /* USER CODE BEGIN 3 */
+
+  /* USER CODE END 3 */
 }
 
 /**
@@ -733,7 +736,13 @@ void can_filter_config(CAN_HandleTypeDef *hcan) {
   }
 }
 
-void starTogglingWatchdog() { HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2); }
+Ebs_supervisor_state ebs_error() {
+  led_err.activate();
+  as_close_sdc.deactivate();
+  return EBS_STOP_MONITORING;
+}
+
+void startTogglingWatchdog() { HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2); }
 
 void stopTogglingWatchdog() { HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2); }
 

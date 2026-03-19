@@ -32,3 +32,4 @@ fp-info-cache
 firmware/.vscode/*
 firmware/.settings/*
 firmware/.metadata/*
+program.txt

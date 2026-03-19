@@ -85,8 +85,8 @@ struct TransferFcn {
 };
 
 struct Brake_data_can {
-  uint16_t front;
-  uint16_t rear;
+  uint16_t brake_pressure_front;
+  uint16_t brake_pressure_rear;
   bool status;
 };
 
@@ -102,7 +102,7 @@ public:
   float rear;
 
   void update(Brake_data_can &brake_data) {
-    this->front = convert_raw_data(brake_data.front);
+    this->front = convert_raw_data(brake_data.brake_pressure_front);
     this->rear = convert_raw_data(brake_data.rear);
   }
 
@@ -177,10 +177,6 @@ TIM_HandleTypeDef htim3;
 Brake_data_can brake_data_can;
 
 uint16_t adc_dma_buffer[3];
-
-uint16_t can_timeout_counter;
-
-GPIO_PinState SDC_STATE;
 
 /* GPIO Section */
 GpioOutElement led_ok(LD_OK_GPIO_Port, LD_OK_Pin);
@@ -308,24 +304,20 @@ int main(void) {
   //   HAL_GPIO_TogglePin(LD_ERR_GPIO_Port, LD_ERR_Pin);
   // }
 
-  //--------------------------------------------------------------------------------------------------------------------
-  // continuous monitoring
-
-  while (1) {
+  while (true) {
     switch (ebs_state) {
     case (EBS_INITIAL_CHECKUP): {
+
       valve1.activate();
       valve2.activate();
-
-      //--------------------------------------------------------------------------------------------------------------------
-      // Initial checkup
 
       // check if sdc is working
       sdc_timeout_timer.restart();
       startTogglingWatchdog();
       while (true) {
-        if (sdc_timeout_timer.checkIfTimedOutThenReset())
+        if (sdc_timeout_timer.checkIfTimedOutThenReset()) {
           ebs_state = ebs_error();
+        }
         if (sdc_ready.isActive())
           break;
       }
@@ -392,13 +384,15 @@ int main(void) {
       valve2.activate();
 
       ebs_state = EBS_CONTINOUS_MONITORING;
+      break;
     }
     case EBS_CONTINOUS_MONITORING: {
       // Monitor the storage of brake energy (air pressure)
       air_pressure.update(adc_dma_buffer);
-      if (air_pressure.check() == HAL_ERROR)
+      if (air_pressure.check() == HAL_ERROR) {
         ebs_state = ebs_error();
-
+        break;
+      }
       // Convert brake pressure data from if received from CAN
       if (brake_data_can.status == true) {
         brakes.update(brake_data_can);
@@ -420,9 +414,11 @@ int main(void) {
         }
         break;
       }
+      break;
     }
     case EBS_STOP_MONITORING: {
     }
+      return 1;
     }
   }
   /* USER CODE END WHILE */
@@ -706,7 +702,7 @@ static void MX_GPIO_Init(void) {
 /* USER CODE BEGIN 4 */
 
 void can_driver_input_cb(const PUTM_CAN_M_driver_input_t &driver_input) {
-  brake_data_can.front = driver_input.brake_pressure_front;
+  brake_data_can.brake_pressure_front = driver_input.brake_pressure_front;
   brake_data_can.rear = driver_input.brake_pressure_rear;
   brake_data_can.status = true;
 }

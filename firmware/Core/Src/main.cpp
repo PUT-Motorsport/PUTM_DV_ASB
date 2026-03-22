@@ -103,7 +103,7 @@ public:
 
   void update(Brake_data_can &brake_data) {
     this->front = convert_raw_data(brake_data.brake_pressure_front);
-    this->rear = convert_raw_data(brake_data.rear);
+    this->rear = convert_raw_data(brake_data.brake_pressure_rear);
   }
 
   HAL_StatusTypeDef check_buildup(float air_ebs) {
@@ -703,7 +703,7 @@ static void MX_GPIO_Init(void) {
 
 void can_driver_input_cb(const PUTM_CAN_M_driver_input_t &driver_input) {
   brake_data_can.brake_pressure_front = driver_input.brake_pressure_front;
-  brake_data_can.rear = driver_input.brake_pressure_rear;
+  brake_data_can.brake_pressure_rear = driver_input.brake_pressure_rear;
   brake_data_can.status = true;
 }
 

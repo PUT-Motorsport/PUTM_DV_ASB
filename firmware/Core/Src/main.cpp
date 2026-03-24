@@ -53,18 +53,19 @@
 /* Private macro
  * -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-enum Ebs_supervisor_state {
+enum Ebs_state {
   EBS_INITIAL_CHECKUP,
   EBS_CONTINOUS_MONITORING,
   EBS_STOP_MONITORING,
 };
 
-enum Ebs_error {
+enum Ebs_status {
   EBS_OK,
   EBS_AIR_PRESSURE_ERROR,
   EBS_BRAKES_ERROR,
   EBS_SDC_ERROR,
   EBS_CAN_ERROR,
+  EBS_WATCHDOG_ERROR,
 };
 
 static struct Config {
@@ -114,7 +115,7 @@ public:
     this->rear = convert_raw_data(brake_data.brake_pressure_rear);
   }
 
-  Ebs_error check_buildup(float air_ebs) {
+  Ebs_status check_buildup(float air_ebs) {
     if (this->front < config.press_tf_coef * air_ebs)
       return EBS_BRAKES_ERROR;
     if (this->rear < config.press_tf_coef * air_ebs)
@@ -122,14 +123,14 @@ public:
     return EBS_OK;
   }
 
-  Ebs_error check_holdup(float air_ebs) {
+  Ebs_status check_holdup(float air_ebs) {
     if (this->front > config.press_tf_coef * air_ebs &&
         this->rear < config.can_brake_lower_bound)
       return EBS_OK;
     else
       return EBS_BRAKES_ERROR;
   }
-  Ebs_error check_engaged() {
+  Ebs_status check_engaged() {
     if (config.can_engaged_brakes_lower_bound < this->front &&
         config.can_engaged_brakes_upper_bound > this->rear &&
         config.can_engaged_brakes_lower_bound < this->front &&
@@ -156,7 +157,7 @@ public:
         air_transferFcn.solve(static_cast<float>(adc_dma_data[1]));
     this->main = air_transferFcn.solve(static_cast<float>(adc_dma_data[2]));
   }
-  Ebs_error check() {
+  Ebs_status check() {
     if (std::abs(this->ebs - this->redundant) > config.brake_press_deviation)
       return EBS_AIR_PRESSURE_ERROR;
     if (config.brake_lower_bound >= this->ebs ||
@@ -216,7 +217,7 @@ void startTogglingWatchdog();
 void stopTogglingWatchdog();
 void can_filter_config(CAN_HandleTypeDef *hcan);
 void can_driver_input_cb(const PUTM_CAN_M_driver_input_t &driver_input);
-bool ebs_error_check(Ebs_error error);
+bool ebs_error_check(Ebs_status error);
 
 /* USER CODE END PFP */
 
@@ -261,7 +262,7 @@ int main(void) {
   MX_CAN1_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  Ebs_supervisor_state ebs_state = EBS_INITIAL_CHECKUP;
+  Ebs_state ebs_state = EBS_INITIAL_CHECKUP;
 
   // Initialize CAN
   using namespace putm_ev_can;
@@ -295,6 +296,8 @@ int main(void) {
     case (EBS_INITIAL_CHECKUP): {
       // Turn on checkup led
       led_chk.activate();
+      led_ok.deactivate();
+      led_err.deactivate();
 
       // Close valves
       valve1.activate();
@@ -302,27 +305,31 @@ int main(void) {
 
       // Check if SDC is working
       startTogglingWatchdog();
+
       sdc_timeout_timer.restart();
       while (!sdc_ready.isActive()) {
         if (sdc_timeout_timer.checkIfTimedOutThenReset()) {
+          ebs_error_check(EBS_SDC_ERROR);
           ebs_state = EBS_STOP_MONITORING;
           break;
         }
       }
+
       if (ebs_state != EBS_INITIAL_CHECKUP)
         break;
-
       stopTogglingWatchdog();
+
       sdc_timeout_timer.restart();
       while (sdc_ready.isActive()) {
         if (sdc_timeout_timer.checkIfTimedOutThenReset()) {
+          ebs_error_check(EBS_SDC_ERROR);
           ebs_state = EBS_STOP_MONITORING;
           break;
         }
       }
+
       if (ebs_state != EBS_INITIAL_CHECKUP)
         break;
-
       startTogglingWatchdog();
 
       // Check that the EBS energy storage is filled
@@ -336,6 +343,7 @@ int main(void) {
       can_timeout_timer.restart();
       while (!brake_data_can.status) {
         if (can_timeout_timer.checkIfTimedOutThenReset()) {
+          ebs_error_check(EBS_CAN_ERROR);
           ebs_state = EBS_STOP_MONITORING;
           break;
         }
@@ -345,10 +353,17 @@ int main(void) {
       brake_data_can.status = false;
 
       // Check that the brake pressure is built up correctly
+      air_pressure.update(adc_dma_buffer);
       if (ebs_error_check(brakes.check_buildup(air_pressure.ebs))) {
         ebs_state = EBS_STOP_MONITORING;
         break;
       }
+
+      // Enable TS
+      as_close_sdc.activate();
+
+      // Wait for TS
+      // Add checking TS from external signal/CAN
 
       // Check that the brake pressure is still built
       // up correctly #1
@@ -460,7 +475,15 @@ int main(void) {
     }
     case EBS_STOP_MONITORING: {
     }
-      return 1;
+      led_ok.deactivate();
+      led_chk.deactivate();
+      led_err.activate();
+      while (!sdc_ready.isActive()) {
+        // Add proper ASB reset
+      }
+      led_err.deactivate();
+      ebs_state = EBS_INITIAL_CHECKUP;
+      break;
     }
   }
   /* USER CODE END WHILE */
@@ -767,10 +790,10 @@ void can_filter_config(CAN_HandleTypeDef *hcan) {
   }
 }
 
-bool ebs_error_check(Ebs_error error) {
+bool ebs_error_check(Ebs_status error) {
   switch (error) {
   case EBS_OK: {
-    return true;
+    return false;
   }
   case EBS_AIR_PRESSURE_ERROR: {
     break;
@@ -784,11 +807,11 @@ bool ebs_error_check(Ebs_error error) {
   case EBS_CAN_ERROR: {
     break;
   }
+  case EBS_WATCHDOG_ERROR: {
+    break;
+  }
   }
   as_close_sdc.deactivate();
-  led_ok.deactivate();
-  led_chk.deactivate();
-  led_err.activate();
 
   return true;
 }

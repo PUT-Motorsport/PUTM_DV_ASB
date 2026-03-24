@@ -263,11 +263,10 @@ int main(void) {
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   Ebs_state ebs_state = EBS_INITIAL_CHECKUP;
+  bool ebs_break = false;
 
   // Initialize CAN
-  using namespace putm_ev_can;
-
-  CanDriver can_m;
+  putm_ev_can::CanDriver can_m;
   can_filter_config(&hcan1);
   if (!can_m.Init(&hcan1)) {
     ebs_error_check(EBS_CAN_ERROR);
@@ -309,32 +308,35 @@ int main(void) {
       sdc_timeout_timer.restart();
       while (!sdc_ready.isActive()) {
         if (sdc_timeout_timer.checkIfTimedOutThenReset()) {
-          ebs_error_check(EBS_SDC_ERROR);
-          ebs_state = EBS_STOP_MONITORING;
+          ebs_break = ebs_error_check(EBS_SDC_ERROR);
           break;
         }
       }
 
-      if (ebs_state != EBS_INITIAL_CHECKUP)
+      if (ebs_break) {
+        ebs_state = EBS_STOP_MONITORING;
         break;
+      }
       stopTogglingWatchdog();
 
       sdc_timeout_timer.restart();
       while (sdc_ready.isActive()) {
         if (sdc_timeout_timer.checkIfTimedOutThenReset()) {
-          ebs_error_check(EBS_SDC_ERROR);
-          ebs_state = EBS_STOP_MONITORING;
+          ebs_break = ebs_error_check(EBS_SDC_ERROR);
           break;
         }
       }
 
-      if (ebs_state != EBS_INITIAL_CHECKUP)
+      if (ebs_break) {
+        ebs_state = EBS_STOP_MONITORING;
         break;
+      }
       startTogglingWatchdog();
 
       // Check that the EBS energy storage is filled
       air_pressure.update(adc_dma_buffer);
-      if (ebs_error_check(air_pressure.check())) {
+      ebs_break = ebs_error_check(air_pressure.check());
+      if (ebs_break) {
         ebs_state = EBS_STOP_MONITORING;
         break;
       }
@@ -343,18 +345,20 @@ int main(void) {
       can_timeout_timer.restart();
       while (!brake_data_can.status) {
         if (can_timeout_timer.checkIfTimedOutThenReset()) {
-          ebs_error_check(EBS_CAN_ERROR);
-          ebs_state = EBS_STOP_MONITORING;
+          ebs_break = ebs_error_check(EBS_CAN_ERROR);
           break;
         }
       }
-      if (ebs_state != EBS_INITIAL_CHECKUP)
+      if (ebs_break) {
+        ebs_state = EBS_STOP_MONITORING;
         break;
+      }
       brake_data_can.status = false;
 
       // Check that the brake pressure is built up correctly
       air_pressure.update(adc_dma_buffer);
-      if (ebs_error_check(brakes.check_buildup(air_pressure.ebs))) {
+      ebs_break = ebs_error_check(brakes.check_buildup(air_pressure.ebs));
+      if (ebs_break) {
         ebs_state = EBS_STOP_MONITORING;
         break;
       }
@@ -372,25 +376,27 @@ int main(void) {
       valve_timeout_timer.restart();
       while (!brakes.check_holdup(air_pressure.ebs)) {
         if (valve_timeout_timer.checkIfTimedOutThenReset()) {
-          ebs_error_check(EBS_BRAKES_ERROR);
-          ebs_state = EBS_STOP_MONITORING;
+          ebs_break = ebs_error_check(EBS_BRAKES_ERROR);
           break;
         }
 
         can_timeout_timer.restart();
         while (!brake_data_can.status) {
           if (can_timeout_timer.checkIfTimedOutThenReset()) {
-            ebs_error_check(EBS_CAN_ERROR);
-            ebs_state = EBS_STOP_MONITORING;
+            ebs_break = ebs_error_check(EBS_CAN_ERROR);
             break;
           }
         }
-        if (ebs_state != EBS_INITIAL_CHECKUP)
+        if (ebs_break) {
+          ebs_state = EBS_STOP_MONITORING;
           break;
+        }
         brake_data_can.status = false;
       }
-      if (ebs_state != EBS_INITIAL_CHECKUP)
+      if (ebs_break) {
+        ebs_state = EBS_STOP_MONITORING;
         break;
+      }
       valve1.activate();
 
       // Check that the brake pressure is still built
@@ -400,25 +406,27 @@ int main(void) {
       valve_timeout_timer.restart();
       while (!brakes.check_holdup(air_pressure.ebs)) {
         if (valve_timeout_timer.checkIfTimedOutThenReset()) {
-          ebs_error_check(EBS_BRAKES_ERROR);
-          ebs_state = EBS_STOP_MONITORING;
+          ebs_break = ebs_error_check(EBS_BRAKES_ERROR);
           break;
         }
 
         can_timeout_timer.restart();
         while (!brake_data_can.status) {
           if (can_timeout_timer.checkIfTimedOutThenReset()) {
-            ebs_error_check(EBS_CAN_ERROR);
-            ebs_state = EBS_STOP_MONITORING;
+            ebs_break = ebs_error_check(EBS_CAN_ERROR);
             break;
           }
         }
-        if (ebs_state != EBS_INITIAL_CHECKUP)
+        if (ebs_break) {
+          ebs_state = EBS_STOP_MONITORING;
           break;
+        }
         brake_data_can.status = false;
       }
-      if (ebs_state != EBS_INITIAL_CHECKUP)
+      if (ebs_break) {
+        ebs_state = EBS_STOP_MONITORING;
         break;
+      }
       valve2.activate();
 
       // Start continous monitoring
@@ -432,7 +440,8 @@ int main(void) {
 
       // Monitor the storage of brake energy (air pressure)
       air_pressure.update(adc_dma_buffer);
-      if (ebs_error_check(air_pressure.check())) {
+      ebs_break = ebs_error_check(air_pressure.check());
+      if (ebs_break) {
         ebs_state = EBS_STOP_MONITORING;
         break;
       }
@@ -451,25 +460,27 @@ int main(void) {
         valve_timeout_timer.restart();
         while (!brakes.check_holdup(air_pressure.ebs)) {
           if (valve_timeout_timer.checkIfTimedOutThenReset()) {
-            ebs_error_check(EBS_BRAKES_ERROR);
-            ebs_state = EBS_STOP_MONITORING;
+            ebs_break = ebs_error_check(EBS_BRAKES_ERROR);
             break;
           }
 
           can_timeout_timer.restart();
           while (!brake_data_can.status) {
             if (can_timeout_timer.checkIfTimedOutThenReset()) {
-              ebs_error_check(EBS_CAN_ERROR);
-              ebs_state = EBS_STOP_MONITORING;
+              ebs_break = ebs_error_check(EBS_CAN_ERROR);
               break;
             }
           }
-          if (ebs_state != EBS_CONTINOUS_MONITORING)
+          if (ebs_break) {
+            ebs_state = EBS_STOP_MONITORING;
             break;
+          }
           brake_data_can.status = false;
         }
-        if (ebs_state != EBS_CONTINOUS_MONITORING)
+        if (ebs_break) {
+          ebs_state = EBS_STOP_MONITORING;
           break;
+        }
       }
       break;
     }
@@ -815,8 +826,6 @@ bool ebs_error_check(Ebs_status error) {
 
   return true;
 }
-
-// Ebs_supervisor_state ebs_warn() {}
 
 void startTogglingWatchdog() { HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2); }
 

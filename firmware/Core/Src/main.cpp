@@ -28,6 +28,7 @@
 #include "gpioElements.hpp"
 #include "stm32l4xx_hal_can.h"
 #include "stm32l4xx_hal_def.h"
+#include "stm32l4xx_hal_gpio.h"
 #include "timer.hpp"
 #include <cstdint>
 #include <functional>
@@ -294,9 +295,7 @@ int main(void) {
 
     case (EBS_INITIAL_CHECKUP): {
       // Turn on checkup led
-      led_chk.activate();
-      led_ok.deactivate();
-      led_err.deactivate();
+      led_warn.activate();
 
       // Close valves
       valve1.activate();
@@ -430,7 +429,7 @@ int main(void) {
       valve2.activate();
 
       // Start continous monitoring
-      led_chk.deactivate();
+      led_warn.deactivate();
       ebs_state = EBS_CONTINOUS_MONITORING;
       break;
     }
@@ -487,7 +486,7 @@ int main(void) {
     case EBS_STOP_MONITORING: {
     }
       led_ok.deactivate();
-      led_chk.deactivate();
+      led_warn.deactivate();
       led_err.activate();
       while (!sdc_ready.isActive()) {
         // Add proper ASB reset

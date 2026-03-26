@@ -1,78 +1,26 @@
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 400:Plugin executed on: 'win32'
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 401:Plugin executed with python version: '3.9.16 (main, Apr  9 2023, 05:22:13) [MSC v.1934 64 bit (AMD64)]'
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 402:KiCad build version: 7.0.2
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 403:Plugin version: 2.1.0
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 404:Frame repr: <wx._core.Frame object at 0x0000021700FE9EE0>
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 428:Preparing replicator with U3 as a reference
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.replicate_layout 116:getting a list of all footprints on board
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H3 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H2 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H1 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H5 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H6 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint PUTM_LOGO does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint H4 does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.replicate_layout 135:Footprint G*** does not have Sheetfile property, it will not be replicated. Most likely it is only in layout
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 476:source anchor footprint is 'U3'
-Located on: ['Air pressure sensor control', 'Pressure Buffer2']
-With filenames: ['C:\\Users\\przem\\OneDrive\\Pulpit\\PUTM\\PUTM_DV_ASB_2023\\hardware\\sensors.kicad_sch', 'C:\\Users\\przem\\OneDrive\\Pulpit\\PUTM\\PUTM_DV_ASB_2023\\hardware\\buffer.kicad_sch']
-With sheet_id:['Air pressure sensor control', 'Pressure Buffer2']
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 483:Corresponding footprints are 
-[('U2', ['Air pressure sensor control', 'Pressure Buffer1']), ('U3', ['Air pressure sensor control', 'Pressure Buffer2']), ('U1', ['Air pressure sensor control', 'Pressure Buffer']), ('U4', ['Air pressure sensor control', 'Pressure Buffer3'])]
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 495:Showing dialog
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.replicate_layout 403:constructing a list of sheets suitable for replication on level:'Pressure Buffer2', file:'C:\\Users\\przem\\OneDrive\\Pulpit\\PUTM\\PUTM_DV_ASB_2023\\hardware\\buffer.kicad_sch'
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.replicate_layout 440:suitable sheets are:[['Air pressure sensor control', 'Pressure Buffer'], ['Air pressure sensor control', 'Pressure Buffer1'], ['Air pressure sensor control', 'Pressure Buffer3']]
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1411:Level selected: ['Air pressure sensor control', 'Pressure Buffer2']
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1246:Filtering list of tracks
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 501:Toolbar position: wx.Point(1329, 80)
-10-02 14:05:13 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 506:Dialog position: wx.Point(967, 80)
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 403:constructing a list of sheets suitable for replication on level:'Pressure Buffer2', file:'C:\\Users\\przem\\OneDrive\\Pulpit\\PUTM\\PUTM_DV_ASB_2023\\hardware\\buffer.kicad_sch'
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 440:suitable sheets are:[['Air pressure sensor control', 'Pressure Buffer'], ['Air pressure sensor control', 'Pressure Buffer1'], ['Air pressure sensor control', 'Pressure Buffer3']]
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 248:Replicating layout
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 239:Starting replication of sheets: [['Air pressure sensor control', 'Pressure Buffer'], ['Air pressure sensor control', 'Pressure Buffer1'], ['Air pressure sensor control', 'Pressure Buffer3']]
-on level: ['Air pressure sensor control', 'Pressure Buffer2']
-with tracks=True, zone=True, text=True, text=True, intersecting=False, remove=False, locked footprints=False, group_only=False
-10-02 14:05:18 root 340:updating GUI message: 'Preparing for replication'
-10-02 14:05:18 root 345:updating GUI with: 0
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 309:Getting the list of source footprints
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 319:Getting the list of all the remaining footprints
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 326:Getting source tracks
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1246:Filtering list of tracks
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 330:Getting source zones
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 334:Getting source text items
-10-02 14:05:18 root 345:updating GUI with: 66
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 338:Getting source drawing items
-10-02 14:05:18 root 340:updating GUI message: 'Replicating footprints'
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 754:Replicating footprints
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 761:Replicating footprints on sheet ['Air pressure sensor control', 'Pressure Buffer']
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 761:Replicating footprints on sheet ['Air pressure sensor control', 'Pressure Buffer1']
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 761:Replicating footprints on sheet ['Air pressure sensor control', 'Pressure Buffer3']
-10-02 14:05:18 root 340:updating GUI message: 'Replicating tracks'
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 924:Replicating tracks
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 930:Replicating tracks on sheet ['Air pressure sensor control', 'Pressure Buffer']
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Air pressure sensor control', 'Pressure Buffer'] :[('/Air pressure sensor control/REDUNDANT', '/Air pressure sensor control/MAIN'), ('Net-(U3-+)', 'Net-(U1-+)'), ('Net-(U3--)', 'Net-(U1--)'), ('+3V3', '+3V3'), ('SENSORIN_REDUNDANT', 'SENSORIN_MAIN'), ('GND', 'GND')]
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 930:Replicating tracks on sheet ['Air pressure sensor control', 'Pressure Buffer1']
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Air pressure sensor control', 'Pressure Buffer1'] :[('SENSORIN_REDUNDANT', 'SENSORIN_EBS'), ('/Air pressure sensor control/REDUNDANT', '/Air pressure sensor control/EBS'), ('Net-(U3--)', 'Net-(U2--)'), ('+3V3', '+3V3'), ('Net-(U3-+)', 'Net-(U2-+)'), ('GND', 'GND')]
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 930:Replicating tracks on sheet ['Air pressure sensor control', 'Pressure Buffer3']
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Air pressure sensor control', 'Pressure Buffer3'] :[('SENSORIN_REDUNDANT', 'SENSORIN_SPARE'), ('+3V3', '+3V3'), ('/Air pressure sensor control/REDUNDANT', '/Air pressure sensor control/PRESS4'), ('Net-(U3--)', 'Net-(U4--)'), ('Net-(U3-+)', 'Net-(U4-+)'), ('GND', 'GND')]
-10-02 14:05:18 root 340:updating GUI message: 'Replicating zones'
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 994:Replicating zones
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1001:Replicating zones on sheet ['Air pressure sensor control', 'Pressure Buffer']
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Air pressure sensor control', 'Pressure Buffer'] :[('/Air pressure sensor control/REDUNDANT', '/Air pressure sensor control/MAIN'), ('Net-(U3-+)', 'Net-(U1-+)'), ('Net-(U3--)', 'Net-(U1--)'), ('+3V3', '+3V3'), ('SENSORIN_REDUNDANT', 'SENSORIN_MAIN'), ('GND', 'GND')]
-10-02 14:05:18 root 345:updating GUI with: 33
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1001:Replicating zones on sheet ['Air pressure sensor control', 'Pressure Buffer1']
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Air pressure sensor control', 'Pressure Buffer1'] :[('SENSORIN_REDUNDANT', 'SENSORIN_EBS'), ('/Air pressure sensor control/REDUNDANT', '/Air pressure sensor control/EBS'), ('Net-(U3--)', 'Net-(U2--)'), ('+3V3', '+3V3'), ('Net-(U3-+)', 'Net-(U2-+)'), ('GND', 'GND')]
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1001:Replicating zones on sheet ['Air pressure sensor control', 'Pressure Buffer3']
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 749:Net pairs for sheet ['Air pressure sensor control', 'Pressure Buffer3'] :[('SENSORIN_REDUNDANT', 'SENSORIN_SPARE'), ('+3V3', '+3V3'), ('/Air pressure sensor control/REDUNDANT', '/Air pressure sensor control/PRESS4'), ('Net-(U3--)', 'Net-(U4--)'), ('Net-(U3-+)', 'Net-(U4-+)'), ('GND', 'GND')]
-10-02 14:05:18 root 340:updating GUI message: 'Replicating text'
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1083:Replicating text
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1090:Replicating text on sheet ['Air pressure sensor control', 'Pressure Buffer']
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1090:Replicating text on sheet ['Air pressure sensor control', 'Pressure Buffer1']
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1090:Replicating text on sheet ['Air pressure sensor control', 'Pressure Buffer3']
-10-02 14:05:18 root 340:updating GUI message: 'Replicating drawings'
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1134:Replicating drawings
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1140:Replicating drawings on sheet ['Air pressure sensor control', 'Pressure Buffer']
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1140:Replicating drawings on sheet ['Air pressure sensor control', 'Pressure Buffer1']
-10-02 14:05:18 com_github_MitjaNemec_ReplicateLayout.replicate_layout 1140:Replicating drawings on sheet ['Air pressure sensor control', 'Pressure Buffer3']
-10-02 14:05:19 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 264:Replication complete
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 326:Plugin executed on: 'win32'
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 327:Plugin executed with python version: '3.9.10 (main, Jul 19 2022, 05:36:50) [MSC v.1932 64 bit (AMD64)]'
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 328:KiCad build version: (6.0.7)
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 329:Plugin version: 1.2.5
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 330:Frame repr: <wx._core.Frame object at 0x000002B52053DF70>
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 354:Preparing replicator with R11 as a reference
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 110:getting a list of all footprints on board
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint G*** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint REF** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.replicate_layout 129:Footprint G*** does not have Sheetfile property, it will not be replicated. Most likely it is only in schematics
+12-09 03:12:58 com_github_MitjaNemec_ReplicateLayout.action_replicate_layout 369:Fatal error when making an instance of replicator
+Traceback (most recent call last):
+  File "C:\Users\przemas\Documents\KiCad\6.0\3rdparty\plugins\com_github_MitjaNemec_ReplicateLayout\action_replicate_layout.py", line 358, in Run
+    replicator = Replicator(board, src_anchor_fp_reference)
+  File "C:\Users\przemas\Documents\KiCad\6.0\3rdparty\plugins\com_github_MitjaNemec_ReplicateLayout\replicate_layout.py", line 153, in __init__
+    self.parse_schematic_files(self.sch_filename, schematic_found)
+  File "C:\Users\przemas\Documents\KiCad\6.0\3rdparty\plugins\com_github_MitjaNemec_ReplicateLayout\replicate_layout.py", line 198, in parse_schematic_files
+    self.parse_schematic_files(sheetfile, dict_of_sheets)
+  File "C:\Users\przemas\Documents\KiCad\6.0\3rdparty\plugins\com_github_MitjaNemec_ReplicateLayout\replicate_layout.py", line 179, in parse_schematic_files
+    with open(filename) as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'gic.kicad_sch'

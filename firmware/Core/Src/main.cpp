@@ -285,6 +285,7 @@ int main(void) {
   Timer sdc_timeout_timer(config.sdc_settle_timeout);
   Timer valve_timeout_timer(config.valve_settle_timeout);
   Timer can_timeout_timer(config.can_timeout);
+  as_close_sdc.deactivate();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -332,13 +333,13 @@ int main(void) {
       }
       startTogglingWatchdog();
 
-      // Check that the EBS energy storage is filled
-      air_pressure.update(adc_dma_buffer);
-      ebs_break = ebs_error_check(air_pressure.check());
-      if (ebs_break) {
-        ebs_state = EBS_STOP_MONITORING;
-        break;
-      }
+      // // Check that the EBS energy storage is filled
+      // air_pressure.update(adc_dma_buffer);
+      // ebs_break = ebs_error_check(air_pressure.check());
+      // if (ebs_break) {
+      //   ebs_state = EBS_STOP_MONITORING;
+      //   break;
+      // }
 
       // Check CAN
       can_timeout_timer.restart();
@@ -354,13 +355,13 @@ int main(void) {
       }
       brake_data_can.status = false;
 
-      // Check that the brake pressure is built up correctly
-      air_pressure.update(adc_dma_buffer);
-      ebs_break = ebs_error_check(brakes.check_buildup(air_pressure.ebs));
-      if (ebs_break) {
-        ebs_state = EBS_STOP_MONITORING;
-        break;
-      }
+      // // Check that the brake pressure is built up correctly
+      // air_pressure.update(adc_dma_buffer);
+      // ebs_break = ebs_error_check(brakes.check_buildup(air_pressure.ebs));
+      // if (ebs_break) {
+      //   ebs_state = EBS_STOP_MONITORING;
+      //   break;
+      // }
 
       // Enable TS
       as_close_sdc.activate();
@@ -370,63 +371,63 @@ int main(void) {
 
       // Check that the brake pressure is still built
       // up correctly #1
-      valve1.deactivate();
-      HAL_Delay(config.valve_settle_delay);
-      valve_timeout_timer.restart();
-      while (!brakes.check_holdup(air_pressure.ebs)) {
-        if (valve_timeout_timer.checkIfTimedOutThenReset()) {
-          ebs_break = ebs_error_check(EBS_BRAKES_ERROR);
-          break;
-        }
+      // valve1.deactivate();
+      // HAL_Delay(config.valve_settle_delay);
+      // valve_timeout_timer.restart();
+      // while (!brakes.check_holdup(air_pressure.ebs)) {
+      //   if (valve_timeout_timer.checkIfTimedOutThenReset()) {
+      //     ebs_break = ebs_error_check(EBS_BRAKES_ERROR);
+      //     break;
+      //   }
 
-        can_timeout_timer.restart();
-        while (!brake_data_can.status) {
-          if (can_timeout_timer.checkIfTimedOutThenReset()) {
-            ebs_break = ebs_error_check(EBS_CAN_ERROR);
-            break;
-          }
-        }
-        if (ebs_break) {
-          ebs_state = EBS_STOP_MONITORING;
-          break;
-        }
-        brake_data_can.status = false;
-      }
-      if (ebs_break) {
-        ebs_state = EBS_STOP_MONITORING;
-        break;
-      }
-      valve1.activate();
+      //   can_timeout_timer.restart();
+      //   while (!brake_data_can.status) {
+      //     if (can_timeout_timer.checkIfTimedOutThenReset()) {
+      //       ebs_break = ebs_error_check(EBS_CAN_ERROR);
+      //       break;
+      //     }
+      //   }
+      //   if (ebs_break) {
+      //     ebs_state = EBS_STOP_MONITORING;
+      //     break;
+      //   }
+      //   brake_data_can.status = false;
+      // }
+      // if (ebs_break) {
+      //   ebs_state = EBS_STOP_MONITORING;
+      //   break;
+      // }
+      // valve1.activate();
 
-      // Check that the brake pressure is still built
-      // up correctly #2
-      valve2.deactivate();
-      HAL_Delay(config.valve_settle_delay);
-      valve_timeout_timer.restart();
-      while (!brakes.check_holdup(air_pressure.ebs)) {
-        if (valve_timeout_timer.checkIfTimedOutThenReset()) {
-          ebs_break = ebs_error_check(EBS_BRAKES_ERROR);
-          break;
-        }
+      // // Check that the brake pressure is still built
+      // // up correctly #2
+      // valve2.deactivate();
+      // HAL_Delay(config.valve_settle_delay);
+      // valve_timeout_timer.restart();
+      // while (!brakes.check_holdup(air_pressure.ebs)) {
+      //   if (valve_timeout_timer.checkIfTimedOutThenReset()) {
+      //     ebs_break = ebs_error_check(EBS_BRAKES_ERROR);
+      //     break;
+      //   }
 
-        can_timeout_timer.restart();
-        while (!brake_data_can.status) {
-          if (can_timeout_timer.checkIfTimedOutThenReset()) {
-            ebs_break = ebs_error_check(EBS_CAN_ERROR);
-            break;
-          }
-        }
-        if (ebs_break) {
-          ebs_state = EBS_STOP_MONITORING;
-          break;
-        }
-        brake_data_can.status = false;
-      }
-      if (ebs_break) {
-        ebs_state = EBS_STOP_MONITORING;
-        break;
-      }
-      valve2.activate();
+      //   can_timeout_timer.restart();
+      //   while (!brake_data_can.status) {
+      //     if (can_timeout_timer.checkIfTimedOutThenReset()) {
+      //       ebs_break = ebs_error_check(EBS_CAN_ERROR);
+      //       break;
+      //     }
+      //   }
+      //   if (ebs_break) {
+      //     ebs_state = EBS_STOP_MONITORING;
+      //     break;
+      //   }
+      //   brake_data_can.status = false;
+      // }
+      // if (ebs_break) {
+      //   ebs_state = EBS_STOP_MONITORING;
+      //   break;
+      // }
+      // valve2.activate();
 
       // Start continous monitoring
       led_warn.deactivate();

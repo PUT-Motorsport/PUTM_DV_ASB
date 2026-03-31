@@ -251,7 +251,7 @@
       "internal_id": "",
       "mfg": "",
       "mpn": "",
-      "sch_revision": ""
+      "sch_revision": "Beta 1.1"
     },
     "layer_pairs": [],
     "layer_presets": [],
@@ -735,7 +735,7 @@
       {
         "filename": "PUTM_DV_EBS_2023.kicad_sch",
         "name": "PUTM_DV_EBS_2023",
-        "uuid": "00000000-0000-0000-0000-000000000000"
+        "uuid": "d921fbb5-521e-405d-bdec-f40195adfa1c"
       }
     ],
     "used_designators": "",
@@ -744,7 +744,7 @@
   "sheets": [
     [
       "d921fbb5-521e-405d-bdec-f40195adfa1c",
-      ""
+      "PUTM_DV_EBS_2023"
     ],
     [
       "16412294-9d23-4b06-9a1c-2367431a1782",

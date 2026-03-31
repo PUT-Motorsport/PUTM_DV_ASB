@@ -1,129 +1,354 @@
-(kicad_sch (version 20211123) (generator eeschema)
-
-  (uuid cb732976-6f26-4326-9457-ca6aea8dc7e9)
-
-  (paper "A4")
-
-  (lib_symbols
-  )
-
-
-  (wire (pts (xy 148.59 83.82) (xy 166.37 83.82))
-    (stroke (width 0) (type default) (color 0 0 0 0))
-    (uuid 061b09a0-42e5-462f-8367-087452d4b276)
-  )
-  (wire (pts (xy 87.63 52.07) (xy 100.33 52.07))
-    (stroke (width 0) (type default) (color 0 0 0 0))
-    (uuid 1ac3f31e-361a-4b30-9d9a-1ba864feeac5)
-  )
-  (wire (pts (xy 148.59 52.07) (xy 166.37 52.07))
-    (stroke (width 0) (type default) (color 0 0 0 0))
-    (uuid 616dcbb8-4aef-4e35-b24d-5be7821b2a5e)
-  )
-  (wire (pts (xy 148.59 116.84) (xy 163.83 116.84))
-    (stroke (width 0) (type default) (color 0 0 0 0))
-    (uuid 662d1b67-a689-42fd-b438-fca49cf62ace)
-  )
-  (wire (pts (xy 85.09 83.82) (xy 100.33 83.82))
-    (stroke (width 0) (type default) (color 0 0 0 0))
-    (uuid aad8080a-5433-4af4-af00-7ba834545ee0)
-  )
-  (wire (pts (xy 93.98 116.84) (xy 100.33 116.84))
-    (stroke (width 0) (type default) (color 0 0 0 0))
-    (uuid c999ee6f-5c31-40d0-bbce-a6231d706b71)
-  )
-
-  (text "10 bar 24V DC supply M5" (at 53.34 191.77 0)
-    (effects (font (size 6 6)) (justify left bottom))
-    (uuid ac1d608b-b628-48d9-83d7-af365554d953)
-  )
-  (text "PSE540-1W5" (at 80.01 179.07 0)
-    (effects (font (size 6 6)) (justify left bottom))
-    (uuid cf45137b-ddaf-4cb4-b294-ff355d8fbe36)
-  )
-
-  (hierarchical_label "REDUNDANT" (shape output) (at 163.83 116.84 0)
-    (effects (font (size 1.27 1.27)) (justify left))
-    (uuid 27624bdf-af9d-49ec-a557-ebafd75cb2ab)
-  )
-  (hierarchical_label "MAIN" (shape output) (at 166.37 52.07 0)
-    (effects (font (size 1.27 1.27)) (justify left))
-    (uuid 31245d88-fa46-4518-9801-d68b87283d5b)
-  )
-  (hierarchical_label "SENSOR_REDUNDANT" (shape input) (at 93.98 116.84 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid 42c744f9-48da-466d-b99b-f5a4a449344c)
-  )
-  (hierarchical_label "SENSOR_MAIN" (shape input) (at 87.63 52.07 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid 6b7040f1-f800-4273-ba20-e6deccaf19ac)
-  )
-  (hierarchical_label "EBS" (shape output) (at 166.37 83.82 0)
-    (effects (font (size 1.27 1.27)) (justify left))
-    (uuid 6d6e43bd-c919-46d1-8bb9-b7b81935e19c)
-  )
-  (hierarchical_label "SENSOR_EBS" (shape input) (at 85.09 83.82 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid e0118275-0f26-4379-b6c1-8a8dd8787fde)
-  )
-
-  (sheet (at 100.33 71.12) (size 48.26 24.13) (fields_autoplaced)
-    (stroke (width 0.1524) (type solid) (color 0 0 0 0))
-    (fill (color 0 0 0 0.0000))
-    (uuid 2138a410-a835-4c5b-94a4-707f9fcacbbd)
-    (property "Sheet name" "Pressure Buffer1" (id 0) (at 100.33 70.4084 0)
-      (effects (font (size 1.27 1.27)) (justify left bottom))
-    )
-    (property "Sheet file" "buffer.kicad_sch" (id 1) (at 100.33 95.8346 0)
-      (effects (font (size 1.27 1.27)) (justify left top))
-    )
-    (pin "AIR_SENSOR" output (at 148.59 83.82 0)
-      (effects (font (size 1.27 1.27)) (justify right))
-      (uuid f77053ca-ca06-44ff-8d61-de4d60e738ba)
-    )
-    (pin "AIR_R" input (at 100.33 83.82 180)
-      (effects (font (size 1.27 1.27)) (justify left))
-      (uuid 42d13c26-e5e6-438b-b27b-013aab1ece36)
-    )
-  )
-
-  (sheet (at 100.33 39.37) (size 48.26 24.13) (fields_autoplaced)
-    (stroke (width 0.1524) (type solid) (color 0 0 0 0))
-    (fill (color 0 0 0 0.0000))
-    (uuid ae830780-2461-4e8c-b528-b01e34f9f141)
-    (property "Sheet name" "Pressure Buffer" (id 0) (at 100.33 38.6584 0)
-      (effects (font (size 1.27 1.27)) (justify left bottom))
-    )
-    (property "Sheet file" "buffer.kicad_sch" (id 1) (at 100.33 64.0846 0)
-      (effects (font (size 1.27 1.27)) (justify left top))
-    )
-    (pin "AIR_SENSOR" output (at 148.59 52.07 0)
-      (effects (font (size 1.27 1.27)) (justify right))
-      (uuid 97cbed7d-1547-4775-aca6-da515bc5bb8c)
-    )
-    (pin "AIR_R" input (at 100.33 52.07 180)
-      (effects (font (size 1.27 1.27)) (justify left))
-      (uuid e5b79e2a-ee0c-4620-be7d-e9849df7dfca)
-    )
-  )
-
-  (sheet (at 100.33 102.87) (size 48.26 24.13) (fields_autoplaced)
-    (stroke (width 0.1524) (type solid) (color 0 0 0 0))
-    (fill (color 0 0 0 0.0000))
-    (uuid d2cebea6-4b71-4d4d-8083-65636bff8f5a)
-    (property "Sheet name" "Pressure Buffer2" (id 0) (at 100.33 102.1584 0)
-      (effects (font (size 1.27 1.27)) (justify left bottom))
-    )
-    (property "Sheet file" "buffer.kicad_sch" (id 1) (at 100.33 127.5846 0)
-      (effects (font (size 1.27 1.27)) (justify left top))
-    )
-    (pin "AIR_SENSOR" output (at 148.59 116.84 0)
-      (effects (font (size 1.27 1.27)) (justify right))
-      (uuid 5bca21b0-d15c-453c-aded-a8003ac837fc)
-    )
-    (pin "AIR_R" input (at 100.33 116.84 180)
-      (effects (font (size 1.27 1.27)) (justify left))
-      (uuid d5b79354-5e9b-480e-87a6-d3d204653d85)
-    )
-  )
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "cb732976-6f26-4326-9457-ca6aea8dc7e9")
+	(paper "A4")
+	(lib_symbols)
+	(text "10 bar 24V DC supply M5"
+		(exclude_from_sim no)
+		(at 53.34 191.77 0)
+		(effects
+			(font
+				(size 6 6)
+			)
+			(justify left bottom)
+		)
+		(uuid "ac1d608b-b628-48d9-83d7-af365554d953")
+	)
+	(text "PSE540-1W5"
+		(exclude_from_sim no)
+		(at 80.01 179.07 0)
+		(effects
+			(font
+				(size 6 6)
+			)
+			(justify left bottom)
+		)
+		(uuid "cf45137b-ddaf-4cb4-b294-ff355d8fbe36")
+	)
+	(wire
+		(pts
+			(xy 148.59 83.82) (xy 166.37 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "061b09a0-42e5-462f-8367-087452d4b276")
+	)
+	(wire
+		(pts
+			(xy 87.63 52.07) (xy 100.33 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1ac3f31e-361a-4b30-9d9a-1ba864feeac5")
+	)
+	(wire
+		(pts
+			(xy 148.59 52.07) (xy 166.37 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "616dcbb8-4aef-4e35-b24d-5be7821b2a5e")
+	)
+	(wire
+		(pts
+			(xy 148.59 116.84) (xy 163.83 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "662d1b67-a689-42fd-b438-fca49cf62ace")
+	)
+	(wire
+		(pts
+			(xy 85.09 83.82) (xy 100.33 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aad8080a-5433-4af4-af00-7ba834545ee0")
+	)
+	(wire
+		(pts
+			(xy 93.98 116.84) (xy 100.33 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c999ee6f-5c31-40d0-bbce-a6231d706b71")
+	)
+	(hierarchical_label "REDUNDANT"
+		(shape output)
+		(at 163.83 116.84 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "27624bdf-af9d-49ec-a557-ebafd75cb2ab")
+	)
+	(hierarchical_label "MAIN"
+		(shape output)
+		(at 166.37 52.07 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "31245d88-fa46-4518-9801-d68b87283d5b")
+	)
+	(hierarchical_label "SENSOR_REDUNDANT"
+		(shape input)
+		(at 93.98 116.84 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "42c744f9-48da-466d-b99b-f5a4a449344c")
+	)
+	(hierarchical_label "SENSOR_MAIN"
+		(shape input)
+		(at 87.63 52.07 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "6b7040f1-f800-4273-ba20-e6deccaf19ac")
+	)
+	(hierarchical_label "EBS"
+		(shape output)
+		(at 166.37 83.82 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6d6e43bd-c919-46d1-8bb9-b7b81935e19c")
+	)
+	(hierarchical_label "SENSOR_EBS"
+		(shape input)
+		(at 85.09 83.82 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "e0118275-0f26-4379-b6c1-8a8dd8787fde")
+	)
+	(sheet
+		(at 100.33 71.12)
+		(size 48.26 24.13)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "2138a410-a835-4c5b-94a4-707f9fcacbbd")
+		(property "Sheetname" "Pressure Buffer1"
+			(at 100.33 70.4084 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "buffer.kicad_sch"
+			(at 100.33 95.8346 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "AIR_SENSOR" output
+			(at 148.59 83.82 0)
+			(uuid "f77053ca-ca06-44ff-8d61-de4d60e738ba")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "AIR_R" input
+			(at 100.33 83.82 180)
+			(uuid "42d13c26-e5e6-438b-b27b-013aab1ece36")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "PUTM_DV_EBS_2023"
+				(path "/d921fbb5-521e-405d-bdec-f40195adfa1c/0e6e746e-cf7c-47e8-8ed6-c681697efa7a"
+					(page "14")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 100.33 39.37)
+		(size 48.26 24.13)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "ae830780-2461-4e8c-b528-b01e34f9f141")
+		(property "Sheetname" "Pressure Buffer"
+			(at 100.33 38.6584 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "buffer.kicad_sch"
+			(at 100.33 64.0846 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "AIR_SENSOR" output
+			(at 148.59 52.07 0)
+			(uuid "97cbed7d-1547-4775-aca6-da515bc5bb8c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "AIR_R" input
+			(at 100.33 52.07 180)
+			(uuid "e5b79e2a-ee0c-4620-be7d-e9849df7dfca")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "PUTM_DV_EBS_2023"
+				(path "/d921fbb5-521e-405d-bdec-f40195adfa1c/0e6e746e-cf7c-47e8-8ed6-c681697efa7a"
+					(page "13")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 100.33 102.87)
+		(size 48.26 24.13)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "d2cebea6-4b71-4d4d-8083-65636bff8f5a")
+		(property "Sheetname" "Pressure Buffer2"
+			(at 100.33 102.1584 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "buffer.kicad_sch"
+			(at 100.33 127.5846 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "AIR_SENSOR" output
+			(at 148.59 116.84 0)
+			(uuid "5bca21b0-d15c-453c-aded-a8003ac837fc")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "AIR_R" input
+			(at 100.33 116.84 180)
+			(uuid "d5b79354-5e9b-480e-87a6-d3d204653d85")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "PUTM_DV_EBS_2023"
+				(path "/d921fbb5-521e-405d-bdec-f40195adfa1c/0e6e746e-cf7c-47e8-8ed6-c681697efa7a"
+					(page "15")
+				)
+			)
+		)
+	)
 )

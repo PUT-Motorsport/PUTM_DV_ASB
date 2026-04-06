@@ -20,13 +20,14 @@ set(MX_Include_Dirs
 # STM32CubeMX generated application sources
 set(MX_Application_Src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/main.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/gpioElements.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/timer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/stm32l4xx_it.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/stm32l4xx_hal_msp.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/sysmem.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/syscalls.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../startup_stm32l4p5xx.s
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/gpioElements.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/timer.cpp
+
 )
 
 # STM32 HAL/LL Drivers
@@ -86,7 +87,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${MX_Application_Src})
 target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE ${MX_LINK_DIRS})
 
 # Add libraries to the project
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${MX_LINK_LIBS})
+target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC ${MX_LINK_LIBS})
 
 # Add the map file to the list of files to be removed with 'clean' target
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES ADDITIONAL_CLEAN_FILES ${CMAKE_PROJECT_NAME}.map)

@@ -26,6 +26,7 @@
 #include "PUTM_CAN_M.h"
 #include "PUTM_EV_CAN_LIBRARY/include/can_driver.hpp"
 #include "gpioElements.hpp"
+#include "stm32l4xx_hal_adc_ex.h"
 #include "stm32l4xx_hal_can.h"
 #include "stm32l4xx_hal_def.h"
 #include "stm32l4xx_hal_gpio.h"
@@ -88,16 +89,22 @@ static struct Config {
   constexpr static uint32_t adc_count = 3;
 } volatile config;
 
+struct Brake_data_can {
+  uint16_t front;
+  uint16_t rear;
+  bool status;
+} volatile brake_data_can;
+
+struct Air_pressure_data_dma {
+  uint16_t ebs;
+  uint16_t redundant;
+  uint16_t main;
+} volatile air_pressure_data_dma;
+
 struct TransferFcn {
   float a;
   float b;
   float solve(float x) { return a * x + b; }
-};
-
-struct Brake_data_can {
-  uint16_t brake_pressure_front;
-  uint16_t brake_pressure_rear;
-  bool status;
 };
 
 class Brakes_data {
@@ -111,9 +118,9 @@ public:
   float front;
   float rear;
 
-  void update(Brake_data_can &brake_data) {
-    this->front = convert_raw_data(brake_data.brake_pressure_front);
-    this->rear = convert_raw_data(brake_data.brake_pressure_rear);
+  void update(volatile Brake_data_can &brake_data) {
+    this->front = convert_raw_data(brake_data.front);
+    this->rear = convert_raw_data(brake_data.rear);
   }
 
   Ebs_status check_buildup(float air_ebs) {
@@ -132,10 +139,10 @@ public:
       return EBS_BRAKES_ERROR;
   }
   Ebs_status check_engaged() {
-    if (config.can_engaged_brakes_lower_bound < this->front &&
-        config.can_engaged_brakes_upper_bound > this->rear &&
-        config.can_engaged_brakes_lower_bound < this->front &&
-        config.can_engaged_brakes_upper_bound > this->rear)
+    if (this->front > config.can_engaged_brakes_lower_bound &&
+        this->front<config.can_engaged_brakes_upper_bound &&this->rear> config
+            .can_engaged_brakes_lower_bound &&
+        this->rear < config.can_engaged_brakes_upper_bound)
       return EBS_OK;
     else
       return EBS_BRAKES_ERROR;
@@ -152,11 +159,13 @@ public:
   float redundant;
   float main;
 
-  void update(uint16_t adc_dma_data[config.adc_count]) {
-    this->ebs = air_transferFcn.solve(static_cast<float>(adc_dma_data[0]));
+  void update(volatile Air_pressure_data_dma &air_pressure_data) {
+    this->ebs =
+        air_transferFcn.solve(static_cast<float>(air_pressure_data.ebs));
     this->redundant =
-        air_transferFcn.solve(static_cast<float>(adc_dma_data[1]));
-    this->main = air_transferFcn.solve(static_cast<float>(adc_dma_data[2]));
+        air_transferFcn.solve(static_cast<float>(air_pressure_data.redundant));
+    this->main =
+        air_transferFcn.solve(static_cast<float>(air_pressure_data.main));
   }
   Ebs_status check() {
     if (std::abs(this->ebs - this->redundant) > config.brake_press_deviation)
@@ -184,9 +193,7 @@ TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN PV */
 
-Brake_data_can brake_data_can;
-
-uint16_t adc_dma_buffer[3];
+volatile uint16_t adc_dma_buffer[3];
 
 /* GPIO Section */
 GpioOutElement led_ok(LD_OK_GPIO_Port, LD_OK_Pin);
@@ -263,7 +270,7 @@ int main(void) {
   MX_CAN1_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  Ebs_state ebs_state = EBS_INITIAL_CHECKUP;
+  Ebs_state ebs_state = EBS_CONTINOUS_MONITORING;
   bool ebs_break = false;
 
   // Initialize CAN
@@ -279,13 +286,13 @@ int main(void) {
   Brakes_data brakes;
   Air_pressure_data air_pressure;
 
-  HAL_ADCEx_Calibration_Start(&hadc1, 10);
+  HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
   HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_dma_buffer, config.adc_count);
 
   Timer sdc_timeout_timer(config.sdc_settle_timeout);
   Timer valve_timeout_timer(config.valve_settle_timeout);
   Timer can_timeout_timer(config.can_timeout);
-  as_close_sdc.deactivate();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -297,10 +304,6 @@ int main(void) {
     case (EBS_INITIAL_CHECKUP): {
       // Turn on checkup led
       led_warn.activate();
-
-      // Close valves
-      valve1.activate();
-      valve2.activate();
 
       // Check if SDC is working
       startTogglingWatchdog();
@@ -334,7 +337,9 @@ int main(void) {
       startTogglingWatchdog();
 
       // Check that the EBS energy storage is filled
-      air_pressure.update(adc_dma_buffer);
+      __disable_irq();
+      air_pressure.update(air_pressure_data_dma);
+      __enable_irq();
       ebs_break = ebs_error_check(air_pressure.check());
       if (ebs_break) {
         ebs_state = EBS_STOP_MONITORING;
@@ -356,7 +361,9 @@ int main(void) {
       brake_data_can.status = false;
 
       // // Check that the brake pressure is built up correctly
-      air_pressure.update(adc_dma_buffer);
+      __disable_irq();
+      air_pressure.update(air_pressure_data_dma);
+      __enable_irq();
       ebs_break = ebs_error_check(brakes.check_buildup(air_pressure.ebs));
       if (ebs_break) {
         ebs_state = EBS_STOP_MONITORING;
@@ -391,6 +398,9 @@ int main(void) {
           ebs_state = EBS_STOP_MONITORING;
           break;
         }
+        __disable_irq();
+        brakes.update(brake_data_can);
+        __enable_irq();
         brake_data_can.status = false;
       }
       if (ebs_break) {
@@ -421,6 +431,9 @@ int main(void) {
           ebs_state = EBS_STOP_MONITORING;
           break;
         }
+        __disable_irq();
+        brakes.update(brake_data_can);
+        __enable_irq();
         brake_data_can.status = false;
       }
       if (ebs_break) {
@@ -439,7 +452,9 @@ int main(void) {
       led_ok.activate();
 
       // Monitor the storage of brake energy (air pressure)
-      air_pressure.update(adc_dma_buffer);
+      __disable_irq();
+      air_pressure.update(air_pressure_data_dma);
+      __enable_irq();
       ebs_break = ebs_error_check(air_pressure.check());
       if (ebs_break) {
         ebs_state = EBS_STOP_MONITORING;
@@ -447,7 +462,9 @@ int main(void) {
       }
       // Convert brake pressure data from if received from CAN
       if (brake_data_can.status == true) {
+        __disable_irq();
         brakes.update(brake_data_can);
+        __enable_irq();
         brake_data_can.status = false;
       }
 
@@ -475,7 +492,9 @@ int main(void) {
             ebs_state = EBS_STOP_MONITORING;
             break;
           }
-          brake_data_can.status = false;
+          __disable_irq();
+          brakes.update(brake_data_can);
+          __enable_irq();
         }
         if (ebs_break) {
           ebs_state = EBS_STOP_MONITORING;
@@ -485,7 +504,6 @@ int main(void) {
       break;
     }
     case EBS_STOP_MONITORING: {
-    }
       led_ok.deactivate();
       led_warn.deactivate();
       led_err.activate();
@@ -496,14 +514,14 @@ int main(void) {
       ebs_state = EBS_INITIAL_CHECKUP;
       break;
     }
+    }
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+
+    /* USER CODE END 3 */
   }
-  /* USER CODE END WHILE */
-
-  /* USER CODE BEGIN 3 */
-
-  /* USER CODE END 3 */
 }
-
 /**
  * @brief System Clock Configuration
  * @retval None
@@ -554,6 +572,7 @@ void SystemClock_Config(void) {
  * @retval None
  */
 static void MX_ADC1_Init(void) {
+
   /* USER CODE BEGIN ADC1_Init 0 */
 
   /* USER CODE END ADC1_Init 0 */
@@ -574,7 +593,7 @@ static void MX_ADC1_Init(void) {
   hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.NbrOfConversion = 3;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
@@ -582,7 +601,6 @@ static void MX_ADC1_Init(void) {
   hadc1.Init.DMAContinuousRequests = ENABLE;
   hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
   hadc1.Init.OversamplingMode = DISABLE;
-  hadc1.Init.DFSDMConfig = ADC_DFSDM_MODE_ENABLE;
   if (HAL_ADC_Init(&hadc1) != HAL_OK) {
     Error_Handler();
   }
@@ -777,9 +795,17 @@ static void MX_GPIO_Init(void) {
 
 /* USER CODE BEGIN 4 */
 
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
+  if (hadc == &hadc1) {
+    air_pressure_data_dma.ebs = adc_dma_buffer[0];
+    air_pressure_data_dma.redundant = adc_dma_buffer[1];
+    air_pressure_data_dma.main = adc_dma_buffer[2];
+  }
+}
+
 void can_driver_input_cb(const PUTM_CAN_M_driver_input_t &driver_input) {
-  brake_data_can.brake_pressure_front = driver_input.brake_pressure_front;
-  brake_data_can.brake_pressure_rear = driver_input.brake_pressure_rear;
+  brake_data_can.front = driver_input.brake_pressure_front;
+  brake_data_can.rear = driver_input.brake_pressure_rear;
   brake_data_can.status = true;
 }
 
@@ -823,7 +849,6 @@ bool ebs_error_check(Ebs_status error) {
   }
   }
   as_close_sdc.deactivate();
-
   return true;
 }
 

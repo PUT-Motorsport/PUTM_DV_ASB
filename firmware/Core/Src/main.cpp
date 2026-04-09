@@ -19,6 +19,11 @@
 /* Includes
  * ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
+#include "can.h"
+#include "dma.h"
+#include "gpio.h"
+#include "tim.h"
 
 /* Private includes
  * ----------------------------------------------------------*/
@@ -26,15 +31,9 @@
 #include "PUTM_CAN_M.h"
 #include "PUTM_EV_CAN_LIBRARY/include/can_driver.hpp"
 #include "gpioElements.hpp"
-#include "stm32l4xx_hal_adc_ex.h"
-#include "stm32l4xx_hal_can.h"
-#include "stm32l4xx_hal_def.h"
-#include "stm32l4xx_hal_gpio.h"
 #include "timer.hpp"
-#include <cstdint>
-#include <functional>
-#include <math.h>
 
+#include "math.h"
 /* USER CODE END Includes */
 
 /* Private typedef
@@ -159,14 +158,14 @@ public:
   float redundant;
   float main;
 
-  void update(volatile Air_pressure_data_dma &air_pressure_data) {
-    this->ebs =
-        air_transferFcn.solve(static_cast<float>(air_pressure_data.ebs));
+  void update(volatile uint16_t air_pressure_data[config::adc_count]) {
+    this->ebs = air_transferFcn.solve(static_cast<float>(air_pressure_data[0]));
     this->redundant =
-        air_transferFcn.solve(static_cast<float>(air_pressure_data.redundant));
+        air_transferFcn.solve(static_cast<float>(air_pressure_data[1]));
     this->main =
-        air_transferFcn.solve(static_cast<float>(air_pressure_data.main));
+        air_transferFcn.solve(static_cast<float>(air_pressure_data[2]));
   }
+
   bool check() {
     if (std::abs(this->ebs - this->redundant) > config::brake_press_deviation)
       return true;
@@ -184,12 +183,6 @@ public:
 
 /* Private variables
  * ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc1;
-DMA_HandleTypeDef hdma_adc1;
-
-CAN_HandleTypeDef hcan1;
-
-TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN PV */
 
@@ -215,11 +208,7 @@ GpioInElement sdc_ready(SDC_RDY_GPIO_Port, SDC_RDY_Pin);
 /* Private function prototypes
  * -----------------------------------------------*/
 void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-static void MX_DMA_Init(void);
-static void MX_TIM3_Init(void);
-static void MX_CAN1_Init(void);
-static void MX_ADC1_Init(void);
+
 /* USER CODE BEGIN PFP */
 void startTogglingWatchdog();
 void stopTogglingWatchdog();
@@ -270,7 +259,7 @@ int main(void) {
   MX_CAN1_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  Ebs_state ebs_state = EBS_CONTINOUS_MONITORING;
+  Ebs_state ebs_state = EBS_INITIAL_CHECKUP;
   bool ebs_break = false;
 
   Brakes_data brakes;
@@ -333,9 +322,7 @@ int main(void) {
       startTogglingWatchdog();
 
       // Check that the EBS energy storage is filled
-      __disable_irq();
-      air_pressure.update(air_pressure_data_dma);
-      __enable_irq();
+      air_pressure.update(adc_dma_buffer);
       if (air_pressure.check()) {
         ebs_error();
         ebs_state = EBS_STOP_MONITORING;
@@ -354,22 +341,18 @@ int main(void) {
         ebs_state = EBS_STOP_MONITORING;
         break;
       }
-      __disable_irq();
       brakes.update(brake_data_can);
       brake_data_can.status = false;
-      __enable_irq();
 
-      // // Check that the brake pressure is built up correctly
-      __disable_irq();
-      air_pressure.update(air_pressure_data_dma);
-      __enable_irq();
+      // Check that the brake pressure is built up correctly
+      air_pressure.update(adc_dma_buffer);
       if (brakes.check_buildup(air_pressure.ebs)) {
         ebs_error();
         ebs_state = EBS_STOP_MONITORING;
         break;
       }
 
-      // Enable TS
+      // // Enable TS
       as_close_sdc.activate();
 
       // Wait for TS
@@ -395,13 +378,10 @@ int main(void) {
           }
         }
         if (ebs_break) {
-          ebs_state = EBS_STOP_MONITORING;
           break;
         }
-        __disable_irq();
         brakes.update(brake_data_can);
         brake_data_can.status = false;
-        __enable_irq();
       }
       if (ebs_break) {
         ebs_state = EBS_STOP_MONITORING;
@@ -428,13 +408,10 @@ int main(void) {
           }
         }
         if (ebs_break) {
-          ebs_state = EBS_STOP_MONITORING;
           break;
         }
-        __disable_irq();
         brakes.update(brake_data_can);
         brake_data_can.status = false;
-        __enable_irq();
       }
       if (ebs_break) {
         ebs_state = EBS_STOP_MONITORING;
@@ -453,56 +430,50 @@ int main(void) {
     case EBS_CONTINOUS_MONITORING: {
 
       // Monitor the storage of brake energy (air pressure)
-      __disable_irq();
-      air_pressure.update(air_pressure_data_dma);
-      __enable_irq();
+      air_pressure.update(adc_dma_buffer);
       if (air_pressure.check()) {
         ebs_error();
         ebs_state = EBS_STOP_MONITORING;
         break;
       }
-      // Convert brake pressure data from if received from CAN
-      if (brake_data_can.status == true) {
-        __disable_irq();
-        brakes.update(brake_data_can);
-        brake_data_can.status = false;
-        __enable_irq();
-      }
+      // // Convert brake pressure data from if received from CAN
+      // if (brake_data_can.status == true) {
+      //   brakes.update(brake_data_can);
+      //   brake_data_can.status = false;
+      // }
 
       // Check RES state CAN OK?
       // AS OK?
 
-      // Check SDC
-      if (!sdc_ready.isActive()) {
-        HAL_Delay(config::valve_settle_delay);
-        valve_timeout_timer.restart();
-        while (brakes.check_engaged()) {
-          if (ebs_break = valve_timeout_timer.checkIfTimedOutThenReset()) {
-            ebs_error();
-            break;
-          }
+      // // Check SDC
+      // if (!sdc_ready.isActive()) {
+      //   HAL_Delay(config::valve_settle_delay);
+      //   valve_timeout_timer.restart();
+      //   while (brakes.check_engaged()) {
+      //     if (ebs_break = valve_timeout_timer.checkIfTimedOutThenReset()) {
+      //       ebs_error();
+      //       break;
+      //     }
 
-          can_timeout_timer.restart();
-          while (!brake_data_can.status) {
-            if (ebs_break = can_timeout_timer.checkIfTimedOutThenReset()) {
-              ebs_error();
-              break;
-            }
-          }
-          if (ebs_break) {
-            ebs_state = EBS_STOP_MONITORING;
-            break;
-          }
-          __disable_irq();
-          brakes.update(brake_data_can);
-          brake_data_can.status = false;
-          __enable_irq();
-        }
-        if (ebs_break) {
-          ebs_state = EBS_STOP_MONITORING;
-          break;
-        }
-      }
+      //     can_timeout_timer.restart();
+      //     while (!brake_data_can.status) {
+      //       if (ebs_break = can_timeout_timer.checkIfTimedOutThenReset()) {
+      //         ebs_error();
+      //         break;
+      //       }
+      //     }
+      //     if (ebs_break)
+      //       break;
+
+      //     brakes.update(brake_data_can);
+      //     brake_data_can.status = false;
+      //   }
+      //   if (ebs_break) {
+      //     ebs_state = EBS_STOP_MONITORING;
+      //     break;
+      //   }
+      // }
+
       break;
     }
     case EBS_STOP_MONITORING: {
@@ -536,8 +507,8 @@ void SystemClock_Config(void) {
     Error_Handler();
   }
 
-  /** Initializes the RCC Oscillators according to the specified
-   * parameters in the RCC_OscInitTypeDef structure.
+  /** Initializes the RCC Oscillators according to the specified parameters
+   * in the RCC_OscInitTypeDef structure.
    */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
@@ -566,242 +537,7 @@ void SystemClock_Config(void) {
   }
 }
 
-/**
- * @brief ADC1 Initialization Function
- * @param None
- * @retval None
- */
-static void MX_ADC1_Init(void) {
-
-  /* USER CODE BEGIN ADC1_Init 0 */
-
-  /* USER CODE END ADC1_Init 0 */
-
-  ADC_MultiModeTypeDef multimode = {0};
-  ADC_ChannelConfTypeDef sConfig = {0};
-
-  /* USER CODE BEGIN ADC1_Init 1 */
-
-  /* USER CODE END ADC1_Init 1 */
-
-  /** Common config
-   */
-  hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
-  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
-  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
-  hadc1.Init.LowPowerAutoWait = DISABLE;
-  hadc1.Init.ContinuousConvMode = ENABLE;
-  hadc1.Init.NbrOfConversion = 3;
-  hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc1.Init.DMAContinuousRequests = ENABLE;
-  hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
-  hadc1.Init.OversamplingMode = DISABLE;
-  if (HAL_ADC_Init(&hadc1) != HAL_OK) {
-    Error_Handler();
-  }
-
-  /** Configure the ADC multi-mode
-   */
-  multimode.Mode = ADC_MODE_INDEPENDENT;
-  if (HAL_ADCEx_MultiModeConfigChannel(&hadc1, &multimode) != HAL_OK) {
-    Error_Handler();
-  }
-
-  /** Configure Regular Channel
-   */
-  sConfig.Channel = ADC_CHANNEL_1;
-  sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_2CYCLES_5;
-  sConfig.SingleDiff = ADC_SINGLE_ENDED;
-  sConfig.OffsetNumber = ADC_OFFSET_NONE;
-  sConfig.Offset = 0;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
-    Error_Handler();
-  }
-
-  /** Configure Regular Channel
-   */
-  sConfig.Channel = ADC_CHANNEL_2;
-  sConfig.Rank = ADC_REGULAR_RANK_2;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
-    Error_Handler();
-  }
-
-  /** Configure Regular Channel
-   */
-  sConfig.Channel = ADC_CHANNEL_3;
-  sConfig.Rank = ADC_REGULAR_RANK_3;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN ADC1_Init 2 */
-
-  /* USER CODE END ADC1_Init 2 */
-}
-
-/**
- * @brief CAN1 Initialization Function
- * @param None
- * @retval None
- */
-static void MX_CAN1_Init(void) {
-  /* USER CODE BEGIN CAN1_Init 0 */
-
-  /* USER CODE END CAN1_Init 0 */
-
-  /* USER CODE BEGIN CAN1_Init 1 */
-
-  /* USER CODE END CAN1_Init 1 */
-  hcan1.Instance = CAN1;
-  hcan1.Init.Prescaler = 2;
-  hcan1.Init.Mode = CAN_MODE_NORMAL;
-  hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
-  hcan1.Init.TimeSeg1 = CAN_BS1_13TQ;
-  hcan1.Init.TimeSeg2 = CAN_BS2_2TQ;
-  hcan1.Init.TimeTriggeredMode = DISABLE;
-  hcan1.Init.AutoBusOff = DISABLE;
-  hcan1.Init.AutoWakeUp = DISABLE;
-  hcan1.Init.AutoRetransmission = DISABLE;
-  hcan1.Init.ReceiveFifoLocked = DISABLE;
-  hcan1.Init.TransmitFifoPriority = DISABLE;
-  if (HAL_CAN_Init(&hcan1) != HAL_OK) {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN CAN1_Init 2 */
-
-  /* USER CODE END CAN1_Init 2 */
-}
-
-/**
- * @brief TIM3 Initialization Function
- * @param None
- * @retval None
- */
-static void MX_TIM3_Init(void) {
-  /* USER CODE BEGIN TIM3_Init 0 */
-
-  /* USER CODE END TIM3_Init 0 */
-
-  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
-
-  /* USER CODE BEGIN TIM3_Init 1 */
-
-  /* USER CODE END TIM3_Init 1 */
-  htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 1022;
-  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 4000;
-  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim3) != HAL_OK) {
-    Error_Handler();
-  }
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK) {
-    Error_Handler();
-  }
-  if (HAL_TIM_PWM_Init(&htim3) != HAL_OK) {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK) {
-    Error_Handler();
-  }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 2000;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_2) != HAL_OK) {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM3_Init 2 */
-
-  /* USER CODE END TIM3_Init 2 */
-  HAL_TIM_MspPostInit(&htim3);
-}
-
-/**
- * Enable DMA controller clock
- */
-static void MX_DMA_Init(void) {
-  /* DMA controller clock enable */
-  __HAL_RCC_DMAMUX1_CLK_ENABLE();
-  __HAL_RCC_DMA1_CLK_ENABLE();
-
-  /* DMA interrupt init */
-  /* DMA1_Channel1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
-}
-
-/**
- * @brief GPIO Initialization Function
- * @param None
- * @retval None
- */
-static void MX_GPIO_Init(void) {
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-  /* USER CODE BEGIN MX_GPIO_Init_1 */
-  /* USER CODE END MX_GPIO_Init_1 */
-
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOH_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA,
-                    LD_OK_Pin | LD_WARN_Pin | LD_ERR_Pin | LD_CHK_Pin |
-                        AS_CLOSE_SDC_Pin | AS_MODE_Pin,
-                    GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, VALVE1_Pin | VALVE2_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pins : LD_OK_Pin LD_WARN_Pin LD_ERR_Pin LD_CHK_Pin
-                         AS_CLOSE_SDC_Pin AS_MODE_Pin */
-  GPIO_InitStruct.Pin = LD_OK_Pin | LD_WARN_Pin | LD_ERR_Pin | LD_CHK_Pin |
-                        AS_CLOSE_SDC_Pin | AS_MODE_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : VALVE1_Pin VALVE2_Pin */
-  GPIO_InitStruct.Pin = VALVE1_Pin | VALVE2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : SDC_RDY_Pin */
-  GPIO_InitStruct.Pin = SDC_RDY_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(SDC_RDY_GPIO_Port, &GPIO_InitStruct);
-
-  /* USER CODE BEGIN MX_GPIO_Init_2 */
-  /* USER CODE END MX_GPIO_Init_2 */
-}
-
 /* USER CODE BEGIN 4 */
-
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
-  if (hadc == &hadc1) {
-    air_pressure_data_dma.ebs = adc_dma_buffer[0];
-    air_pressure_data_dma.redundant = adc_dma_buffer[1];
-    air_pressure_data_dma.main = adc_dma_buffer[2];
-  }
-}
 
 void can_driver_input_cb(const PUTM_CAN_M_driver_input_t &driver_input) {
   brake_data_can.front = driver_input.brake_pressure_front;
